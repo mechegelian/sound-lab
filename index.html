@@ -9,7 +9,7 @@
 <body>
   <div class="app">
     <header class="top-bar">
-      <h1>sound L A B</h1>
+      <h1>SOUND LAB</h1>
       <p>super experimental browser sound lab</p>
     </header>
 
@@ -26,27 +26,39 @@
     </section>
 
     <section class="panel spectrogram-panel">
-  <div class="spectrogram-header">
-    <h2>spectrogram</h2>
-    <div class="spectrogram-controls">
-      <button id="pauseSpectrogramButton">Pause Spec</button>
-      <button id="resumeSpectrogramButton">Resume Spec</button>
-      <button id="clearSpectrogramButton">Clear Spec</button>
-    </div>
-  </div>
-
-  <div class="spectrogram-wrapper">
-    <canvas id="spectrogram" width="1200" height="220"></canvas>
-    <canvas id="spectrogramOverlay" width="1200" height="220"></canvas>
+      <div class="spectrogram-header">
+        <h2>spectrogram</h2>
+        <div class="spectrogram-controls">
+          <button id="pauseSpectrogramButton">Pause Spec</button>
+          <button id="resumeSpectrogramButton">Resume Spec</button>
+          <button id="clearSpectrogramButton">Clear Spec</button>
+        </div>
       </div>
-    </section>  
+
+      <div class="spectrogram-wrapper">
+        <canvas id="spectrogram" width="1200" height="220"></canvas>
+        <canvas id="spectrogramOverlay" width="1200" height="220"></canvas>
+      </div>
+    </section>
 
     <main class="bottom-grid">
       <section class="panel controls-panel">
         <h2>controls</h2>
 
         <div class="control-group">
-          <label for="volumeSlider">Master Volume</label>
+          <label for="controlTargetSelect">Control Target</label>
+          <select id="controlTargetSelect">
+            <option value="master">Master</option>
+            <option value="a">Drift Core</option>
+            <option value="b">Low Engine</option>
+            <option value="c">Air Reed</option>
+            <option value="d">Sub Pulse</option>
+            <option value="e">Wind Pipe</option>
+          </select>
+        </div>
+
+        <div class="control-group">
+          <label for="volumeSlider">Volume</label>
           <input type="range" id="volumeSlider" min="0" max="100" value="70">
         </div>
 
@@ -64,6 +76,38 @@
           <label for="distortionSlider">Distortion</label>
           <input type="range" id="distortionSlider" min="0" max="100" value="0">
         </div>
+
+        <div class="effects-block">
+          <h3>sound design</h3>
+
+          <div class="effect-line">
+            <span class="effect-name">Sub Freq</span>
+            <input type="range" id="subPulseFreq" min="30" max="120" step="1" value="48">
+            <span id="subPulseFreqValue">48Hz</span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Sub Detune</span>
+            <input type="range" id="subPulseDetune" min="0" max="12" step="0.1" value="2.5">
+            <span id="subPulseDetuneValue">2.5Hz</span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Pipe Tone</span>
+            <input type="range" id="windPipeTone" min="220" max="1400" step="1" value="620">
+            <span id="windPipeToneValue">620Hz</span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Pipe Breath</span>
+            <input type="range" id="windPipeBreath" min="0" max="100" step="1" value="55">
+            <span id="windPipeBreathValue">55%</span>
+            <span></span>
+          </div>
+        </div>
       </section>
 
       <section class="panel sounds-effects-panel">
@@ -71,18 +115,28 @@
 
         <div class="sounds-block">
           <div class="sound-row">
-            <span>Texture A</span>
+            <span>Drift Core</span>
             <button class="sound-toggle" id="textureAButton">OFF</button>
           </div>
 
           <div class="sound-row">
-            <span>Texture B</span>
+            <span>Low Engine</span>
             <button class="sound-toggle" id="textureBButton">OFF</button>
           </div>
 
           <div class="sound-row">
-            <span>Texture C</span>
+            <span>Air Reed</span>
             <button class="sound-toggle" id="textureCButton">OFF</button>
+          </div>
+
+          <div class="sound-row">
+            <span>Sub Pulse</span>
+            <button class="sound-toggle" id="textureDButton">OFF</button>
+          </div>
+
+          <div class="sound-row">
+            <span>Wind Pipe</span>
+            <button class="sound-toggle" id="textureEButton">OFF</button>
           </div>
         </div>
 
@@ -122,6 +176,44 @@
             <input type="range" id="warpDuration" min="0" max="2" step="0.1" value="1.0">
             <span id="warpDurationValue">1.0s</span>
             <button id="warpButton">Trigger</button>
+          </div>
+        </div>
+
+        <div class="effects-block">
+          <h3>effect loop</h3>
+
+          <div class="effect-line">
+            <span class="effect-name">Effect</span>
+            <select id="loopEffectSelect">
+              <option value="hitUp">Hit Up</option>
+              <option value="hitDown">Hit Down</option>
+              <option value="echoBurst">Echo Burst</option>
+              <option value="muffle">Muffle</option>
+              <option value="warp">Warp</option>
+            </select>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Interval</span>
+            <input type="range" id="loopInterval" min="1" max="8" step="0.5" value="3">
+            <span id="loopIntervalValue">3.0s</span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Duration</span>
+            <input type="range" id="loopDuration" min="0.2" max="4" step="0.1" value="1">
+            <span id="loopDurationValue">1.0s</span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Loop</span>
+            <button id="startLoopButton">Start</button>
+            <button id="stopLoopButton">Stop</button>
+            <span id="loopStatus">Idle</span>
           </div>
         </div>
       </section>

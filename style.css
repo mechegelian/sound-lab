@@ -1,0 +1,241 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background-color: #111;
+  color: #f2f2f2;
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.top-bar {
+  border: 2px solid #444;
+  background-color: #1b1b1b;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.top-bar h1 {
+  margin: 0;
+  font-size: 36px;
+  letter-spacing: 3px;
+}
+
+.top-bar p {
+  margin: 8px 0 0 0;
+  color: #bbbbbb;
+  font-size: 15px;
+}
+
+.transport-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  background-color: #1b1b1b;
+  padding: 20px;
+  flex-wrap: wrap;
+}
+
+.transport-bar button,
+.sound-toggle,
+.effect-line button {
+  background-color: #eaeaea;
+  color: #111;
+  border: none;
+  padding: 10px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.panel {
+  border: 2px solid #444;
+  background-color: #1b1b1b;
+  padding: 20px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  text-transform: lowercase;
+  font-size: 24px;
+}
+
+.scope-panel {
+  margin-bottom: 20px;
+}
+
+.spectrogram-panel {
+  margin-bottom: 20px;
+}
+.spectrogram-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.spectrogram-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.spectrogram-controls button {
+  background-color: #eaeaea;
+  color: #111;
+  border: none;
+  padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.spectrogram-wrapper {
+  position: relative;
+}
+
+#spectrogram,
+#spectrogramOverlay {
+  width: 100%;
+  height: 18vh;
+  min-height: 170px;
+  background-color: #000;
+  border: 1px solid #555;
+  display: block;
+  border-radius: 8px;
+}
+
+#spectrogramOverlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: transparent;
+}
+
+#oscilloscope {
+  width: 100%;
+  height: 33vh;
+  min-height: 260px;
+  background-color: #000;
+  border: 1px solid #555;
+  display: block;
+  border-radius: 8px;
+}
+
+#spectrogram {
+  width: 100%;
+  height: 18vh;
+  min-height: 170px;
+  background-color: #000;
+  border: 1px solid #555;
+  display: block;
+  border-radius: 8px;
+}
+
+.bottom-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.controls-panel,
+.sounds-effects-panel {
+  min-height: 420px;
+}
+
+.control-group {
+  margin-bottom: 24px;
+}
+
+.control-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 15px;
+}
+
+.control-group input[type="range"] {
+  width: 100%;
+}
+
+.sounds-block {
+  margin-bottom: 28px;
+}
+
+.sound-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #555;
+  padding: 12px;
+  margin-bottom: 12px;
+  background-color: #252525;
+  border-radius: 8px;
+}
+
+.sound-toggle.active {
+  background-color: #7cff7c;
+}
+
+.effects-block h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: normal;
+  text-transform: lowercase;
+  color: #dddddd;
+}
+
+.effect-line {
+  display: grid;
+  grid-template-columns: 90px 1fr 60px 90px;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.effect-name {
+  font-size: 14px;
+  color: #f2f2f2;
+}
+
+.effect-line input[type="range"] {
+  width: 100%;
+}
+
+.effect-line span {
+  color: #dddddd;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .effect-line {
+    grid-template-columns: 1fr;
+  }
+
+  #oscilloscope {
+    height: 28vh;
+    min-height: 220px;
+  }
+
+  #spectrogram {
+    height: 16vh;
+    min-height: 150px;
+  }
+}

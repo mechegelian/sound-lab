@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sound Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top-bar">
+      <h1>sound L A B</h1>
+      <p>super experimental browser sound lab</p>
+    </header>
+
+    <section class="transport-bar">
+      <button id="startButton">Start Audio</button>
+      <button id="playAllButton">Play</button>
+      <button id="stopAllButton">Stop</button>
+      <button id="randomButton">Randomize</button>
+    </section>
+
+    <section class="panel scope-panel">
+      <h2>oscilloscope</h2>
+      <canvas id="oscilloscope" width="1200" height="320"></canvas>
+    </section>
+
+    <section class="panel spectrogram-panel">
+  <div class="spectrogram-header">
+    <h2>spectrogram</h2>
+    <div class="spectrogram-controls">
+      <button id="pauseSpectrogramButton">Pause Spec</button>
+      <button id="resumeSpectrogramButton">Resume Spec</button>
+      <button id="clearSpectrogramButton">Clear Spec</button>
+    </div>
+  </div>
+
+  <div class="spectrogram-wrapper">
+    <canvas id="spectrogram" width="1200" height="220"></canvas>
+    <canvas id="spectrogramOverlay" width="1200" height="220"></canvas>
+      </div>
+    </section>  
+
+    <main class="bottom-grid">
+      <section class="panel controls-panel">
+        <h2>controls</h2>
+
+        <div class="control-group">
+          <label for="volumeSlider">Master Volume</label>
+          <input type="range" id="volumeSlider" min="0" max="100" value="70">
+        </div>
+
+        <div class="control-group">
+          <label for="filterSlider">Filter</label>
+          <input type="range" id="filterSlider" min="0" max="100" value="50">
+        </div>
+
+        <div class="control-group">
+          <label for="speedSlider">Speed</label>
+          <input type="range" id="speedSlider" min="50" max="150" value="100">
+        </div>
+
+        <div class="control-group">
+          <label for="distortionSlider">Distortion</label>
+          <input type="range" id="distortionSlider" min="0" max="100" value="0">
+        </div>
+      </section>
+
+      <section class="panel sounds-effects-panel">
+        <h2>sounds & effects</h2>
+
+        <div class="sounds-block">
+          <div class="sound-row">
+            <span>Texture A</span>
+            <button class="sound-toggle" id="textureAButton">OFF</button>
+          </div>
+
+          <div class="sound-row">
+            <span>Texture B</span>
+            <button class="sound-toggle" id="textureBButton">OFF</button>
+          </div>
+
+          <div class="sound-row">
+            <span>Texture C</span>
+            <button class="sound-toggle" id="textureCButton">OFF</button>
+          </div>
+        </div>
+
+        <div class="effects-block">
+          <h3>performance effects</h3>
+
+          <div class="effect-line">
+            <span class="effect-name">Hit Up</span>
+            <input type="range" id="hitUpDuration" min="0" max="2" step="0.1" value="0.8">
+            <span id="hitUpDurationValue">0.8s</span>
+            <button id="hitUpButton">Trigger</button>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Hit Down</span>
+            <input type="range" id="hitDownDuration" min="0" max="2" step="0.1" value="0.8">
+            <span id="hitDownDurationValue">0.8s</span>
+            <button id="hitDownButton">Trigger</button>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Echo Burst</span>
+            <input type="range" id="echoBurstDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="echoBurstDurationValue">1.0s</span>
+            <button id="echoBurstButton">Trigger</button>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Muffle</span>
+            <input type="range" id="muffleDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="muffleDurationValue">1.0s</span>
+            <button id="muffleButton">Trigger</button>
+          </div>
+
+          <div class="effect-line">
+            <span class="effect-name">Warp</span>
+            <input type="range" id="warpDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="warpDurationValue">1.0s</span>
+            <button id="warpButton">Trigger</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="https://unpkg.com/tone"></script>
+  <script src="app.js"></script>
+</body>
+</html>

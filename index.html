@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound Lab</title>
+  <title>sound L A B</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
     <header class="top-bar">
-      <h1>SOUND LAB</h1>
-      <p>super experimental browser sound lab</p>
+      <h1>sound L A B</h1>
+      <p>super experimental browser sound producer by Mehmet</p>
     </header>
 
     <section class="transport-bar">
@@ -183,6 +183,20 @@
           <h3>effect loop</h3>
 
           <div class="effect-line">
+            <span class="effect-name">Target</span>
+            <select id="effectTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <span></span>
+            <span></span>
+          </div>
+
+          <div class="effect-line">
             <span class="effect-name">Effect</span>
             <select id="loopEffectSelect">
               <option value="hitUp">Hit Up</option>
@@ -197,15 +211,15 @@
 
           <div class="effect-line">
             <span class="effect-name">Interval</span>
-            <input type="range" id="loopInterval" min="1" max="8" step="0.5" value="3">
-            <span id="loopIntervalValue">3.0s</span>
+            <input type="range" id="loopInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopIntervalValue">4.0s</span>
             <span></span>
           </div>
 
           <div class="effect-line">
             <span class="effect-name">Duration</span>
-            <input type="range" id="loopDuration" min="0.2" max="4" step="0.1" value="1">
-            <span id="loopDurationValue">1.0s</span>
+            <input type="range" id="loopDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopDurationValue">2.0s</span>
             <span></span>
           </div>
 

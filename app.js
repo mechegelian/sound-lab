@@ -80,9 +80,6 @@ const baseFreq1 = 110;
 const baseFreq2 = 111.2;
 const baseFreq3 = 55;
 
-// -------------------------
-// CONTROL STATE
-// -------------------------
 const controlState = {
   master: { volume: 70, filter: 50, speed: 100, distortion: 0 },
   a: { volume: 70, filter: 50, speed: 100, distortion: 0 },
@@ -92,9 +89,6 @@ const controlState = {
   e: { volume: 42, filter: 60, speed: 100, distortion: 0 }
 };
 
-// -------------------------
-// ANALYSIS + MASTER FX
-// -------------------------
 const waveformAnalyser = new Tone.Analyser("waveform", 1024);
 const fftAnalyser = new Tone.Analyser("fft", 256);
 
@@ -104,93 +98,65 @@ const masterDistortion = new Tone.Distortion(0);
 const echoDelay = new Tone.FeedbackDelay(0.25, 0.2);
 echoDelay.wet.value = 0;
 
-// -------------------------
-// TEXTURE A : Drift Core
-// -------------------------
 const textureAFilter = new Tone.Filter(1800, "lowpass");
 const textureADistortion = new Tone.Distortion(0);
 const textureAGain = new Tone.Gain(0);
-
 const textureAOsc1 = new Tone.Oscillator(baseFreq1, "sine");
 const textureAOsc2 = new Tone.Oscillator(baseFreq2, "triangle");
 const textureAOsc3 = new Tone.Oscillator(baseFreq3, "sine");
 
-// -------------------------
-// TEXTURE B : Low Engine
-// -------------------------
 const textureBFilter = new Tone.Filter(220, "lowpass");
 const textureBDistortion = new Tone.Distortion(0);
 const textureBGain = new Tone.Gain(0);
-
 const textureBOsc1 = new Tone.Oscillator(43.65, "square");
 const textureBOsc2 = new Tone.Oscillator(87.3, "sine");
 const textureBOsc3 = new Tone.Oscillator(65.4, "triangle");
 
-// -------------------------
-// TEXTURE C : Air Reed
-// -------------------------
 const textureCFilter = new Tone.Filter(1400, "bandpass");
 const textureCDistortion = new Tone.Distortion(0);
 const textureCGain = new Tone.Gain(0);
-
 const textureCNoise = new Tone.Noise("pink");
 const textureCOsc = new Tone.Oscillator(523.25, "sine");
 const textureCFilterLFO = new Tone.LFO(0.22, 900, 2200);
 
-// -------------------------
-// TEXTURE D : Sub Pulse
-// -------------------------
 const textureDFilter = new Tone.Filter(260, "lowpass");
 const textureDDistortion = new Tone.Distortion(0);
 const textureDGain = new Tone.Gain(0);
-
 const textureDOsc1 = new Tone.Oscillator(48, "sawtooth");
 const textureDOsc2 = new Tone.Oscillator(50.5, "square");
 
-// -------------------------
-// TEXTURE E : Wind Pipe
-// -------------------------
 const textureEFilter = new Tone.Filter(1200, "bandpass");
 const textureEDistortion = new Tone.Distortion(0);
 const textureEGain = new Tone.Gain(0);
 const textureENoiseGain = new Tone.Gain(0.3);
-
 const textureENoise = new Tone.Noise("pink");
 const textureEOsc = new Tone.Oscillator(620, "triangle");
 const textureEFilterLFO = new Tone.LFO(0.18, 700, 1700);
 
-// -------------------------
-// CONNECTIONS
-// -------------------------
-
-// A
+// connections
 textureAOsc1.connect(textureAFilter);
 textureAOsc2.connect(textureAFilter);
 textureAOsc3.connect(textureAFilter);
 textureAFilter.connect(textureADistortion);
 textureADistortion.connect(textureAGain);
 
-// B
 textureBOsc1.connect(textureBFilter);
 textureBOsc2.connect(textureBFilter);
 textureBOsc3.connect(textureBFilter);
 textureBFilter.connect(textureBDistortion);
 textureBDistortion.connect(textureBGain);
 
-// C
 textureCNoise.connect(textureCFilter);
 textureCOsc.connect(textureCFilter);
 textureCFilterLFO.connect(textureCFilter.frequency);
 textureCFilter.connect(textureCDistortion);
 textureCDistortion.connect(textureCGain);
 
-// D
 textureDOsc1.connect(textureDFilter);
 textureDOsc2.connect(textureDFilter);
 textureDFilter.connect(textureDDistortion);
 textureDDistortion.connect(textureDGain);
 
-// E
 textureENoise.connect(textureENoiseGain);
 textureENoiseGain.connect(textureEFilter);
 textureEOsc.connect(textureEFilter);
@@ -198,7 +164,6 @@ textureEFilterLFO.connect(textureEFilter.frequency);
 textureEFilter.connect(textureEDistortion);
 textureEDistortion.connect(textureEGain);
 
-// all to master
 textureAGain.connect(masterFilter);
 textureBGain.connect(masterFilter);
 textureCGain.connect(masterFilter);
@@ -213,9 +178,7 @@ masterGain.connect(waveformAnalyser);
 masterGain.connect(fftAnalyser);
 masterGain.toDestination();
 
-// -------------------------
-// START SOURCES
-// -------------------------
+// start sources
 textureAOsc1.start();
 textureAOsc2.start();
 textureAOsc3.start();
@@ -235,9 +198,6 @@ textureENoise.start();
 textureEOsc.start();
 textureEFilterLFO.start();
 
-// -------------------------
-// HELPERS
-// -------------------------
 function sliderToGain(target, value) {
   if (target === "master") return value / 100;
   return value / 200;
@@ -250,36 +210,33 @@ function sliderToFrequency(value) {
 }
 
 function getGainNode(target) {
-  const map = {
+  return {
     a: textureAGain,
     b: textureBGain,
     c: textureCGain,
     d: textureDGain,
     e: textureEGain
-  };
-  return map[target];
+  }[target];
 }
 
 function getFilterNode(target) {
-  const map = {
+  return {
     a: textureAFilter,
     b: textureBFilter,
     c: textureCFilter,
     d: textureDFilter,
     e: textureEFilter
-  };
-  return map[target];
+  }[target];
 }
 
 function getDistortionNode(target) {
-  const map = {
+  return {
     a: textureADistortion,
     b: textureBDistortion,
     c: textureCDistortion,
     d: textureDDistortion,
     e: textureEDistortion
-  };
-  return map[target];
+  }[target];
 }
 
 function isTextureOn(target) {
@@ -301,24 +258,18 @@ function requireAnyTexture() {
     alert("First click Start Audio");
     return false;
   }
-
   if (!textureAOn && !textureBOn && !textureCOn && !textureDOn && !textureEOn) {
     alert("Turn on at least one sound first");
     return false;
   }
-
   return true;
 }
 
-// -------------------------
-// APPLY STORED CONTROLS
-// -------------------------
 function applyStoredVolume(target) {
   if (target === "master") {
     masterGain.gain.rampTo(sliderToGain("master", controlState.master.volume), 0.1);
     return;
   }
-
   const gainNode = getGainNode(target);
   if (gainNode && isTextureOn(target)) {
     gainNode.gain.rampTo(sliderToGain(target, controlState[target].volume), 0.1);
@@ -330,7 +281,6 @@ function applyStoredFilter(target) {
     masterFilter.frequency.rampTo(sliderToFrequency(controlState.master.filter), 0.1);
     return;
   }
-
   const filterNode = getFilterNode(target);
   if (filterNode) {
     filterNode.frequency.rampTo(sliderToFrequency(controlState[target].filter), 0.1);
@@ -342,7 +292,6 @@ function applyStoredDistortion(target) {
     masterDistortion.distortion = controlState.master.distortion / 100;
     return;
   }
-
   const distortionNode = getDistortionNode(target);
   if (distortionNode) {
     distortionNode.distortion = controlState[target].distortion / 100;
@@ -383,11 +332,7 @@ function applyStoredSpeed(target) {
   }
 
   if (target === "master") {
-    applyStoredSpeed("a");
-    applyStoredSpeed("b");
-    applyStoredSpeed("c");
-    applyStoredSpeed("d");
-    applyStoredSpeed("e");
+    ["a", "b", "c", "d", "e"].forEach(applyStoredSpeed);
   }
 }
 
@@ -400,9 +345,6 @@ function applyAllStoredControls() {
   });
 }
 
-// -------------------------
-// UI <-> STATE SYNC
-// -------------------------
 function syncControlSlidersToTarget() {
   const target = getControlTarget();
   volumeSlider.value = controlState[target].volume;
@@ -413,20 +355,13 @@ function syncControlSlidersToTarget() {
 
 controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
 
-// -------------------------
-// AUDIO START
-// -------------------------
 startButton.addEventListener("click", async function () {
   if (audioStarted) return;
-
   await Tone.start();
   audioStarted = true;
   startButton.textContent = "Audio Ready";
 });
 
-// -------------------------
-// TOGGLE HELPERS
-// -------------------------
 function setTextureAState(isOn) {
   textureAOn = isOn;
   if (textureAOn) {
@@ -492,9 +427,6 @@ function setTextureEState(isOn) {
   }
 }
 
-// -------------------------
-// TEXTURE BUTTONS
-// -------------------------
 textureAButton.addEventListener("click", function () {
   if (!audioStarted) return alert("First click Start Audio");
   setTextureAState(!textureAOn);
@@ -520,12 +452,8 @@ textureEButton.addEventListener("click", function () {
   setTextureEState(!textureEOn);
 });
 
-// -------------------------
-// PLAY / STOP
-// -------------------------
 playAllButton.addEventListener("click", function () {
   if (!audioStarted) return alert("First click Start Audio");
-
   setTextureAState(true);
   setTextureBState(true);
   setTextureCState(true);
@@ -541,9 +469,6 @@ stopAllButton.addEventListener("click", function () {
   setTextureEState(false);
 });
 
-// -------------------------
-// CONTROL SLIDERS
-// -------------------------
 volumeSlider.addEventListener("input", function () {
   const target = getControlTarget();
   controlState[target].volume = Number(volumeSlider.value);
@@ -568,9 +493,6 @@ distortionSlider.addEventListener("input", function () {
   applyStoredDistortion(target);
 });
 
-// -------------------------
-// NEW SOUND PARAMS
-// -------------------------
 function updateSoundDesignLabels() {
   subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
   subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
@@ -617,9 +539,6 @@ windPipeBreath.addEventListener("input", function () {
   applyWindPipeDesign();
 });
 
-// -------------------------
-// DURATION LABELS
-// -------------------------
 function updateDurationLabels() {
   hitUpDurationValue.textContent = `${hitUpDuration.value}s`;
   hitDownDurationValue.textContent = `${hitDownDuration.value}s`;
@@ -642,9 +561,6 @@ function updateDurationLabels() {
   slider.addEventListener("input", updateDurationLabels);
 });
 
-// -------------------------
-// ACTIVE TARGETS FOR EFFECTS
-// -------------------------
 function getActiveTextureGroups() {
   const activeGroups = [];
 
@@ -699,9 +615,6 @@ function getActiveTextureGroups() {
   return activeGroups;
 }
 
-// -------------------------
-// EFFECTS
-// -------------------------
 function applyPitchHit(multiplier, holdTime) {
   if (!requireAnyTexture()) return;
 
@@ -804,9 +717,6 @@ warpButton.addEventListener("click", function () {
   triggerEffect("warp", Number(warpDuration.value));
 });
 
-// -------------------------
-// EFFECT LOOP
-// -------------------------
 function stopEffectLoop() {
   if (effectLoopId) {
     clearInterval(effectLoopId);
@@ -828,7 +738,6 @@ startLoopButton.addEventListener("click", function () {
   const durationValue = Number(loopDuration.value);
 
   loopStatus.textContent = `Looping ${effectName}`;
-
   triggerEffect(effectName, durationValue);
 
   effectLoopId = setInterval(function () {
@@ -838,9 +747,6 @@ startLoopButton.addEventListener("click", function () {
 
 stopLoopButton.addEventListener("click", stopEffectLoop);
 
-// -------------------------
-// RANDOMIZE
-// -------------------------
 randomButton.addEventListener("click", function () {
   if (!audioStarted) {
     alert("First click Start Audio");
@@ -868,9 +774,6 @@ randomButton.addEventListener("click", function () {
   updateDurationLabels();
 });
 
-// -------------------------
-// SPECTROGRAM
-// -------------------------
 pauseSpectrogramButton.addEventListener("click", function () {
   spectrogramPaused = true;
 });
@@ -954,9 +857,6 @@ function drawSpectrogram() {
   drawSpectrogramOverlay();
 }
 
-// -------------------------
-// OSCILLOSCOPE
-// -------------------------
 function drawOscilloscope() {
   requestAnimationFrame(drawOscilloscope);
 
@@ -1025,15 +925,9 @@ function drawOscilloscope() {
   oscilloscopeCtx.restore();
 }
 
-// -------------------------
-// INIT
-// -------------------------
 updateSoundDesignLabels();
 updateDurationLabels();
 syncControlSlidersToTarget();
-applySubPulseDesign();
-applyWindPipeDesign();
-applyAllStoredControls();
 
 oscilloscopeCtx.fillStyle = "black";
 oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);

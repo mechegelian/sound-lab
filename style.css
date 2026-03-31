@@ -46,7 +46,8 @@ body {
 
 .transport-bar button,
 .sound-toggle,
-.effect-line button {
+.effect-line button,
+.spectrogram-controls button {
   background-color: #eaeaea;
   color: #111;
   border: none;
@@ -76,6 +77,7 @@ body {
 .spectrogram-panel {
   margin-bottom: 20px;
 }
+
 .spectrogram-header {
   display: flex;
   justify-content: space-between;
@@ -91,18 +93,18 @@ body {
   flex-wrap: wrap;
 }
 
-.spectrogram-controls button {
-  background-color: #eaeaea;
-  color: #111;
-  border: none;
-  padding: 10px 14px;
-  font-size: 14px;
-  cursor: pointer;
-  border-radius: 8px;
-}
-
 .spectrogram-wrapper {
   position: relative;
+}
+
+#oscilloscope {
+  width: 100%;
+  height: 33vh;
+  min-height: 260px;
+  background-color: #000;
+  border: 1px solid #555;
+  display: block;
+  border-radius: 8px;
 }
 
 #spectrogram,
@@ -121,26 +123,6 @@ body {
   inset: 0;
   pointer-events: none;
   background: transparent;
-}
-
-#oscilloscope {
-  width: 100%;
-  height: 33vh;
-  min-height: 260px;
-  background-color: #000;
-  border: 1px solid #555;
-  display: block;
-  border-radius: 8px;
-}
-
-#spectrogram {
-  width: 100%;
-  height: 18vh;
-  min-height: 170px;
-  background-color: #000;
-  border: 1px solid #555;
-  display: block;
-  border-radius: 8px;
 }
 
 .bottom-grid {
@@ -166,6 +148,15 @@ body {
 
 .control-group input[type="range"] {
   width: 100%;
+}
+
+select {
+  width: 100%;
+  background-color: #111;
+  color: #f2f2f2;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 8px;
 }
 
 .sounds-block {
@@ -198,7 +189,7 @@ body {
 
 .effect-line {
   display: grid;
-  grid-template-columns: 90px 1fr 60px 90px;
+  grid-template-columns: 90px 1fr 70px 90px;
   gap: 12px;
   align-items: center;
   margin-bottom: 14px;
@@ -234,16 +225,9 @@ body {
     min-height: 220px;
   }
 
-  #spectrogram {
+  #spectrogram,
+  #spectrogramOverlay {
     height: 16vh;
     min-height: 150px;
   }
-}
-select {
-  width: 100%;
-  background-color: #111;
-  color: #f2f2f2;
-  border: 1px solid #555;
-  padding: 10px;
-  border-radius: 8px;
 }

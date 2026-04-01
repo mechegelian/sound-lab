@@ -10,7 +10,7 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -125,17 +125,26 @@ body {
   background: transparent;
 }
 
+/* MAIN LAYOUT */
 .bottom-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 360px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.controls-panel {
+  min-width: 0;
+}
+
+.sounds-effects-panel {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
   gap: 20px;
 }
 
-.controls-panel,
-.sounds-effects-panel {
-  min-height: 420px;
-}
-
+/* CONTROLS */
 .control-group {
   margin-bottom: 24px;
 }
@@ -159,8 +168,12 @@ select {
   border-radius: 8px;
 }
 
+/* SOUNDS BLOCK */
 .sounds-block {
-  margin-bottom: 28px;
+  border: 1px solid #555;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #181818;
 }
 
 .sound-row {
@@ -174,8 +187,20 @@ select {
   border-radius: 8px;
 }
 
+.sound-row:last-child {
+  margin-bottom: 0;
+}
+
 .sound-toggle.active {
   background-color: #7cff7c;
+}
+
+/* EFFECT AREAS */
+.effects-block {
+  border: 1px solid #555;
+  border-radius: 12px;
+  padding: 18px;
+  background-color: #181818;
 }
 
 .effects-block h3 {
@@ -187,12 +212,16 @@ select {
   color: #dddddd;
 }
 
+/* BASE LINE */
 .effect-line {
   display: grid;
-  grid-template-columns: 90px 1fr 70px 90px;
   gap: 12px;
   align-items: center;
   margin-bottom: 14px;
+}
+
+.effect-line:last-child {
+  margin-bottom: 0;
 }
 
 .effect-name {
@@ -202,6 +231,7 @@ select {
 
 .effect-line input[type="range"] {
   width: 100%;
+  min-width: 0;
 }
 
 .effect-line span {
@@ -209,14 +239,83 @@ select {
   font-size: 14px;
 }
 
-@media (max-width: 900px) {
+/* SOUND DESIGN ROWS */
+.wide-line {
+  grid-template-columns: 110px 1fr 90px;
+}
+
+/* MANUAL EFFECT ROWS */
+.effect-line-advanced {
+  grid-template-columns: 110px 180px 1fr 80px 100px;
+}
+
+.effect-line-advanced select {
+  min-width: 160px;
+}
+
+.effect-line-advanced input[type="range"] {
+  min-width: 160px;
+}
+
+/* LOOP AREA */
+/* burada tek satıra sıkıştırmak yerine geniş ama kontrollü bir yapı */
+.effect-line-loop {
+  grid-template-columns: 140px 180px minmax(140px, 1fr) 70px minmax(140px, 1fr) 70px 90px 90px;
+  gap: 12px;
+  align-items: center;
+}
+
+.effect-line-loop select {
+  min-width: 170px;
+}
+
+.effect-line-loop input[type="range"] {
+  min-width: 140px;
+}
+
+.effect-line-loop span {
+  white-space: nowrap;
+}
+
+/* loops bloğu diğerlerinden daha geniş hissedilsin */
+.effects-block:last-child {
+  padding: 22px;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1250px) {
   .bottom-grid {
     grid-template-columns: 1fr;
   }
+
+  .controls-panel {
+    order: 1;
+  }
+
+  .sounds-effects-panel {
+    order: 2;
+  }
+
+  .effect-line-loop {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .effect-line-loop select,
+  .effect-line-loop input[type="range"] {
+    min-width: 0;
+  }
 }
 
-@media (max-width: 768px) {
-  .effect-line {
+@media (max-width: 900px) {
+  .effect-line-advanced {
+    grid-template-columns: 1fr;
+  }
+
+  .wide-line {
+    grid-template-columns: 1fr;
+  }
+
+  .effect-line-loop {
     grid-template-columns: 1fr;
   }
 

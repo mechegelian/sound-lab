@@ -1,82 +1,129 @@
-function byId(id) {
-  return document.getElementById(id);
-}
+const startButton = document.getElementById("startButton");
+const playAllButton = document.getElementById("playAllButton");
+const stopAllButton = document.getElementById("stopAllButton");
+const randomButton = document.getElementById("randomButton");
 
-const startButton = byId("startButton");
-const playAllButton = byId("playAllButton");
-const stopAllButton = byId("stopAllButton");
-const randomButton = byId("randomButton");
+const textureAButton = document.getElementById("textureAButton");
+const textureBButton = document.getElementById("textureBButton");
+const textureCButton = document.getElementById("textureCButton");
+const textureDButton = document.getElementById("textureDButton");
+const textureEButton = document.getElementById("textureEButton");
 
-const textureAButton = byId("textureAButton");
-const textureBButton = byId("textureBButton");
-const textureCButton = byId("textureCButton");
-const textureDButton = byId("textureDButton");
-const textureEButton = byId("textureEButton");
+const hitUpButton = document.getElementById("hitUpButton");
+const hitDownButton = document.getElementById("hitDownButton");
+const echoBurstButton = document.getElementById("echoBurstButton");
+const muffleButton = document.getElementById("muffleButton");
+const warpButton = document.getElementById("warpButton");
 
-const hitUpButton = byId("hitUpButton");
-const hitDownButton = byId("hitDownButton");
-const echoBurstButton = byId("echoBurstButton");
-const muffleButton = byId("muffleButton");
-const warpButton = byId("warpButton");
+const hitUpDuration = document.getElementById("hitUpDuration");
+const hitDownDuration = document.getElementById("hitDownDuration");
+const echoBurstDuration = document.getElementById("echoBurstDuration");
+const muffleDuration = document.getElementById("muffleDuration");
+const warpDuration = document.getElementById("warpDuration");
 
-const hitUpDuration = byId("hitUpDuration");
-const hitDownDuration = byId("hitDownDuration");
-const echoBurstDuration = byId("echoBurstDuration");
-const muffleDuration = byId("muffleDuration");
-const warpDuration = byId("warpDuration");
+const hitUpDurationValue = document.getElementById("hitUpDurationValue");
+const hitDownDurationValue = document.getElementById("hitDownDurationValue");
+const echoBurstDurationValue = document.getElementById("echoBurstDurationValue");
+const muffleDurationValue = document.getElementById("muffleDurationValue");
+const warpDurationValue = document.getElementById("warpDurationValue");
 
-const hitUpDurationValue = byId("hitUpDurationValue");
-const hitDownDurationValue = byId("hitDownDurationValue");
-const echoBurstDurationValue = byId("echoBurstDurationValue");
-const muffleDurationValue = byId("muffleDurationValue");
-const warpDurationValue = byId("warpDurationValue");
+const hitUpTargetSelect = document.getElementById("hitUpTargetSelect");
+const hitDownTargetSelect = document.getElementById("hitDownTargetSelect");
+const echoBurstTargetSelect = document.getElementById("echoBurstTargetSelect");
+const muffleTargetSelect = document.getElementById("muffleTargetSelect");
+const warpTargetSelect = document.getElementById("warpTargetSelect");
 
-const controlTargetSelect = byId("controlTargetSelect");
-const volumeSlider = byId("volumeSlider");
-const filterSlider = byId("filterSlider");
-const speedSlider = byId("speedSlider");
-const distortionSlider = byId("distortionSlider");
+const controlTargetSelect = document.getElementById("controlTargetSelect");
 
-const subPulseFreq = byId("subPulseFreq");
-const subPulseDetune = byId("subPulseDetune");
-const windPipeTone = byId("windPipeTone");
-const windPipeBreath = byId("windPipeBreath");
+const volumeSlider = document.getElementById("volumeSlider");
+const filterSlider = document.getElementById("filterSlider");
+const speedSlider = document.getElementById("speedSlider");
+const distortionSlider = document.getElementById("distortionSlider");
 
-const subPulseFreqValue = byId("subPulseFreqValue");
-const subPulseDetuneValue = byId("subPulseDetuneValue");
-const windPipeToneValue = byId("windPipeToneValue");
-const windPipeBreathValue = byId("windPipeBreathValue");
+const subPulseFreq = document.getElementById("subPulseFreq");
+const subPulseDetune = document.getElementById("subPulseDetune");
+const windPipeTone = document.getElementById("windPipeTone");
+const windPipeBreath = document.getElementById("windPipeBreath");
 
-const loopEffectSelect = byId("loopEffectSelect");
-const loopInterval = byId("loopInterval");
-const loopDuration = byId("loopDuration");
-const loopIntervalValue = byId("loopIntervalValue");
-const loopDurationValue = byId("loopDurationValue");
-const startLoopButton = byId("startLoopButton");
-const stopLoopButton = byId("stopLoopButton");
-const loopStatus = byId("loopStatus");
+const subPulseFreqValue = document.getElementById("subPulseFreqValue");
+const subPulseDetuneValue = document.getElementById("subPulseDetuneValue");
+const windPipeToneValue = document.getElementById("windPipeToneValue");
+const windPipeBreathValue = document.getElementById("windPipeBreathValue");
 
-const pauseSpectrogramButton = byId("pauseSpectrogramButton");
-const resumeSpectrogramButton = byId("resumeSpectrogramButton");
-const clearSpectrogramButton = byId("clearSpectrogramButton");
+// loop controls per effect
+const loopHitUpTargetSelect = document.getElementById("loopHitUpTargetSelect");
+const loopHitUpInterval = document.getElementById("loopHitUpInterval");
+const loopHitUpIntervalValue = document.getElementById("loopHitUpIntervalValue");
+const loopHitUpDuration = document.getElementById("loopHitUpDuration");
+const loopHitUpDurationValue = document.getElementById("loopHitUpDurationValue");
+const startLoopHitUpButton = document.getElementById("startLoopHitUpButton");
+const stopLoopHitUpButton = document.getElementById("stopLoopHitUpButton");
 
-const oscilloscopeCanvas = byId("oscilloscope");
-const spectrogramCanvas = byId("spectrogram");
-const spectrogramOverlay = byId("spectrogramOverlay");
+const loopHitDownTargetSelect = document.getElementById("loopHitDownTargetSelect");
+const loopHitDownInterval = document.getElementById("loopHitDownInterval");
+const loopHitDownIntervalValue = document.getElementById("loopHitDownIntervalValue");
+const loopHitDownDuration = document.getElementById("loopHitDownDuration");
+const loopHitDownDurationValue = document.getElementById("loopHitDownDurationValue");
+const startLoopHitDownButton = document.getElementById("startLoopHitDownButton");
+const stopLoopHitDownButton = document.getElementById("stopLoopHitDownButton");
 
-const oscilloscopeCtx = oscilloscopeCanvas ? oscilloscopeCanvas.getContext("2d") : null;
-const spectrogramCtx = spectrogramCanvas ? spectrogramCanvas.getContext("2d") : null;
-const spectrogramOverlayCtx = spectrogramOverlay ? spectrogramOverlay.getContext("2d") : null;
+const loopEchoTargetSelect = document.getElementById("loopEchoTargetSelect");
+const loopEchoInterval = document.getElementById("loopEchoInterval");
+const loopEchoIntervalValue = document.getElementById("loopEchoIntervalValue");
+const loopEchoDuration = document.getElementById("loopEchoDuration");
+const loopEchoDurationValue = document.getElementById("loopEchoDurationValue");
+const startLoopEchoButton = document.getElementById("startLoopEchoButton");
+const stopLoopEchoButton = document.getElementById("stopLoopEchoButton");
+
+const loopMuffleTargetSelect = document.getElementById("loopMuffleTargetSelect");
+const loopMuffleInterval = document.getElementById("loopMuffleInterval");
+const loopMuffleIntervalValue = document.getElementById("loopMuffleIntervalValue");
+const loopMuffleDuration = document.getElementById("loopMuffleDuration");
+const loopMuffleDurationValue = document.getElementById("loopMuffleDurationValue");
+const startLoopMuffleButton = document.getElementById("startLoopMuffleButton");
+const stopLoopMuffleButton = document.getElementById("stopLoopMuffleButton");
+
+const loopWarpTargetSelect = document.getElementById("loopWarpTargetSelect");
+const loopWarpInterval = document.getElementById("loopWarpInterval");
+const loopWarpIntervalValue = document.getElementById("loopWarpIntervalValue");
+const loopWarpDuration = document.getElementById("loopWarpDuration");
+const loopWarpDurationValue = document.getElementById("loopWarpDurationValue");
+const startLoopWarpButton = document.getElementById("startLoopWarpButton");
+const stopLoopWarpButton = document.getElementById("stopLoopWarpButton");
+
+const oscilloscopeCanvas = document.getElementById("oscilloscope");
+const oscilloscopeCtx = oscilloscopeCanvas.getContext("2d");
+
+const spectrogramCanvas = document.getElementById("spectrogram");
+const spectrogramCtx = spectrogramCanvas.getContext("2d");
+
+const spectrogramOverlayCanvas = document.getElementById("spectrogramOverlay");
+const spectrogramOverlayCtx = spectrogramOverlayCanvas.getContext("2d");
+
+const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton");
+const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
+const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
 
 let audioStarted = false;
-let spectrogramPaused = false;
-let loopTimer = null;
-
 let textureAOn = false;
 let textureBOn = false;
 let textureCOn = false;
 let textureDOn = false;
 let textureEOn = false;
+
+let spectrogramPaused = false;
+const spectrogramSecondsVisible = 8;
+
+// one interval per loop effect
+let hitUpLoopId = null;
+let hitDownLoopId = null;
+let echoLoopId = null;
+let muffleLoopId = null;
+let warpLoopId = null;
+
+const baseFreq1 = 110;
+const baseFreq2 = 111.2;
+const baseFreq3 = 55;
 
 const controlState = {
   master: { volume: 70, filter: 50, speed: 100, distortion: 0 },
@@ -87,11 +134,7 @@ const controlState = {
   e: { volume: 42, filter: 60, speed: 100, distortion: 0 }
 };
 
-const baseFreq1 = 110;
-const baseFreq2 = 111.2;
-const baseFreq3 = 55;
-
-// AUDIO GRAPH
+// analysis + master fx
 const waveformAnalyser = new Tone.Analyser("waveform", 1024);
 const fftAnalyser = new Tone.Analyser("fft", 256);
 
@@ -101,6 +144,7 @@ const masterDistortion = new Tone.Distortion(0);
 const echoDelay = new Tone.FeedbackDelay(0.25, 0.2);
 echoDelay.wet.value = 0;
 
+// A : Drift Core
 const textureAFilter = new Tone.Filter(1800, "lowpass");
 const textureADistortion = new Tone.Distortion(0);
 const textureAGain = new Tone.Gain(0);
@@ -108,6 +152,7 @@ const textureAOsc1 = new Tone.Oscillator(baseFreq1, "sine");
 const textureAOsc2 = new Tone.Oscillator(baseFreq2, "triangle");
 const textureAOsc3 = new Tone.Oscillator(baseFreq3, "sine");
 
+// B : Low Engine
 const textureBFilter = new Tone.Filter(220, "lowpass");
 const textureBDistortion = new Tone.Distortion(0);
 const textureBGain = new Tone.Gain(0);
@@ -115,6 +160,7 @@ const textureBOsc1 = new Tone.Oscillator(43.65, "square");
 const textureBOsc2 = new Tone.Oscillator(87.3, "sine");
 const textureBOsc3 = new Tone.Oscillator(65.4, "triangle");
 
+// C : Air Reed
 const textureCFilter = new Tone.Filter(1400, "bandpass");
 const textureCDistortion = new Tone.Distortion(0);
 const textureCGain = new Tone.Gain(0);
@@ -122,12 +168,14 @@ const textureCNoise = new Tone.Noise("pink");
 const textureCOsc = new Tone.Oscillator(523.25, "sine");
 const textureCFilterLFO = new Tone.LFO(0.22, 900, 2200);
 
+// D : Sub Pulse
 const textureDFilter = new Tone.Filter(260, "lowpass");
 const textureDDistortion = new Tone.Distortion(0);
 const textureDGain = new Tone.Gain(0);
 const textureDOsc1 = new Tone.Oscillator(48, "sawtooth");
 const textureDOsc2 = new Tone.Oscillator(50.5, "square");
 
+// E : Wind Pipe
 const textureEFilter = new Tone.Filter(1200, "bandpass");
 const textureEDistortion = new Tone.Distortion(0);
 const textureEGain = new Tone.Gain(0);
@@ -136,7 +184,7 @@ const textureENoise = new Tone.Noise("pink");
 const textureEOsc = new Tone.Oscillator(620, "triangle");
 const textureEFilterLFO = new Tone.LFO(0.18, 700, 1700);
 
-// CONNECTIONS
+// connections
 textureAOsc1.connect(textureAFilter);
 textureAOsc2.connect(textureAFilter);
 textureAOsc3.connect(textureAFilter);
@@ -181,7 +229,7 @@ masterGain.connect(waveformAnalyser);
 masterGain.connect(fftAnalyser);
 masterGain.toDestination();
 
-// START NODES
+// start sources
 textureAOsc1.start();
 textureAOsc2.start();
 textureAOsc3.start();
@@ -201,28 +249,60 @@ textureENoise.start();
 textureEOsc.start();
 textureEFilterLFO.start();
 
+// helpers
 function sliderToGain(target, value) {
-  return target === "master" ? value / 100 : value / 200;
+  if (target === "master") return value / 100;
+  return value / 200;
 }
 
 function sliderToFrequency(value) {
-  const min = 100;
-  const max = 5000;
-  return min + (value / 100) * (max - min);
+  const minFreq = 100;
+  const maxFreq = 5000;
+  return minFreq + (value / 100) * (maxFreq - minFreq);
 }
 
-function getControlTargetKey() {
-  return controlTargetSelect ? controlTargetSelect.value : "master";
+function getGainNode(target) {
+  return {
+    a: textureAGain,
+    b: textureBGain,
+    c: textureCGain,
+    d: textureDGain,
+    e: textureEGain
+  }[target];
 }
 
-function getTextureOn(key) {
+function getFilterNode(target) {
+  return {
+    a: textureAFilter,
+    b: textureBFilter,
+    c: textureCFilter,
+    d: textureDFilter,
+    e: textureEFilter
+  }[target];
+}
+
+function getDistortionNode(target) {
+  return {
+    a: textureADistortion,
+    b: textureBDistortion,
+    c: textureCDistortion,
+    d: textureDDistortion,
+    e: textureEDistortion
+  }[target];
+}
+
+function isTextureOn(target) {
   return (
-    (key === "a" && textureAOn) ||
-    (key === "b" && textureBOn) ||
-    (key === "c" && textureCOn) ||
-    (key === "d" && textureDOn) ||
-    (key === "e" && textureEOn)
+    (target === "a" && textureAOn) ||
+    (target === "b" && textureBOn) ||
+    (target === "c" && textureCOn) ||
+    (target === "d" && textureDOn) ||
+    (target === "e" && textureEOn)
   );
+}
+
+function getControlTarget() {
+  return controlTargetSelect.value;
 }
 
 function requireAnyTexture() {
@@ -237,26 +317,27 @@ function requireAnyTexture() {
   return true;
 }
 
-function getGainNode(key) {
-  return { a: textureAGain, b: textureBGain, c: textureCGain, d: textureDGain, e: textureEGain }[key];
+function requireSpecificTexture(target) {
+  if (!audioStarted) {
+    alert("First click Start Audio");
+    return false;
+  }
+  if (!isTextureOn(target)) {
+    alert("Turn on the selected target sound first");
+    return false;
+  }
+  return true;
 }
 
-function getFilterNode(key) {
-  return { a: textureAFilter, b: textureBFilter, c: textureCFilter, d: textureDFilter, e: textureEFilter }[key];
-}
-
-function getDistortionNode(key) {
-  return { a: textureADistortion, b: textureBDistortion, c: textureCDistortion, d: textureDDistortion, e: textureEDistortion }[key];
-}
-
+// control application
 function applyStoredVolume(target) {
   if (target === "master") {
     masterGain.gain.rampTo(sliderToGain("master", controlState.master.volume), 0.1);
     return;
   }
-  const node = getGainNode(target);
-  if (node && getTextureOn(target)) {
-    node.gain.rampTo(sliderToGain(target, controlState[target].volume), 0.1);
+  const gainNode = getGainNode(target);
+  if (gainNode && isTextureOn(target)) {
+    gainNode.gain.rampTo(sliderToGain(target, controlState[target].volume), 0.1);
   }
 }
 
@@ -265,8 +346,10 @@ function applyStoredFilter(target) {
     masterFilter.frequency.rampTo(sliderToFrequency(controlState.master.filter), 0.1);
     return;
   }
-  const node = getFilterNode(target);
-  if (node) node.frequency.rampTo(sliderToFrequency(controlState[target].filter), 0.1);
+  const filterNode = getFilterNode(target);
+  if (filterNode) {
+    filterNode.frequency.rampTo(sliderToFrequency(controlState[target].filter), 0.1);
+  }
 }
 
 function applyStoredDistortion(target) {
@@ -274,8 +357,10 @@ function applyStoredDistortion(target) {
     masterDistortion.distortion = controlState.master.distortion / 100;
     return;
   }
-  const node = getDistortionNode(target);
-  if (node) node.distortion = controlState[target].distortion / 100;
+  const distortionNode = getDistortionNode(target);
+  if (distortionNode) {
+    distortionNode.distortion = controlState[target].distortion / 100;
+  }
 }
 
 function applyStoredSpeed(target) {
@@ -310,43 +395,170 @@ function applyStoredSpeed(target) {
     textureEOsc.frequency.rampTo(tone * speedMultiplier, 0.1);
     textureEFilterLFO.frequency.rampTo(0.18 * speedMultiplier, 0.1);
   }
+
+  if (target === "master") {
+    ["a", "b", "c", "d", "e"].forEach(applyStoredSpeed);
+  }
 }
 
-function applyAllStoredControls() {
-  applyStoredVolume("master");
-  applyStoredFilter("master");
-  applyStoredDistortion("master");
-  ["a", "b", "c", "d", "e"].forEach(function (key) {
-    applyStoredFilter(key);
-    applyStoredDistortion(key);
-    applyStoredSpeed(key);
-  });
-}
-
+// ui sync
 function syncControlSlidersToTarget() {
-  if (!controlTargetSelect) return;
-  const key = getControlTargetKey();
-  volumeSlider.value = controlState[key].volume;
-  filterSlider.value = controlState[key].filter;
-  speedSlider.value = controlState[key].speed;
-  distortionSlider.value = controlState[key].distortion;
+  const target = getControlTarget();
+  volumeSlider.value = controlState[target].volume;
+  filterSlider.value = controlState[target].filter;
+  speedSlider.value = controlState[target].speed;
+  distortionSlider.value = controlState[target].distortion;
 }
 
+controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
+
+// audio start
+startButton.addEventListener("click", async function () {
+  if (audioStarted) return;
+  await Tone.start();
+  audioStarted = true;
+  startButton.textContent = "Audio Ready";
+});
+
+// toggles
+function setTextureAState(isOn) {
+  textureAOn = isOn;
+  if (textureAOn) {
+    textureAGain.gain.rampTo(sliderToGain("a", controlState.a.volume), 0.2);
+    textureAButton.textContent = "ON";
+    textureAButton.classList.add("active");
+  } else {
+    textureAGain.gain.rampTo(0, 0.2);
+    textureAButton.textContent = "OFF";
+    textureAButton.classList.remove("active");
+  }
+}
+
+function setTextureBState(isOn) {
+  textureBOn = isOn;
+  if (textureBOn) {
+    textureBGain.gain.rampTo(sliderToGain("b", controlState.b.volume), 0.2);
+    textureBButton.textContent = "ON";
+    textureBButton.classList.add("active");
+  } else {
+    textureBGain.gain.rampTo(0, 0.2);
+    textureBButton.textContent = "OFF";
+    textureBButton.classList.remove("active");
+  }
+}
+
+function setTextureCState(isOn) {
+  textureCOn = isOn;
+  if (textureCOn) {
+    textureCGain.gain.rampTo(sliderToGain("c", controlState.c.volume), 0.2);
+    textureCButton.textContent = "ON";
+    textureCButton.classList.add("active");
+  } else {
+    textureCGain.gain.rampTo(0, 0.2);
+    textureCButton.textContent = "OFF";
+    textureCButton.classList.remove("active");
+  }
+}
+
+function setTextureDState(isOn) {
+  textureDOn = isOn;
+  if (textureDOn) {
+    textureDGain.gain.rampTo(sliderToGain("d", controlState.d.volume), 0.2);
+    textureDButton.textContent = "ON";
+    textureDButton.classList.add("active");
+  } else {
+    textureDGain.gain.rampTo(0, 0.2);
+    textureDButton.textContent = "OFF";
+    textureDButton.classList.remove("active");
+  }
+}
+
+function setTextureEState(isOn) {
+  textureEOn = isOn;
+  if (textureEOn) {
+    textureEGain.gain.rampTo(sliderToGain("e", controlState.e.volume), 0.2);
+    textureEButton.textContent = "ON";
+    textureEButton.classList.add("active");
+  } else {
+    textureEGain.gain.rampTo(0, 0.2);
+    textureEButton.textContent = "OFF";
+    textureEButton.classList.remove("active");
+  }
+}
+
+textureAButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureAState(!textureAOn);
+});
+
+textureBButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureBState(!textureBOn);
+});
+
+textureCButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureCState(!textureCOn);
+});
+
+textureDButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureDState(!textureDOn);
+});
+
+textureEButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureEState(!textureEOn);
+});
+
+playAllButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureAState(true);
+  setTextureBState(true);
+  setTextureCState(true);
+  setTextureDState(true);
+  setTextureEState(true);
+});
+
+stopAllButton.addEventListener("click", function () {
+  setTextureAState(false);
+  setTextureBState(false);
+  setTextureCState(false);
+  setTextureDState(false);
+  setTextureEState(false);
+});
+
+// control sliders
+volumeSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].volume = Number(volumeSlider.value);
+  applyStoredVolume(target);
+});
+
+filterSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].filter = Number(filterSlider.value);
+  applyStoredFilter(target);
+});
+
+speedSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].speed = Number(speedSlider.value);
+  applyStoredSpeed(target);
+});
+
+distortionSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].distortion = Number(distortionSlider.value);
+  applyStoredDistortion(target);
+});
+
+// new sound params
 function updateSoundDesignLabels() {
-  if (subPulseFreqValue) subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
-  if (subPulseDetuneValue) subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
-  if (windPipeToneValue) windPipeToneValue.textContent = `${windPipeTone.value}Hz`;
-  if (windPipeBreathValue) windPipeBreathValue.textContent = `${windPipeBreath.value}%`;
-}
-
-function updateDurationLabels() {
-  if (hitUpDurationValue) hitUpDurationValue.textContent = `${Number(hitUpDuration.value).toFixed(1)}s`;
-  if (hitDownDurationValue) hitDownDurationValue.textContent = `${Number(hitDownDuration.value).toFixed(1)}s`;
-  if (echoBurstDurationValue) echoBurstDurationValue.textContent = `${Number(echoBurstDuration.value).toFixed(1)}s`;
-  if (muffleDurationValue) muffleDurationValue.textContent = `${Number(muffleDuration.value).toFixed(1)}s`;
-  if (warpDurationValue) warpDurationValue.textContent = `${Number(warpDuration.value).toFixed(1)}s`;
-  if (loopIntervalValue) loopIntervalValue.textContent = `${Number(loopInterval.value).toFixed(1)}s`;
-  if (loopDurationValue) loopDurationValue.textContent = `${Number(loopDuration.value).toFixed(1)}s`;
+  subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
+  subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
+  windPipeToneValue.textContent = `${windPipeTone.value}Hz`;
+  windPipeBreathValue.textContent = `${windPipeBreath.value}%`;
 }
 
 function applySubPulseDesign() {
@@ -366,290 +578,49 @@ function applyWindPipeDesign() {
   textureENoiseGain.gain.rampTo(breath / 180, 0.1);
 }
 
-function setTextureState(button, gainNode, key, isOn) {
-  if (key === "a") textureAOn = isOn;
-  if (key === "b") textureBOn = isOn;
-  if (key === "c") textureCOn = isOn;
-  if (key === "d") textureDOn = isOn;
-  if (key === "e") textureEOn = isOn;
-
-  if (isOn) {
-    gainNode.gain.rampTo(sliderToGain(key, controlState[key].volume), 0.2);
-    if (button) {
-      button.textContent = "ON";
-      button.classList.add("active");
-    }
-  } else {
-    gainNode.gain.rampTo(0, 0.2);
-    if (button) {
-      button.textContent = "OFF";
-      button.classList.remove("active");
-    }
-  }
-}
-
-function getActiveGroups() {
-  const groups = [];
-
-  if (textureAOn) {
-    groups.push({
-      oscillators: [textureAOsc1, textureAOsc2, textureAOsc3],
-      baseFrequencies: [
-        baseFreq1 * (controlState.a.speed / 100),
-        baseFreq2 * (controlState.a.speed / 100),
-        baseFreq3 * (controlState.a.speed / 100)
-      ]
-    });
-  }
-
-  if (textureBOn) {
-    groups.push({
-      oscillators: [textureBOsc1, textureBOsc2, textureBOsc3],
-      baseFrequencies: [
-        43.65 * (controlState.b.speed / 100),
-        87.3 * (controlState.b.speed / 100),
-        65.4 * (controlState.b.speed / 100)
-      ]
-    });
-  }
-
-  if (textureCOn) {
-    groups.push({
-      oscillators: [textureCOsc],
-      baseFrequencies: [523.25 * (controlState.c.speed / 100)]
-    });
-  }
-
-  if (textureDOn) {
-    const base = Number(subPulseFreq.value);
-    const detune = Number(subPulseDetune.value);
-    groups.push({
-      oscillators: [textureDOsc1, textureDOsc2],
-      baseFrequencies: [
-        base * (controlState.d.speed / 100),
-        (base + detune) * (controlState.d.speed / 100)
-      ]
-    });
-  }
-
-  if (textureEOn) {
-    groups.push({
-      oscillators: [textureEOsc],
-      baseFrequencies: [Number(windPipeTone.value) * (controlState.e.speed / 100)]
-    });
-  }
-
-  return groups;
-}
-
-function triggerPitchEffect(multiplier, holdTime) {
-  if (!requireAnyTexture()) return;
-
-  const groups = getActiveGroups();
-
-  groups.forEach(function (group) {
-    group.oscillators.forEach(function (osc, i) {
-      osc.frequency.value = group.baseFrequencies[i] * multiplier;
-    });
-  });
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (osc, i) {
-        osc.frequency.rampTo(group.baseFrequencies[i], 0.4);
-      });
-    });
-  }, holdTime * 1000);
-}
-
-function triggerEchoBurst(holdTime) {
-  if (!requireAnyTexture()) return;
-
-  echoDelay.delayTime.rampTo(0.3, 0.05);
-  echoDelay.feedback.rampTo(0.65, 0.1);
-  echoDelay.wet.rampTo(0.85, 0.1);
-
-  setTimeout(function () {
-    echoDelay.feedback.rampTo(0.2, 0.7);
-    echoDelay.wet.rampTo(0, 0.7);
-    echoDelay.delayTime.rampTo(0.25, 0.2);
-  }, holdTime * 1000);
-}
-
-function triggerMuffle(holdTime) {
-  if (!requireAnyTexture()) return;
-
-  const normalFreq = sliderToFrequency(controlState.master.filter);
-  masterFilter.frequency.cancelScheduledValues(Tone.now());
-  masterFilter.frequency.rampTo(220, 0.08);
-
-  setTimeout(function () {
-    masterFilter.frequency.rampTo(normalFreq, 0.45);
-  }, holdTime * 1000);
-}
-
-function triggerWarp(holdTime) {
-  if (!requireAnyTexture()) return;
-
-  const groups = getActiveGroups();
-
-  groups.forEach(function (group) {
-    group.oscillators.forEach(function (osc, i) {
-      osc.frequency.rampTo(group.baseFrequencies[i] * 1.55, 0.08);
-    });
-  });
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (osc, i) {
-        osc.frequency.rampTo(group.baseFrequencies[i] * 0.78, 0.15);
-      });
-    });
-  }, holdTime * 500);
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (osc, i) {
-        osc.frequency.rampTo(group.baseFrequencies[i], 0.35);
-      });
-    });
-  }, holdTime * 1000);
-}
-
-function triggerEffect(effectName, durationValue) {
-  if (effectName === "Hit Up") triggerPitchEffect(1.8, durationValue);
-  if (effectName === "Hit Down") triggerPitchEffect(0.45, durationValue);
-  if (effectName === "Echo Burst") triggerEchoBurst(durationValue);
-  if (effectName === "Muffle") triggerMuffle(durationValue);
-  if (effectName === "Warp") triggerWarp(durationValue);
-}
-
-// SAFE EVENT BINDING
-if (startButton) {
-  startButton.addEventListener("click", async function () {
-    if (audioStarted) return;
-    await Tone.start();
-    audioStarted = true;
-    startButton.textContent = "Audio Ready";
-  });
-}
-
-if (playAllButton) {
-  playAllButton.addEventListener("click", function () {
-    if (!audioStarted) return alert("First click Start Audio");
-    setTextureState(textureAButton, textureAGain, "a", true);
-    setTextureState(textureBButton, textureBGain, "b", true);
-    setTextureState(textureCButton, textureCGain, "c", true);
-    setTextureState(textureDButton, textureDGain, "d", true);
-    setTextureState(textureEButton, textureEGain, "e", true);
-  });
-}
-
-if (stopAllButton) {
-  stopAllButton.addEventListener("click", function () {
-    setTextureState(textureAButton, textureAGain, "a", false);
-    setTextureState(textureBButton, textureBGain, "b", false);
-    setTextureState(textureCButton, textureCGain, "c", false);
-    setTextureState(textureDButton, textureDGain, "d", false);
-    setTextureState(textureEButton, textureEGain, "e", false);
-  });
-}
-
-if (randomButton) {
-  randomButton.addEventListener("click", function () {
-    if (!audioStarted) return alert("First click Start Audio");
-    const key = getControlTargetKey();
-    controlState[key].volume = Math.floor(Math.random() * 101);
-    controlState[key].filter = Math.floor(Math.random() * 101);
-    controlState[key].speed = 70 + Math.floor(Math.random() * 61);
-    controlState[key].distortion = Math.floor(Math.random() * 60);
-    syncControlSlidersToTarget();
-    if (key === "master") {
-      applyStoredVolume("master");
-      applyStoredFilter("master");
-      applyStoredDistortion("master");
-    } else {
-      applyStoredVolume(key);
-      applyStoredFilter(key);
-      applyStoredDistortion(key);
-      applyStoredSpeed(key);
-    }
-  });
-}
-
-[
-  [textureAButton, () => setTextureState(textureAButton, textureAGain, "a", !textureAOn)],
-  [textureBButton, () => setTextureState(textureBButton, textureBGain, "b", !textureBOn)],
-  [textureCButton, () => setTextureState(textureCButton, textureCGain, "c", !textureCOn)],
-  [textureDButton, () => setTextureState(textureDButton, textureDGain, "d", !textureDOn)],
-  [textureEButton, () => setTextureState(textureEButton, textureEGain, "e", !textureEOn)]
-].forEach(([btn, fn]) => {
-  if (btn) {
-    btn.addEventListener("click", function () {
-      if (!audioStarted) return alert("First click Start Audio");
-      fn();
-    });
-  }
+subPulseFreq.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applySubPulseDesign();
 });
 
-if (controlTargetSelect) controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
-
-if (volumeSlider) {
-  volumeSlider.addEventListener("input", function () {
-    const key = getControlTargetKey();
-    controlState[key].volume = Number(volumeSlider.value);
-    applyStoredVolume(key);
-  });
-}
-
-if (filterSlider) {
-  filterSlider.addEventListener("input", function () {
-    const key = getControlTargetKey();
-    controlState[key].filter = Number(filterSlider.value);
-    applyStoredFilter(key);
-  });
-}
-
-if (speedSlider) {
-  speedSlider.addEventListener("input", function () {
-    const key = getControlTargetKey();
-    controlState[key].speed = Number(speedSlider.value);
-    if (key === "master") {
-      ["a", "b", "c", "d", "e"].forEach(function (t) {
-        controlState[t].speed = Number(speedSlider.value);
-        applyStoredSpeed(t);
-      });
-    } else {
-      applyStoredSpeed(key);
-    }
-  });
-}
-
-if (distortionSlider) {
-  distortionSlider.addEventListener("input", function () {
-    const key = getControlTargetKey();
-    controlState[key].distortion = Number(distortionSlider.value);
-    applyStoredDistortion(key);
-  });
-}
-
-[subPulseFreq, subPulseDetune].forEach(function (el) {
-  if (el) {
-    el.addEventListener("input", function () {
-      updateSoundDesignLabels();
-      applySubPulseDesign();
-    });
-  }
+subPulseDetune.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applySubPulseDesign();
 });
 
-[windPipeTone, windPipeBreath].forEach(function (el) {
-  if (el) {
-    el.addEventListener("input", function () {
-      updateSoundDesignLabels();
-      applyWindPipeDesign();
-    });
-  }
+windPipeTone.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applyWindPipeDesign();
 });
+
+windPipeBreath.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applyWindPipeDesign();
+});
+
+// labels
+function updateDurationLabels() {
+  hitUpDurationValue.textContent = `${hitUpDuration.value}s`;
+  hitDownDurationValue.textContent = `${hitDownDuration.value}s`;
+  echoBurstDurationValue.textContent = `${echoBurstDuration.value}s`;
+  muffleDurationValue.textContent = `${muffleDuration.value}s`;
+  warpDurationValue.textContent = `${warpDuration.value}s`;
+
+  loopHitUpIntervalValue.textContent = `${Number(loopHitUpInterval.value).toFixed(1)}s`;
+  loopHitUpDurationValue.textContent = `${Number(loopHitUpDuration.value).toFixed(1)}s`;
+
+  loopHitDownIntervalValue.textContent = `${Number(loopHitDownInterval.value).toFixed(1)}s`;
+  loopHitDownDurationValue.textContent = `${Number(loopHitDownDuration.value).toFixed(1)}s`;
+
+  loopEchoIntervalValue.textContent = `${Number(loopEchoInterval.value).toFixed(1)}s`;
+  loopEchoDurationValue.textContent = `${Number(loopEchoDuration.value).toFixed(1)}s`;
+
+  loopMuffleIntervalValue.textContent = `${Number(loopMuffleInterval.value).toFixed(1)}s`;
+  loopMuffleDurationValue.textContent = `${Number(loopMuffleDuration.value).toFixed(1)}s`;
+
+  loopWarpIntervalValue.textContent = `${Number(loopWarpInterval.value).toFixed(1)}s`;
+  loopWarpDurationValue.textContent = `${Number(loopWarpDuration.value).toFixed(1)}s`;
+}
 
 [
   hitUpDuration,
@@ -657,93 +628,386 @@ if (distortionSlider) {
   echoBurstDuration,
   muffleDuration,
   warpDuration,
-  loopInterval,
-  loopDuration
+  loopHitUpInterval,
+  loopHitUpDuration,
+  loopHitDownInterval,
+  loopHitDownDuration,
+  loopEchoInterval,
+  loopEchoDuration,
+  loopMuffleInterval,
+  loopMuffleDuration,
+  loopWarpInterval,
+  loopWarpDuration
 ].forEach(function (slider) {
-  if (slider) slider.addEventListener("input", updateDurationLabels);
+  slider.addEventListener("input", updateDurationLabels);
 });
 
-if (hitUpButton) hitUpButton.addEventListener("click", () => triggerEffect("Hit Up", Number(hitUpDuration.value)));
-if (hitDownButton) hitDownButton.addEventListener("click", () => triggerEffect("Hit Down", Number(hitDownDuration.value)));
-if (echoBurstButton) echoBurstButton.addEventListener("click", () => triggerEffect("Echo Burst", Number(echoBurstDuration.value)));
-if (muffleButton) muffleButton.addEventListener("click", () => triggerEffect("Muffle", Number(muffleDuration.value)));
-if (warpButton) warpButton.addEventListener("click", () => triggerEffect("Warp", Number(warpDuration.value)));
-
-function stopLoop() {
-  if (loopTimer) {
-    clearInterval(loopTimer);
-    loopTimer = null;
+// effect target helpers
+function getGroupsForTarget(target) {
+  if (target === "a" && textureAOn) {
+    return [{
+      oscillators: [textureAOsc1, textureAOsc2, textureAOsc3],
+      baseFrequencies: [
+        baseFreq1 * (controlState.a.speed / 100),
+        baseFreq2 * (controlState.a.speed / 100),
+        baseFreq3 * (controlState.a.speed / 100)
+      ]
+    }];
   }
-  if (loopStatus) loopStatus.textContent = "Idle";
+
+  if (target === "b" && textureBOn) {
+    return [{
+      oscillators: [textureBOsc1, textureBOsc2, textureBOsc3],
+      baseFrequencies: [
+        43.65 * (controlState.b.speed / 100),
+        87.3 * (controlState.b.speed / 100),
+        65.4 * (controlState.b.speed / 100)
+      ]
+    }];
+  }
+
+  if (target === "c" && textureCOn) {
+    return [{
+      oscillators: [textureCOsc],
+      baseFrequencies: [523.25 * (controlState.c.speed / 100)]
+    }];
+  }
+
+  if (target === "d" && textureDOn) {
+    const base = Number(subPulseFreq.value);
+    const detune = Number(subPulseDetune.value);
+    return [{
+      oscillators: [textureDOsc1, textureDOsc2],
+      baseFrequencies: [
+        base * (controlState.d.speed / 100),
+        (base + detune) * (controlState.d.speed / 100)
+      ]
+    }];
+  }
+
+  if (target === "e" && textureEOn) {
+    return [{
+      oscillators: [textureEOsc],
+      baseFrequencies: [Number(windPipeTone.value) * (controlState.e.speed / 100)]
+    }];
+  }
+
+  return [];
 }
 
-if (startLoopButton) {
-  startLoopButton.addEventListener("click", function () {
-    if (!audioStarted) return alert("First click Start Audio");
-    stopLoop();
+function getAllActiveGroups() {
+  return [
+    ...getGroupsForTarget("a"),
+    ...getGroupsForTarget("b"),
+    ...getGroupsForTarget("c"),
+    ...getGroupsForTarget("d"),
+    ...getGroupsForTarget("e")
+  ];
+}
 
-    const effectName = loopEffectSelect.value;
-    const intervalMs = Number(loopInterval.value) * 1000;
-    const durationValue = Number(loopDuration.value);
+function getGroupsFromSelector(selectorValue) {
+  if (selectorValue === "all") {
+    if (!requireAnyTexture()) return null;
+    return getAllActiveGroups();
+  }
+  if (!requireSpecificTexture(selectorValue)) return null;
+  return getGroupsForTarget(selectorValue);
+}
 
-    if (loopStatus) loopStatus.textContent = `Looping ${effectName}`;
-    triggerEffect(effectName, durationValue);
+// effects
+function applyPitchHit(multiplier, holdTime, targetValue) {
+  const groups = getGroupsFromSelector(targetValue);
+  if (!groups) return;
 
-    loopTimer = setInterval(function () {
-      triggerEffect(effectName, durationValue);
-    }, intervalMs);
+  groups.forEach(function (group) {
+    group.oscillators.forEach(function (oscillator, index) {
+      oscillator.frequency.value = group.baseFrequencies[index] * multiplier;
+    });
   });
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.4);
+      });
+    });
+  }, holdTime * 1000);
 }
 
-if (stopLoopButton) stopLoopButton.addEventListener("click", stopLoop);
+function triggerEchoBurst(holdTime, targetValue) {
+  if (targetValue === "all") {
+    if (!requireAnyTexture()) return;
 
-if (pauseSpectrogramButton) pauseSpectrogramButton.addEventListener("click", () => spectrogramPaused = true);
-if (resumeSpectrogramButton) resumeSpectrogramButton.addEventListener("click", () => spectrogramPaused = false);
-if (clearSpectrogramButton) {
-  clearSpectrogramButton.addEventListener("click", function () {
-    if (!spectrogramCtx) return;
-    spectrogramCtx.fillStyle = "black";
-    spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
-    drawSpectrogramOverlay();
+    echoDelay.delayTime.rampTo(0.3, 0.05);
+    echoDelay.feedback.rampTo(0.65, 0.1);
+    echoDelay.wet.rampTo(0.85, 0.1);
+
+    setTimeout(function () {
+      echoDelay.feedback.rampTo(0.2, 0.7);
+      echoDelay.wet.rampTo(0, 0.7);
+      echoDelay.delayTime.rampTo(0.25, 0.2);
+    }, holdTime * 1000);
+    return;
+  }
+
+  if (!requireSpecificTexture(targetValue)) return;
+  const gainNode = getGainNode(targetValue);
+  if (!gainNode) return;
+
+  gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume) * 1.6, 0.05);
+  setTimeout(function () {
+    gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume), 0.4);
+  }, holdTime * 1000);
+}
+
+function triggerMuffle(holdTime, targetValue) {
+  if (targetValue === "all") {
+    if (!requireAnyTexture()) return;
+    const normalFreq = sliderToFrequency(controlState.master.filter);
+    masterFilter.frequency.cancelScheduledValues(Tone.now());
+    masterFilter.frequency.rampTo(220, 0.08);
+
+    setTimeout(function () {
+      masterFilter.frequency.rampTo(normalFreq, 0.45);
+    }, holdTime * 1000);
+    return;
+  }
+
+  if (!requireSpecificTexture(targetValue)) return;
+  const filterNode = getFilterNode(targetValue);
+  const normalFreq = sliderToFrequency(controlState[targetValue].filter);
+  if (!filterNode) return;
+
+  filterNode.frequency.cancelScheduledValues(Tone.now());
+  filterNode.frequency.rampTo(220, 0.08);
+  setTimeout(function () {
+    filterNode.frequency.rampTo(normalFreq, 0.45);
+  }, holdTime * 1000);
+}
+
+function triggerWarp(holdTime, targetValue) {
+  const groups = getGroupsFromSelector(targetValue);
+  if (!groups) return;
+
+  groups.forEach(function (group) {
+    group.oscillators.forEach(function (oscillator, index) {
+      oscillator.frequency.rampTo(group.baseFrequencies[index] * 1.55, 0.08);
+    });
   });
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index] * 0.78, 0.15);
+      });
+    });
+  }, holdTime * 500);
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.35);
+      });
+    });
+  }, holdTime * 1000);
 }
+
+function triggerEffect(effectName, durationValue, targetValue) {
+  if (effectName === "hitUp") applyPitchHit(1.8, durationValue, targetValue);
+  if (effectName === "hitDown") applyPitchHit(0.45, durationValue, targetValue);
+  if (effectName === "echoBurst") triggerEchoBurst(durationValue, targetValue);
+  if (effectName === "muffle") triggerMuffle(durationValue, targetValue);
+  if (effectName === "warp") triggerWarp(durationValue, targetValue);
+}
+
+// manual effect buttons
+hitUpButton.addEventListener("click", function () {
+  triggerEffect("hitUp", Number(hitUpDuration.value), hitUpTargetSelect.value);
+});
+
+hitDownButton.addEventListener("click", function () {
+  triggerEffect("hitDown", Number(hitDownDuration.value), hitDownTargetSelect.value);
+});
+
+echoBurstButton.addEventListener("click", function () {
+  triggerEffect("echoBurst", Number(echoBurstDuration.value), echoBurstTargetSelect.value);
+});
+
+muffleButton.addEventListener("click", function () {
+  triggerEffect("muffle", Number(muffleDuration.value), muffleTargetSelect.value);
+});
+
+warpButton.addEventListener("click", function () {
+  triggerEffect("warp", Number(warpDuration.value), warpTargetSelect.value);
+});
+
+// loop helpers
+function stopNamedLoop(loopIdName) {
+  if (loopIdName === "hitUp" && hitUpLoopId) {
+    clearInterval(hitUpLoopId);
+    hitUpLoopId = null;
+  }
+  if (loopIdName === "hitDown" && hitDownLoopId) {
+    clearInterval(hitDownLoopId);
+    hitDownLoopId = null;
+  }
+  if (loopIdName === "echo" && echoLoopId) {
+    clearInterval(echoLoopId);
+    echoLoopId = null;
+  }
+  if (loopIdName === "muffle" && muffleLoopId) {
+    clearInterval(muffleLoopId);
+    muffleLoopId = null;
+  }
+  if (loopIdName === "warp" && warpLoopId) {
+    clearInterval(warpLoopId);
+    warpLoopId = null;
+  }
+}
+
+function startNamedLoop(loopName, effectName, targetValue, intervalSeconds, durationSeconds) {
+  if (!audioStarted) {
+    alert("First click Start Audio");
+    return;
+  }
+
+  stopNamedLoop(loopName);
+  triggerEffect(effectName, durationSeconds, targetValue);
+
+  const newId = setInterval(function () {
+    triggerEffect(effectName, durationSeconds, targetValue);
+  }, intervalSeconds * 1000);
+
+  if (loopName === "hitUp") hitUpLoopId = newId;
+  if (loopName === "hitDown") hitDownLoopId = newId;
+  if (loopName === "echo") echoLoopId = newId;
+  if (loopName === "muffle") muffleLoopId = newId;
+  if (loopName === "warp") warpLoopId = newId;
+}
+
+// loop bindings
+startLoopHitUpButton.addEventListener("click", function () {
+  startNamedLoop(
+    "hitUp",
+    "hitUp",
+    loopHitUpTargetSelect.value,
+    Number(loopHitUpInterval.value),
+    Number(loopHitUpDuration.value)
+  );
+});
+
+stopLoopHitUpButton.addEventListener("click", function () {
+  stopNamedLoop("hitUp");
+});
+
+startLoopHitDownButton.addEventListener("click", function () {
+  startNamedLoop(
+    "hitDown",
+    "hitDown",
+    loopHitDownTargetSelect.value,
+    Number(loopHitDownInterval.value),
+    Number(loopHitDownDuration.value)
+  );
+});
+
+stopLoopHitDownButton.addEventListener("click", function () {
+  stopNamedLoop("hitDown");
+});
+
+startLoopEchoButton.addEventListener("click", function () {
+  startNamedLoop(
+    "echo",
+    "echoBurst",
+    loopEchoTargetSelect.value,
+    Number(loopEchoInterval.value),
+    Number(loopEchoDuration.value)
+  );
+});
+
+stopLoopEchoButton.addEventListener("click", function () {
+  stopNamedLoop("echo");
+});
+
+startLoopMuffleButton.addEventListener("click", function () {
+  startNamedLoop(
+    "muffle",
+    "muffle",
+    loopMuffleTargetSelect.value,
+    Number(loopMuffleInterval.value),
+    Number(loopMuffleDuration.value)
+  );
+});
+
+stopLoopMuffleButton.addEventListener("click", function () {
+  stopNamedLoop("muffle");
+});
+
+startLoopWarpButton.addEventListener("click", function () {
+  startNamedLoop(
+    "warp",
+    "warp",
+    loopWarpTargetSelect.value,
+    Number(loopWarpInterval.value),
+    Number(loopWarpDuration.value)
+  );
+});
+
+stopLoopWarpButton.addEventListener("click", function () {
+  stopNamedLoop("warp");
+});
+
+// spectrogram
+pauseSpectrogramButton.addEventListener("click", function () {
+  spectrogramPaused = true;
+});
+
+resumeSpectrogramButton.addEventListener("click", function () {
+  spectrogramPaused = false;
+});
+
+clearSpectrogramButton.addEventListener("click", function () {
+  spectrogramCtx.fillStyle = "black";
+  spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
+  drawSpectrogramOverlay();
+});
 
 function fftToColor(value) {
   const intensity = Math.max(0, Math.min(1, (value + 140) / 140));
-  if (intensity < 0.2) return `rgb(0,0,${Math.floor(80 + intensity * 200)})`;
-  if (intensity < 0.4) return `rgb(0,${Math.floor(intensity * 255)},160)`;
-  if (intensity < 0.65) return `rgb(${Math.floor(intensity * 180)},${Math.floor(120 + intensity * 100)},80)`;
-  if (intensity < 0.85) return `rgb(${Math.floor(180 + intensity * 60)},${Math.floor(120 + intensity * 80)},40)`;
-  return `rgb(255,255,${Math.floor(150 + intensity * 80)})`;
+
+  if (intensity < 0.2) return `rgb(0, 0, ${Math.floor(80 + intensity * 200)})`;
+  if (intensity < 0.4) return `rgb(0, ${Math.floor(intensity * 255)}, 160)`;
+  if (intensity < 0.65) return `rgb(${Math.floor(intensity * 180)}, ${Math.floor(120 + intensity * 100)}, 80)`;
+  if (intensity < 0.85) return `rgb(${Math.floor(180 + intensity * 60)}, ${Math.floor(120 + intensity * 80)}, 40)`;
+  return `rgb(255, 255, ${Math.floor(150 + intensity * 80)})`;
 }
 
 function drawSpectrogramOverlay() {
-  if (!spectrogramOverlayCtx || !spectrogramOverlay) return;
-
-  const width = spectrogramOverlay.width;
-  const height = spectrogramOverlay.height;
+  const width = spectrogramOverlayCanvas.width;
+  const height = spectrogramOverlayCanvas.height;
 
   spectrogramOverlayCtx.clearRect(0, 0, width, height);
   spectrogramOverlayCtx.save();
-  spectrogramOverlayCtx.strokeStyle = "rgba(255,255,255,0.14)";
-  spectrogramOverlayCtx.fillStyle = "rgba(255,255,255,0.55)";
+  spectrogramOverlayCtx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+  spectrogramOverlayCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
+  spectrogramOverlayCtx.lineWidth = 1;
   spectrogramOverlayCtx.font = "12px Arial";
 
-  for (let i = 0; i <= 8; i++) {
-    const x = (width / 8) * i;
+  for (let i = 0; i <= spectrogramSecondsVisible; i++) {
+    const x = (width / spectrogramSecondsVisible) * i;
     spectrogramOverlayCtx.beginPath();
     spectrogramOverlayCtx.moveTo(x, 0);
     spectrogramOverlayCtx.lineTo(x, height);
     spectrogramOverlayCtx.stroke();
-    const secondsAgo = 8 - i;
-    spectrogramOverlayCtx.fillText(secondsAgo === 0 ? "now" : `-${secondsAgo}s`, x + 4, 14);
+
+    const secondsAgo = spectrogramSecondsVisible - i;
+    const label = secondsAgo === 0 ? "now" : `-${secondsAgo}s`;
+    spectrogramOverlayCtx.fillText(label, x + 4, 14);
   }
 
   spectrogramOverlayCtx.restore();
 }
 
 function drawSpectrogram() {
-  if (!spectrogramCtx || !spectrogramCanvas) return;
   requestAnimationFrame(drawSpectrogram);
 
   if (spectrogramPaused) {
@@ -761,7 +1025,7 @@ function drawSpectrogram() {
     0, 0, width - 2, height
   );
 
-  spectrogramCtx.fillStyle = "rgba(0,0,0,0.18)";
+  spectrogramCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
   spectrogramCtx.fillRect(width - 2, 0, 2, height);
 
   const binsToUse = Math.floor(values.length * 0.6);
@@ -776,8 +1040,8 @@ function drawSpectrogram() {
   drawSpectrogramOverlay();
 }
 
+// oscilloscope
 function drawOscilloscope() {
-  if (!oscilloscopeCtx || !oscilloscopeCanvas) return;
   requestAnimationFrame(drawOscilloscope);
 
   const waveform = waveformAnalyser.getValue();
@@ -785,13 +1049,13 @@ function drawOscilloscope() {
   const height = oscilloscopeCanvas.height;
   const centerY = height / 2;
 
-  oscilloscopeCtx.fillStyle = "rgba(0,0,0,0.18)";
+  oscilloscopeCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
   oscilloscopeCtx.fillRect(0, 0, width, height);
 
   const sliceWidth = width / waveform.length;
 
   oscilloscopeCtx.save();
-  oscilloscopeCtx.strokeStyle = "rgba(120,120,120,0.18)";
+  oscilloscopeCtx.strokeStyle = "rgba(120, 120, 120, 0.18)";
   oscilloscopeCtx.lineWidth = 1;
 
   for (let i = 0; i <= 12; i++) {
@@ -809,12 +1073,13 @@ function drawOscilloscope() {
     oscilloscopeCtx.lineTo(width, y);
     oscilloscopeCtx.stroke();
   }
+
   oscilloscopeCtx.restore();
 
   oscilloscopeCtx.save();
   oscilloscopeCtx.beginPath();
   oscilloscopeCtx.lineWidth = 6;
-  oscilloscopeCtx.strokeStyle = "rgba(124,255,124,0.18)";
+  oscilloscopeCtx.strokeStyle = "rgba(124, 255, 124, 0.18)";
   oscilloscopeCtx.shadowBlur = 18;
   oscilloscopeCtx.shadowColor = "#7cff7c";
 
@@ -844,21 +1109,17 @@ function drawOscilloscope() {
   oscilloscopeCtx.restore();
 }
 
-// INIT
+// init
 updateSoundDesignLabels();
 updateDurationLabels();
 syncControlSlidersToTarget();
 
-if (oscilloscopeCtx) {
-  oscilloscopeCtx.fillStyle = "black";
-  oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);
-}
+oscilloscopeCtx.fillStyle = "black";
+oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);
 
-if (spectrogramCtx) {
-  spectrogramCtx.fillStyle = "black";
-  spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
-}
-
+spectrogramCtx.fillStyle = "black";
+spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
 drawSpectrogramOverlay();
+
 drawOscilloscope();
 drawSpectrogram();

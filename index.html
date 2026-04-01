@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>sound L A B</title>
+  <title>sound L AB</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
     <header class="top-bar">
       <h1>sound L A B</h1>
-      <p>super experimental browser sound producer by Mehmet</p>
+      <p>super experimental browser sound lab by Mehmet</p>
     </header>
 
     <section class="transport-bar">
@@ -80,32 +80,28 @@
         <div class="effects-block">
           <h3>sound design</h3>
 
-          <div class="effect-line">
+          <div class="effect-line wide-line">
             <span class="effect-name">Sub Freq</span>
             <input type="range" id="subPulseFreq" min="30" max="120" step="1" value="48">
             <span id="subPulseFreqValue">48Hz</span>
-            <span></span>
           </div>
 
-          <div class="effect-line">
+          <div class="effect-line wide-line">
             <span class="effect-name">Sub Detune</span>
             <input type="range" id="subPulseDetune" min="0" max="12" step="0.1" value="2.5">
             <span id="subPulseDetuneValue">2.5Hz</span>
-            <span></span>
           </div>
 
-          <div class="effect-line">
+          <div class="effect-line wide-line">
             <span class="effect-name">Pipe Tone</span>
             <input type="range" id="windPipeTone" min="220" max="1400" step="1" value="620">
             <span id="windPipeToneValue">620Hz</span>
-            <span></span>
           </div>
 
-          <div class="effect-line">
+          <div class="effect-line wide-line">
             <span class="effect-name">Pipe Breath</span>
             <input type="range" id="windPipeBreath" min="0" max="100" step="1" value="55">
             <span id="windPipeBreathValue">55%</span>
-            <span></span>
           </div>
         </div>
       </section>
@@ -143,48 +139,9 @@
         <div class="effects-block">
           <h3>performance effects</h3>
 
-          <div class="effect-line">
+          <div class="effect-line effect-line-advanced">
             <span class="effect-name">Hit Up</span>
-            <input type="range" id="hitUpDuration" min="0" max="2" step="0.1" value="0.8">
-            <span id="hitUpDurationValue">0.8s</span>
-            <button id="hitUpButton">Trigger</button>
-          </div>
-
-          <div class="effect-line">
-            <span class="effect-name">Hit Down</span>
-            <input type="range" id="hitDownDuration" min="0" max="2" step="0.1" value="0.8">
-            <span id="hitDownDurationValue">0.8s</span>
-            <button id="hitDownButton">Trigger</button>
-          </div>
-
-          <div class="effect-line">
-            <span class="effect-name">Echo Burst</span>
-            <input type="range" id="echoBurstDuration" min="0" max="2" step="0.1" value="1.0">
-            <span id="echoBurstDurationValue">1.0s</span>
-            <button id="echoBurstButton">Trigger</button>
-          </div>
-
-          <div class="effect-line">
-            <span class="effect-name">Muffle</span>
-            <input type="range" id="muffleDuration" min="0" max="2" step="0.1" value="1.0">
-            <span id="muffleDurationValue">1.0s</span>
-            <button id="muffleButton">Trigger</button>
-          </div>
-
-          <div class="effect-line">
-            <span class="effect-name">Warp</span>
-            <input type="range" id="warpDuration" min="0" max="2" step="0.1" value="1.0">
-            <span id="warpDurationValue">1.0s</span>
-            <button id="warpButton">Trigger</button>
-          </div>
-        </div>
-
-        <div class="effects-block">
-          <h3>effect loop</h3>
-
-          <div class="effect-line">
-            <span class="effect-name">Target</span>
-            <select id="effectTargetSelect">
+            <select id="hitUpTargetSelect">
               <option value="all">All Active</option>
               <option value="a">Drift Core</option>
               <option value="b">Low Engine</option>
@@ -192,42 +149,163 @@
               <option value="d">Sub Pulse</option>
               <option value="e">Wind Pipe</option>
             </select>
-            <span></span>
-            <span></span>
+            <input type="range" id="hitUpDuration" min="0" max="2" step="0.1" value="0.8">
+            <span id="hitUpDurationValue">0.8s</span>
+            <button id="hitUpButton">Trigger</button>
           </div>
 
-          <div class="effect-line">
-            <span class="effect-name">Effect</span>
-            <select id="loopEffectSelect">
-              <option value="hitUp">Hit Up</option>
-              <option value="hitDown">Hit Down</option>
-              <option value="echoBurst">Echo Burst</option>
-              <option value="muffle">Muffle</option>
-              <option value="warp">Warp</option>
+          <div class="effect-line effect-line-advanced">
+            <span class="effect-name">Hit Down</span>
+            <select id="hitDownTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
             </select>
-            <span></span>
-            <span></span>
+            <input type="range" id="hitDownDuration" min="0" max="2" step="0.1" value="0.8">
+            <span id="hitDownDurationValue">0.8s</span>
+            <button id="hitDownButton">Trigger</button>
           </div>
 
-          <div class="effect-line">
-            <span class="effect-name">Interval</span>
-            <input type="range" id="loopInterval" min="1" max="8" step="0.5" value="4">
-            <span id="loopIntervalValue">4.0s</span>
-            <span></span>
+          <div class="effect-line effect-line-advanced">
+            <span class="effect-name">Echo Burst</span>
+            <select id="echoBurstTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="echoBurstDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="echoBurstDurationValue">1.0s</span>
+            <button id="echoBurstButton">Trigger</button>
           </div>
 
-          <div class="effect-line">
-            <span class="effect-name">Duration</span>
-            <input type="range" id="loopDuration" min="0.2" max="4" step="0.1" value="2">
-            <span id="loopDurationValue">2.0s</span>
-            <span></span>
+          <div class="effect-line effect-line-advanced">
+            <span class="effect-name">Muffle</span>
+            <select id="muffleTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="muffleDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="muffleDurationValue">1.0s</span>
+            <button id="muffleButton">Trigger</button>
           </div>
 
-          <div class="effect-line">
-            <span class="effect-name">Loop</span>
-            <button id="startLoopButton">Start</button>
-            <button id="stopLoopButton">Stop</button>
-            <span id="loopStatus">Idle</span>
+          <div class="effect-line effect-line-advanced">
+            <span class="effect-name">Warp</span>
+            <select id="warpTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="warpDuration" min="0" max="2" step="0.1" value="1.0">
+            <span id="warpDurationValue">1.0s</span>
+            <button id="warpButton">Trigger</button>
+          </div>
+        </div>
+
+        <div class="effects-block">
+          <h3>effect loops</h3>
+
+          <div class="effect-line effect-line-loop">
+            <span class="effect-name">Hit Up Loop</span>
+            <select id="loopHitUpTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="loopHitUpInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopHitUpIntervalValue">4.0s</span>
+            <input type="range" id="loopHitUpDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopHitUpDurationValue">2.0s</span>
+            <button id="startLoopHitUpButton">Start</button>
+            <button id="stopLoopHitUpButton">Stop</button>
+          </div>
+
+          <div class="effect-line effect-line-loop">
+            <span class="effect-name">Hit Down Loop</span>
+            <select id="loopHitDownTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="loopHitDownInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopHitDownIntervalValue">4.0s</span>
+            <input type="range" id="loopHitDownDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopHitDownDurationValue">2.0s</span>
+            <button id="startLoopHitDownButton">Start</button>
+            <button id="stopLoopHitDownButton">Stop</button>
+          </div>
+
+          <div class="effect-line effect-line-loop">
+            <span class="effect-name">Echo Loop</span>
+            <select id="loopEchoTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="loopEchoInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopEchoIntervalValue">4.0s</span>
+            <input type="range" id="loopEchoDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopEchoDurationValue">2.0s</span>
+            <button id="startLoopEchoButton">Start</button>
+            <button id="stopLoopEchoButton">Stop</button>
+          </div>
+
+          <div class="effect-line effect-line-loop">
+            <span class="effect-name">Muffle Loop</span>
+            <select id="loopMuffleTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="loopMuffleInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopMuffleIntervalValue">4.0s</span>
+            <input type="range" id="loopMuffleDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopMuffleDurationValue">2.0s</span>
+            <button id="startLoopMuffleButton">Start</button>
+            <button id="stopLoopMuffleButton">Stop</button>
+          </div>
+
+          <div class="effect-line effect-line-loop">
+            <span class="effect-name">Warp Loop</span>
+            <select id="loopWarpTargetSelect">
+              <option value="all">All Active</option>
+              <option value="a">Drift Core</option>
+              <option value="b">Low Engine</option>
+              <option value="c">Air Reed</option>
+              <option value="d">Sub Pulse</option>
+              <option value="e">Wind Pipe</option>
+            </select>
+            <input type="range" id="loopWarpInterval" min="1" max="8" step="0.5" value="4">
+            <span id="loopWarpIntervalValue">4.0s</span>
+            <input type="range" id="loopWarpDuration" min="0.2" max="4" step="0.1" value="2">
+            <span id="loopWarpDurationValue">2.0s</span>
+            <button id="startLoopWarpButton">Start</button>
+            <button id="stopLoopWarpButton">Stop</button>
           </div>
         </div>
       </section>

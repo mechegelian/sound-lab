@@ -9,6 +9,15 @@ const textureCButton = document.getElementById("textureCButton");
 const textureDButton = document.getElementById("textureDButton");
 const textureEButton = document.getElementById("textureEButton");
 
+const pauseOscilloscopeButton = document.getElementById("pauseOscilloscopeButton");
+const resumeOscilloscopeButton = document.getElementById("resumeOscilloscopeButton");
+const oscZoomX = document.getElementById("oscZoomX");
+const oscZoomY = document.getElementById("oscZoomY");
+
+const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton");
+const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
+const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
+
 const hitUpButton = document.getElementById("hitUpButton");
 const hitDownButton = document.getElementById("hitDownButton");
 const echoBurstButton = document.getElementById("echoBurstButton");
@@ -50,7 +59,7 @@ const subPulseDetuneValue = document.getElementById("subPulseDetuneValue");
 const windPipeToneValue = document.getElementById("windPipeToneValue");
 const windPipeBreathValue = document.getElementById("windPipeBreathValue");
 
-// loop controls per effect
+// loop controls
 const loopHitUpTargetSelect = document.getElementById("loopHitUpTargetSelect");
 const loopHitUpInterval = document.getElementById("loopHitUpInterval");
 const loopHitUpIntervalValue = document.getElementById("loopHitUpIntervalValue");
@@ -100,10 +109,6 @@ const spectrogramCtx = spectrogramCanvas.getContext("2d");
 const spectrogramOverlayCanvas = document.getElementById("spectrogramOverlay");
 const spectrogramOverlayCtx = spectrogramOverlayCanvas.getContext("2d");
 
-const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton");
-const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
-const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
-
 let audioStarted = false;
 let textureAOn = false;
 let textureBOn = false;
@@ -111,15 +116,16 @@ let textureCOn = false;
 let textureDOn = false;
 let textureEOn = false;
 
+let oscilloscopePaused = false;
 let spectrogramPaused = false;
-const spectrogramSecondsVisible = 8;
 
-// one interval per loop effect
 let hitUpLoopId = null;
 let hitDownLoopId = null;
 let echoLoopId = null;
 let muffleLoopId = null;
 let warpLoopId = null;
+
+const spectrogramSecondsVisible = 8;
 
 const baseFreq1 = 110;
 const baseFreq2 = 111.2;
@@ -135,7 +141,7 @@ const controlState = {
 };
 
 // analysis + master fx
-const waveformAnalyser = new Tone.Analyser("waveform", 1024);
+const waveformAnalyser = new Tone.Analyser("waveform", 2048);
 const fftAnalyser = new Tone.Analyser("fft", 256);
 
 const masterGain = new Tone.Gain(0.7);
@@ -144,7 +150,7 @@ const masterDistortion = new Tone.Distortion(0);
 const echoDelay = new Tone.FeedbackDelay(0.25, 0.2);
 echoDelay.wet.value = 0;
 
-// A : Drift Core
+// textures
 const textureAFilter = new Tone.Filter(1800, "lowpass");
 const textureADistortion = new Tone.Distortion(0);
 const textureAGain = new Tone.Gain(0);
@@ -152,7 +158,6 @@ const textureAOsc1 = new Tone.Oscillator(baseFreq1, "sine");
 const textureAOsc2 = new Tone.Oscillator(baseFreq2, "triangle");
 const textureAOsc3 = new Tone.Oscillator(baseFreq3, "sine");
 
-// B : Low Engine
 const textureBFilter = new Tone.Filter(220, "lowpass");
 const textureBDistortion = new Tone.Distortion(0);
 const textureBGain = new Tone.Gain(0);
@@ -160,7 +165,6 @@ const textureBOsc1 = new Tone.Oscillator(43.65, "square");
 const textureBOsc2 = new Tone.Oscillator(87.3, "sine");
 const textureBOsc3 = new Tone.Oscillator(65.4, "triangle");
 
-// C : Air Reed
 const textureCFilter = new Tone.Filter(1400, "bandpass");
 const textureCDistortion = new Tone.Distortion(0);
 const textureCGain = new Tone.Gain(0);
@@ -168,14 +172,12 @@ const textureCNoise = new Tone.Noise("pink");
 const textureCOsc = new Tone.Oscillator(523.25, "sine");
 const textureCFilterLFO = new Tone.LFO(0.22, 900, 2200);
 
-// D : Sub Pulse
 const textureDFilter = new Tone.Filter(260, "lowpass");
 const textureDDistortion = new Tone.Distortion(0);
 const textureDGain = new Tone.Gain(0);
 const textureDOsc1 = new Tone.Oscillator(48, "sawtooth");
 const textureDOsc2 = new Tone.Oscillator(50.5, "square");
 
-// E : Wind Pipe
 const textureEFilter = new Tone.Filter(1200, "bandpass");
 const textureEDistortion = new Tone.Distortion(0);
 const textureEGain = new Tone.Gain(0);
@@ -329,7 +331,6 @@ function requireSpecificTexture(target) {
   return true;
 }
 
-// control application
 function applyStoredVolume(target) {
   if (target === "master") {
     masterGain.gain.rampTo(sliderToGain("master", controlState.master.volume), 0.1);
@@ -401,7 +402,6 @@ function applyStoredSpeed(target) {
   }
 }
 
-// ui sync
 function syncControlSlidersToTarget() {
   const target = getControlTarget();
   volumeSlider.value = controlState[target].volume;
@@ -528,7 +528,7 @@ stopAllButton.addEventListener("click", function () {
   setTextureEState(false);
 });
 
-// control sliders
+// sliders
 volumeSlider.addEventListener("input", function () {
   const target = getControlTarget();
   controlState[target].volume = Number(volumeSlider.value);
@@ -553,7 +553,7 @@ distortionSlider.addEventListener("input", function () {
   applyStoredDistortion(target);
 });
 
-// new sound params
+// sound design labels
 function updateSoundDesignLabels() {
   subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
   subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
@@ -598,7 +598,7 @@ windPipeBreath.addEventListener("input", function () {
   applyWindPipeDesign();
 });
 
-// labels
+// duration labels
 function updateDurationLabels() {
   hitUpDurationValue.textContent = `${hitUpDuration.value}s`;
   hitDownDurationValue.textContent = `${hitDownDuration.value}s`;
@@ -642,7 +642,7 @@ function updateDurationLabels() {
   slider.addEventListener("input", updateDurationLabels);
 });
 
-// effect target helpers
+// effect group helpers
 function getGroupsForTarget(target) {
   if (target === "a" && textureAOn) {
     return [{
@@ -710,6 +710,7 @@ function getGroupsFromSelector(selectorValue) {
     if (!requireAnyTexture()) return null;
     return getAllActiveGroups();
   }
+
   if (!requireSpecificTexture(selectorValue)) return null;
   return getGroupsForTarget(selectorValue);
 }
@@ -747,10 +748,12 @@ function triggerEchoBurst(holdTime, targetValue) {
       echoDelay.wet.rampTo(0, 0.7);
       echoDelay.delayTime.rampTo(0.25, 0.2);
     }, holdTime * 1000);
+
     return;
   }
 
   if (!requireSpecificTexture(targetValue)) return;
+
   const gainNode = getGainNode(targetValue);
   if (!gainNode) return;
 
@@ -763,6 +766,7 @@ function triggerEchoBurst(holdTime, targetValue) {
 function triggerMuffle(holdTime, targetValue) {
   if (targetValue === "all") {
     if (!requireAnyTexture()) return;
+
     const normalFreq = sliderToFrequency(controlState.master.filter);
     masterFilter.frequency.cancelScheduledValues(Tone.now());
     masterFilter.frequency.rampTo(220, 0.08);
@@ -770,16 +774,19 @@ function triggerMuffle(holdTime, targetValue) {
     setTimeout(function () {
       masterFilter.frequency.rampTo(normalFreq, 0.45);
     }, holdTime * 1000);
+
     return;
   }
 
   if (!requireSpecificTexture(targetValue)) return;
+
   const filterNode = getFilterNode(targetValue);
   const normalFreq = sliderToFrequency(controlState[targetValue].filter);
   if (!filterNode) return;
 
   filterNode.frequency.cancelScheduledValues(Tone.now());
   filterNode.frequency.rampTo(220, 0.08);
+
   setTimeout(function () {
     filterNode.frequency.rampTo(normalFreq, 0.45);
   }, holdTime * 1000);
@@ -820,7 +827,7 @@ function triggerEffect(effectName, durationValue, targetValue) {
   if (effectName === "warp") triggerWarp(durationValue, targetValue);
 }
 
-// manual effect buttons
+// manual effects
 hitUpButton.addEventListener("click", function () {
   triggerEffect("hitUp", Number(hitUpDuration.value), hitUpTargetSelect.value);
 });
@@ -842,24 +849,24 @@ warpButton.addEventListener("click", function () {
 });
 
 // loop helpers
-function stopNamedLoop(loopIdName) {
-  if (loopIdName === "hitUp" && hitUpLoopId) {
+function stopNamedLoop(loopName) {
+  if (loopName === "hitUp" && hitUpLoopId) {
     clearInterval(hitUpLoopId);
     hitUpLoopId = null;
   }
-  if (loopIdName === "hitDown" && hitDownLoopId) {
+  if (loopName === "hitDown" && hitDownLoopId) {
     clearInterval(hitDownLoopId);
     hitDownLoopId = null;
   }
-  if (loopIdName === "echo" && echoLoopId) {
+  if (loopName === "echo" && echoLoopId) {
     clearInterval(echoLoopId);
     echoLoopId = null;
   }
-  if (loopIdName === "muffle" && muffleLoopId) {
+  if (loopName === "muffle" && muffleLoopId) {
     clearInterval(muffleLoopId);
     muffleLoopId = null;
   }
-  if (loopIdName === "warp" && warpLoopId) {
+  if (loopName === "warp" && warpLoopId) {
     clearInterval(warpLoopId);
     warpLoopId = null;
   }
@@ -887,76 +894,50 @@ function startNamedLoop(loopName, effectName, targetValue, intervalSeconds, dura
 
 // loop bindings
 startLoopHitUpButton.addEventListener("click", function () {
-  startNamedLoop(
-    "hitUp",
-    "hitUp",
-    loopHitUpTargetSelect.value,
-    Number(loopHitUpInterval.value),
-    Number(loopHitUpDuration.value)
-  );
+  startNamedLoop("hitUp", "hitUp", loopHitUpTargetSelect.value, Number(loopHitUpInterval.value), Number(loopHitUpDuration.value));
 });
-
 stopLoopHitUpButton.addEventListener("click", function () {
   stopNamedLoop("hitUp");
 });
 
 startLoopHitDownButton.addEventListener("click", function () {
-  startNamedLoop(
-    "hitDown",
-    "hitDown",
-    loopHitDownTargetSelect.value,
-    Number(loopHitDownInterval.value),
-    Number(loopHitDownDuration.value)
-  );
+  startNamedLoop("hitDown", "hitDown", loopHitDownTargetSelect.value, Number(loopHitDownInterval.value), Number(loopHitDownDuration.value));
 });
-
 stopLoopHitDownButton.addEventListener("click", function () {
   stopNamedLoop("hitDown");
 });
 
 startLoopEchoButton.addEventListener("click", function () {
-  startNamedLoop(
-    "echo",
-    "echoBurst",
-    loopEchoTargetSelect.value,
-    Number(loopEchoInterval.value),
-    Number(loopEchoDuration.value)
-  );
+  startNamedLoop("echo", "echoBurst", loopEchoTargetSelect.value, Number(loopEchoInterval.value), Number(loopEchoDuration.value));
 });
-
 stopLoopEchoButton.addEventListener("click", function () {
   stopNamedLoop("echo");
 });
 
 startLoopMuffleButton.addEventListener("click", function () {
-  startNamedLoop(
-    "muffle",
-    "muffle",
-    loopMuffleTargetSelect.value,
-    Number(loopMuffleInterval.value),
-    Number(loopMuffleDuration.value)
-  );
+  startNamedLoop("muffle", "muffle", loopMuffleTargetSelect.value, Number(loopMuffleInterval.value), Number(loopMuffleDuration.value));
 });
-
 stopLoopMuffleButton.addEventListener("click", function () {
   stopNamedLoop("muffle");
 });
 
 startLoopWarpButton.addEventListener("click", function () {
-  startNamedLoop(
-    "warp",
-    "warp",
-    loopWarpTargetSelect.value,
-    Number(loopWarpInterval.value),
-    Number(loopWarpDuration.value)
-  );
+  startNamedLoop("warp", "warp", loopWarpTargetSelect.value, Number(loopWarpInterval.value), Number(loopWarpDuration.value));
 });
-
 stopLoopWarpButton.addEventListener("click", function () {
   stopNamedLoop("warp");
 });
 
-// spectrogram
+// oscilloscope controls
+pauseOscilloscopeButton.addEventListener("click", function () {
+  oscilloscopePaused = true;
+});
+
+resumeOscilloscopeButton.addEventListener("click", function () {
+  oscilloscopePaused = false;
+});
+
+// spectrogram controls
 pauseSpectrogramButton.addEventListener("click", function () {
   spectrogramPaused = true;
 });
@@ -971,6 +952,7 @@ clearSpectrogramButton.addEventListener("click", function () {
   drawSpectrogramOverlay();
 });
 
+// spectrogram visuals
 function fftToColor(value) {
   const intensity = Math.max(0, Math.min(1, (value + 140) / 140));
 
@@ -1040,19 +1022,22 @@ function drawSpectrogram() {
   drawSpectrogramOverlay();
 }
 
-// oscilloscope
+// oscilloscope visuals
 function drawOscilloscope() {
   requestAnimationFrame(drawOscilloscope);
+
+  if (oscilloscopePaused) return;
 
   const waveform = waveformAnalyser.getValue();
   const width = oscilloscopeCanvas.width;
   const height = oscilloscopeCanvas.height;
   const centerY = height / 2;
 
+  const zoomX = Number(oscZoomX.value);
+  const zoomY = Number(oscZoomY.value);
+
   oscilloscopeCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
   oscilloscopeCtx.fillRect(0, 0, width, height);
-
-  const sliceWidth = width / waveform.length;
 
   oscilloscopeCtx.save();
   oscilloscopeCtx.strokeStyle = "rgba(120, 120, 120, 0.18)";
@@ -1076,6 +1061,11 @@ function drawOscilloscope() {
 
   oscilloscopeCtx.restore();
 
+  const samplesToShow = Math.max(128, Math.floor(waveform.length / zoomX));
+  const startIndex = Math.floor((waveform.length - samplesToShow) / 2);
+  const visibleWaveform = waveform.slice(startIndex, startIndex + samplesToShow);
+  const sliceWidth = width / visibleWaveform.length;
+
   oscilloscopeCtx.save();
   oscilloscopeCtx.beginPath();
   oscilloscopeCtx.lineWidth = 6;
@@ -1084,8 +1074,8 @@ function drawOscilloscope() {
   oscilloscopeCtx.shadowColor = "#7cff7c";
 
   let x = 0;
-  for (let i = 0; i < waveform.length; i++) {
-    const y = centerY + waveform[i] * (height * 0.42);
+  for (let i = 0; i < visibleWaveform.length; i++) {
+    const y = centerY + visibleWaveform[i] * (height * 0.16 * zoomY);
     if (i === 0) oscilloscopeCtx.moveTo(x, y);
     else oscilloscopeCtx.lineTo(x, y);
     x += sliceWidth;
@@ -1099,8 +1089,8 @@ function drawOscilloscope() {
   oscilloscopeCtx.strokeStyle = "#9dff9d";
 
   x = 0;
-  for (let i = 0; i < waveform.length; i++) {
-    const y = centerY + waveform[i] * (height * 0.42);
+  for (let i = 0; i < visibleWaveform.length; i++) {
+    const y = centerY + visibleWaveform[i] * (height * 0.16 * zoomY);
     if (i === 0) oscilloscopeCtx.moveTo(x, y);
     else oscilloscopeCtx.lineTo(x, y);
     x += sliceWidth;

@@ -4,119 +4,107 @@
 
 body {
   margin: 0;
-  background: #111;
+  background-color: #111;
   color: #f2f2f2;
   font-family: Arial, sans-serif;
 }
 
-.app-shell {
+.app {
   max-width: 1500px;
   margin: 0 auto;
   padding: 20px;
 }
 
-.panel {
-  background: #1b1b1b;
+.top-bar {
   border: 2px solid #444;
-  border-radius: 12px;
-  padding: 20px;
+  background-color: #1b1b1b;
+  padding: 24px;
   margin-bottom: 20px;
 }
 
-.panel h2 {
-  margin: 0 0 16px 0;
-  font-size: 24px;
-  text-transform: lowercase;
-}
-
-.panel h3 {
-  margin: 0 0 14px 0;
-  font-size: 18px;
-  font-weight: normal;
-  text-transform: lowercase;
-  color: #ddd;
-}
-
-.title-panel h1 {
+.top-bar h1 {
   margin: 0;
   font-size: 36px;
   letter-spacing: 3px;
 }
 
-.title-panel p {
+.top-bar p {
   margin: 8px 0 0 0;
-  color: #bbb;
+  color: #bbbbbb;
+  font-size: 15px;
 }
 
-.transport-buttons {
+.transport-bar {
   display: flex;
   gap: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  background-color: #1b1b1b;
+  padding: 20px;
   flex-wrap: wrap;
 }
 
-button {
-  background: #eaeaea;
+.transport-bar button,
+.sound-toggle,
+.effect-line button,
+.spectrogram-controls button {
+  background-color: #eaeaea;
   color: #111;
   border: none;
   padding: 10px 16px;
   font-size: 16px;
-  border-radius: 8px;
   cursor: pointer;
-}
-
-select,
-input[type="range"] {
-  width: 100%;
-}
-
-select {
-  background: #111;
-  color: #f2f2f2;
-  border: 1px solid #555;
-  padding: 10px;
   border-radius: 8px;
 }
 
-.panel-head {
+.panel {
+  border: 2px solid #444;
+  background-color: #1b1b1b;
+  padding: 20px;
+}
+
+.panel h2 {
+  margin-top: 0;
+  margin-bottom: 18px;
+  text-transform: lowercase;
+  font-size: 24px;
+}
+
+.scope-panel {
+  margin-bottom: 20px;
+}
+
+.spectrogram-panel {
+  margin-bottom: 20px;
+}
+
+.spectrogram-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.osc-tools,
-.spec-tools {
-  display: flex;
-  gap: 12px;
   align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
   flex-wrap: wrap;
 }
 
-.mini-control {
-  min-width: 140px;
+.spectrogram-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-.mini-control label {
-  display: block;
-  font-size: 13px;
-  color: #ccc;
-  margin-bottom: 6px;
+.spectrogram-wrapper {
+  position: relative;
 }
 
 #oscilloscope {
   width: 100%;
   height: 33vh;
   min-height: 260px;
-  background: #000;
+  background-color: #000;
   border: 1px solid #555;
-  border-radius: 8px;
   display: block;
-}
-
-.spectrogram-wrapper {
-  position: relative;
+  border-radius: 8px;
 }
 
 #spectrogram,
@@ -124,10 +112,10 @@ select {
   width: 100%;
   height: 18vh;
   min-height: 170px;
-  background: #000;
+  background-color: #000;
   border: 1px solid #555;
-  border-radius: 8px;
   display: block;
+  border-radius: 8px;
 }
 
 #spectrogramOverlay {
@@ -137,9 +125,10 @@ select {
   background: transparent;
 }
 
-.workspace-grid {
+/* MAIN LAYOUT */
+.bottom-grid {
   display: grid;
-  grid-template-columns: 320px 1fr;
+  grid-template-columns: 360px 1fr;
   gap: 20px;
   align-items: start;
 }
@@ -148,43 +137,54 @@ select {
   min-width: 0;
 }
 
-.right-stack {
+.sounds-effects-panel {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 20px;
-  min-width: 0;
 }
 
+/* CONTROLS */
 .control-group {
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 
 .control-group label {
   display: block;
   margin-bottom: 8px;
+  font-size: 15px;
 }
 
-.value-label {
-  margin-top: 8px;
-  font-size: 14px;
-  color: #ccc;
+.control-group input[type="range"] {
+  width: 100%;
 }
 
-.sub-block {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid #3a3a3a;
+select {
+  width: 100%;
+  background-color: #111;
+  color: #f2f2f2;
+  border: 1px solid #555;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* SOUNDS BLOCK */
+.sounds-block {
+  border: 1px solid #555;
+  border-radius: 12px;
+  padding: 16px;
+  background-color: #181818;
 }
 
 .sound-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: #252525;
   border: 1px solid #555;
-  border-radius: 8px;
   padding: 12px;
   margin-bottom: 12px;
+  background-color: #252525;
+  border-radius: 8px;
 }
 
 .sound-row:last-child {
@@ -192,88 +192,133 @@ select {
 }
 
 .sound-toggle.active {
-  background: #7cff7c;
+  background-color: #7cff7c;
 }
 
-.effects-panel,
-.loops-panel {
-  width: 100%;
+/* EFFECT AREAS */
+.effects-block {
+  border: 1px solid #555;
+  border-radius: 12px;
+  padding: 18px;
+  background-color: #181818;
 }
 
-.effect-row {
+.effects-block h3 {
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: normal;
+  text-transform: lowercase;
+  color: #dddddd;
+}
+
+/* BASE LINE */
+.effect-line {
   display: grid;
-  grid-template-columns: 120px 180px 1fr 70px 100px;
   gap: 12px;
   align-items: center;
   margin-bottom: 14px;
 }
 
-.effect-row:last-child {
+.effect-line:last-child {
   margin-bottom: 0;
 }
 
-.effect-title {
+.effect-name {
+  font-size: 14px;
+  color: #f2f2f2;
+}
+
+.effect-line input[type="range"] {
+  width: 100%;
+  min-width: 0;
+}
+
+.effect-line span {
+  color: #dddddd;
   font-size: 14px;
 }
 
-.loop-row {
-  display: grid;
-  grid-template-columns: 110px 180px 1fr 1fr 180px;
-  gap: 16px;
+/* SOUND DESIGN ROWS */
+.wide-line {
+  grid-template-columns: 110px 1fr 90px;
+}
+
+/* MANUAL EFFECT ROWS */
+.effect-line-advanced {
+  grid-template-columns: 110px 180px 1fr 80px 100px;
+}
+
+.effect-line-advanced select {
+  min-width: 160px;
+}
+
+.effect-line-advanced input[type="range"] {
+  min-width: 160px;
+}
+
+/* LOOP AREA */
+/* burada tek satıra sıkıştırmak yerine geniş ama kontrollü bir yapı */
+.effect-line-loop {
+  grid-template-columns: 140px 180px minmax(140px, 1fr) 70px minmax(140px, 1fr) 70px 90px 90px;
+  gap: 12px;
   align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #333;
 }
 
-.loop-row:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
+.effect-line-loop select {
+  min-width: 170px;
 }
 
-.loop-name {
-  font-size: 15px;
+.effect-line-loop input[type="range"] {
+  min-width: 140px;
 }
 
-.loop-slider-group label {
-  display: block;
-  font-size: 13px;
-  color: #ccc;
-  margin-bottom: 6px;
+.effect-line-loop span {
+  white-space: nowrap;
 }
 
-.loop-slider-group span {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 14px;
-  color: #ccc;
+/* loops bloğu diğerlerinden daha geniş hissedilsin */
+.effects-block:last-child {
+  padding: 22px;
 }
 
-.loop-buttons {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 1100px) {
-  .workspace-grid {
+/* RESPONSIVE */
+@media (max-width: 1250px) {
+  .bottom-grid {
     grid-template-columns: 1fr;
   }
 
-  .effect-row {
-    grid-template-columns: 1fr;
+  .controls-panel {
+    order: 1;
   }
 
-  .loop-row {
-    grid-template-columns: 1fr;
+  .sounds-effects-panel {
+    order: 2;
   }
 
-  .loop-buttons {
-    justify-content: flex-start;
+  .effect-line-loop {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .effect-line-loop select,
+  .effect-line-loop input[type="range"] {
+    min-width: 0;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  .effect-line-advanced {
+    grid-template-columns: 1fr;
+  }
+
+  .wide-line {
+    grid-template-columns: 1fr;
+  }
+
+  .effect-line-loop {
+    grid-template-columns: 1fr;
+  }
+
   #oscilloscope {
     height: 28vh;
     min-height: 220px;

@@ -1,380 +1,1115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sound Lab</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <div class="app-shell">
+const startButton = document.getElementById("startButton");
+const playAllButton = document.getElementById("playAllButton");
+const stopAllButton = document.getElementById("stopAllButton");
+const randomButton = document.getElementById("randomButton");
 
-    <header class="panel title-panel">
-      <h1>sound L A B</h1>
-      <p>super experimental browser synth playground by Mehmet</p>
-    </header>
+const textureAButton = document.getElementById("textureAButton");
+const textureBButton = document.getElementById("textureBButton");
+const textureCButton = document.getElementById("textureCButton");
+const textureDButton = document.getElementById("textureDButton");
+const textureEButton = document.getElementById("textureEButton");
 
-    <section class="panel transport-panel">
-      <div class="transport-buttons">
-        <button id="startButton">Start Audio</button>
-        <button id="playAllButton">Play</button>
-        <button id="stopAllButton">Stop</button>
-        <button id="randomButton">Randomize</button>
-      </div>
-    </section>
+const pauseOscilloscopeButton = document.getElementById("pauseOscilloscopeButton");
+const resumeOscilloscopeButton = document.getElementById("resumeOscilloscopeButton");
+const oscZoomX = document.getElementById("oscZoomX");
+const oscZoomY = document.getElementById("oscZoomY");
 
-    <section class="panel osc-panel">
-      <div class="panel-head">
-        <h2>oscilloscope</h2>
+const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton");
+const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
+const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
 
-        <div class="osc-tools">
-          <button id="pauseOscilloscopeButton">Pause Osc</button>
-          <button id="resumeOscilloscopeButton">Resume Osc</button>
+const hitUpButton = document.getElementById("hitUpButton");
+const hitDownButton = document.getElementById("hitDownButton");
+const echoBurstButton = document.getElementById("echoBurstButton");
+const muffleButton = document.getElementById("muffleButton");
+const warpButton = document.getElementById("warpButton");
 
-          <div class="mini-control">
-            <label for="oscZoomX">Zoom X</label>
-            <input type="range" id="oscZoomX" min="1" max="8" step="1" value="1">
-          </div>
+const hitUpDuration = document.getElementById("hitUpDuration");
+const hitDownDuration = document.getElementById("hitDownDuration");
+const echoBurstDuration = document.getElementById("echoBurstDuration");
+const muffleDuration = document.getElementById("muffleDuration");
+const warpDuration = document.getElementById("warpDuration");
 
-          <div class="mini-control">
-            <label for="oscZoomY">Zoom Y</label>
-            <input type="range" id="oscZoomY" min="1" max="8" step="1" value="2">
-          </div>
-        </div>
-      </div>
+const hitUpDurationValue = document.getElementById("hitUpDurationValue");
+const hitDownDurationValue = document.getElementById("hitDownDurationValue");
+const echoBurstDurationValue = document.getElementById("echoBurstDurationValue");
+const muffleDurationValue = document.getElementById("muffleDurationValue");
+const warpDurationValue = document.getElementById("warpDurationValue");
 
-      <canvas id="oscilloscope" width="1400" height="320"></canvas>
-    </section>
+const hitUpTargetSelect = document.getElementById("hitUpTargetSelect");
+const hitDownTargetSelect = document.getElementById("hitDownTargetSelect");
+const echoBurstTargetSelect = document.getElementById("echoBurstTargetSelect");
+const muffleTargetSelect = document.getElementById("muffleTargetSelect");
+const warpTargetSelect = document.getElementById("warpTargetSelect");
 
-    <section class="panel spec-panel">
-      <div class="panel-head">
-        <h2>spectrogram</h2>
+const controlTargetSelect = document.getElementById("controlTargetSelect");
 
-        <div class="spec-tools">
-          <button id="pauseSpectrogramButton">Pause Spec</button>
-          <button id="resumeSpectrogramButton">Resume Spec</button>
-          <button id="clearSpectrogramButton">Clear Spec</button>
-        </div>
-      </div>
+const volumeSlider = document.getElementById("volumeSlider");
+const filterSlider = document.getElementById("filterSlider");
+const speedSlider = document.getElementById("speedSlider");
+const distortionSlider = document.getElementById("distortionSlider");
 
-      <div class="spectrogram-wrapper">
-        <canvas id="spectrogram" width="1400" height="220"></canvas>
-        <canvas id="spectrogramOverlay" width="1400" height="220"></canvas>
-      </div>
-    </section>
+const subPulseFreq = document.getElementById("subPulseFreq");
+const subPulseDetune = document.getElementById("subPulseDetune");
+const windPipeTone = document.getElementById("windPipeTone");
+const windPipeBreath = document.getElementById("windPipeBreath");
 
-    <main class="workspace-grid">
-      <aside class="panel controls-panel">
-        <h2>controls</h2>
+const subPulseFreqValue = document.getElementById("subPulseFreqValue");
+const subPulseDetuneValue = document.getElementById("subPulseDetuneValue");
+const windPipeToneValue = document.getElementById("windPipeToneValue");
+const windPipeBreathValue = document.getElementById("windPipeBreathValue");
 
-        <div class="control-group">
-          <label for="controlTargetSelect">Target</label>
-          <select id="controlTargetSelect">
-            <option value="master">Master</option>
-            <option value="a">Drift Core</option>
-            <option value="b">Low Engine</option>
-            <option value="c">Air Reed</option>
-            <option value="d">Sub Pulse</option>
-            <option value="e">Wind Pipe</option>
-          </select>
-        </div>
+// loop controls
+const loopHitUpTargetSelect = document.getElementById("loopHitUpTargetSelect");
+const loopHitUpInterval = document.getElementById("loopHitUpInterval");
+const loopHitUpIntervalValue = document.getElementById("loopHitUpIntervalValue");
+const loopHitUpDuration = document.getElementById("loopHitUpDuration");
+const loopHitUpDurationValue = document.getElementById("loopHitUpDurationValue");
+const startLoopHitUpButton = document.getElementById("startLoopHitUpButton");
+const stopLoopHitUpButton = document.getElementById("stopLoopHitUpButton");
 
-        <div class="control-group">
-          <label for="volumeSlider">Volume</label>
-          <input type="range" id="volumeSlider" min="0" max="100" value="70">
-        </div>
+const loopHitDownTargetSelect = document.getElementById("loopHitDownTargetSelect");
+const loopHitDownInterval = document.getElementById("loopHitDownInterval");
+const loopHitDownIntervalValue = document.getElementById("loopHitDownIntervalValue");
+const loopHitDownDuration = document.getElementById("loopHitDownDuration");
+const loopHitDownDurationValue = document.getElementById("loopHitDownDurationValue");
+const startLoopHitDownButton = document.getElementById("startLoopHitDownButton");
+const stopLoopHitDownButton = document.getElementById("stopLoopHitDownButton");
 
-        <div class="control-group">
-          <label for="filterSlider">Filter</label>
-          <input type="range" id="filterSlider" min="0" max="100" value="50">
-        </div>
+const loopEchoTargetSelect = document.getElementById("loopEchoTargetSelect");
+const loopEchoInterval = document.getElementById("loopEchoInterval");
+const loopEchoIntervalValue = document.getElementById("loopEchoIntervalValue");
+const loopEchoDuration = document.getElementById("loopEchoDuration");
+const loopEchoDurationValue = document.getElementById("loopEchoDurationValue");
+const startLoopEchoButton = document.getElementById("startLoopEchoButton");
+const stopLoopEchoButton = document.getElementById("stopLoopEchoButton");
 
-        <div class="control-group">
-          <label for="speedSlider">Speed</label>
-          <input type="range" id="speedSlider" min="50" max="150" value="100">
-        </div>
+const loopMuffleTargetSelect = document.getElementById("loopMuffleTargetSelect");
+const loopMuffleInterval = document.getElementById("loopMuffleInterval");
+const loopMuffleIntervalValue = document.getElementById("loopMuffleIntervalValue");
+const loopMuffleDuration = document.getElementById("loopMuffleDuration");
+const loopMuffleDurationValue = document.getElementById("loopMuffleDurationValue");
+const startLoopMuffleButton = document.getElementById("startLoopMuffleButton");
+const stopLoopMuffleButton = document.getElementById("stopLoopMuffleButton");
 
-        <div class="control-group">
-          <label for="distortionSlider">Distortion</label>
-          <input type="range" id="distortionSlider" min="0" max="100" value="0">
-        </div>
+const loopWarpTargetSelect = document.getElementById("loopWarpTargetSelect");
+const loopWarpInterval = document.getElementById("loopWarpInterval");
+const loopWarpIntervalValue = document.getElementById("loopWarpIntervalValue");
+const loopWarpDuration = document.getElementById("loopWarpDuration");
+const loopWarpDurationValue = document.getElementById("loopWarpDurationValue");
+const startLoopWarpButton = document.getElementById("startLoopWarpButton");
+const stopLoopWarpButton = document.getElementById("stopLoopWarpButton");
 
-        <div class="sub-block">
-          <h3>sound design</h3>
+const oscilloscopeCanvas = document.getElementById("oscilloscope");
+const oscilloscopeCtx = oscilloscopeCanvas.getContext("2d");
 
-          <div class="control-group">
-            <label for="subPulseFreq">Sub Freq</label>
-            <input type="range" id="subPulseFreq" min="30" max="120" step="1" value="48">
-            <div class="value-label" id="subPulseFreqValue">48Hz</div>
-          </div>
+const spectrogramCanvas = document.getElementById("spectrogram");
+const spectrogramCtx = spectrogramCanvas.getContext("2d");
 
-          <div class="control-group">
-            <label for="subPulseDetune">Sub Detune</label>
-            <input type="range" id="subPulseDetune" min="0" max="12" step="0.1" value="2.5">
-            <div class="value-label" id="subPulseDetuneValue">2.5Hz</div>
-          </div>
+const spectrogramOverlayCanvas = document.getElementById("spectrogramOverlay");
+const spectrogramOverlayCtx = spectrogramOverlayCanvas.getContext("2d");
 
-          <div class="control-group">
-            <label for="windPipeTone">Pipe Tone</label>
-            <input type="range" id="windPipeTone" min="220" max="1400" step="1" value="620">
-            <div class="value-label" id="windPipeToneValue">620Hz</div>
-          </div>
+let audioStarted = false;
+let textureAOn = false;
+let textureBOn = false;
+let textureCOn = false;
+let textureDOn = false;
+let textureEOn = false;
 
-          <div class="control-group">
-            <label for="windPipeBreath">Pipe Breath</label>
-            <input type="range" id="windPipeBreath" min="0" max="100" step="1" value="55">
-            <div class="value-label" id="windPipeBreathValue">55%</div>
-          </div>
-        </div>
-      </aside>
+let oscilloscopePaused = false;
+let spectrogramPaused = false;
 
-      <section class="right-stack">
-        <section class="panel sounds-panel">
-          <h2>sounds</h2>
+let hitUpLoopId = null;
+let hitDownLoopId = null;
+let echoLoopId = null;
+let muffleLoopId = null;
+let warpLoopId = null;
 
-          <div class="sound-row">
-            <span>Drift Core</span>
-            <button class="sound-toggle" id="textureAButton">OFF</button>
-          </div>
+const spectrogramSecondsVisible = 8;
 
-          <div class="sound-row">
-            <span>Low Engine</span>
-            <button class="sound-toggle" id="textureBButton">OFF</button>
-          </div>
+const baseFreq1 = 110;
+const baseFreq2 = 111.2;
+const baseFreq3 = 55;
 
-          <div class="sound-row">
-            <span>Air Reed</span>
-            <button class="sound-toggle" id="textureCButton">OFF</button>
-          </div>
+const controlState = {
+  master: { volume: 70, filter: 50, speed: 100, distortion: 0 },
+  a: { volume: 70, filter: 50, speed: 100, distortion: 0 },
+  b: { volume: 56, filter: 25, speed: 100, distortion: 0 },
+  c: { volume: 44, filter: 55, speed: 100, distortion: 0 },
+  d: { volume: 50, filter: 30, speed: 100, distortion: 0 },
+  e: { volume: 42, filter: 60, speed: 100, distortion: 0 }
+};
 
-          <div class="sound-row">
-            <span>Sub Pulse</span>
-            <button class="sound-toggle" id="textureDButton">OFF</button>
-          </div>
+// analysis + master fx
+const waveformAnalyser = new Tone.Analyser("waveform", 2048);
+const fftAnalyser = new Tone.Analyser("fft", 256);
 
-          <div class="sound-row">
-            <span>Wind Pipe</span>
-            <button class="sound-toggle" id="textureEButton">OFF</button>
-          </div>
-        </section>
+const masterGain = new Tone.Gain(0.7);
+const masterFilter = new Tone.Filter(1200, "lowpass");
+const masterDistortion = new Tone.Distortion(0);
+const echoDelay = new Tone.FeedbackDelay(0.25, 0.2);
+echoDelay.wet.value = 0;
 
-        <section class="panel effects-panel">
-          <h2>manual effects</h2>
+// textures
+const textureAFilter = new Tone.Filter(1800, "lowpass");
+const textureADistortion = new Tone.Distortion(0);
+const textureAGain = new Tone.Gain(0);
+const textureAOsc1 = new Tone.Oscillator(baseFreq1, "sine");
+const textureAOsc2 = new Tone.Oscillator(baseFreq2, "triangle");
+const textureAOsc3 = new Tone.Oscillator(baseFreq3, "sine");
 
-          <div class="effect-row">
-            <div class="effect-title">Hit Up</div>
-            <select id="hitUpTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <input type="range" id="hitUpDuration" min="0" max="2" step="0.1" value="0.8">
-            <span id="hitUpDurationValue">0.8s</span>
-            <button id="hitUpButton">Trigger</button>
-          </div>
+const textureBFilter = new Tone.Filter(220, "lowpass");
+const textureBDistortion = new Tone.Distortion(0);
+const textureBGain = new Tone.Gain(0);
+const textureBOsc1 = new Tone.Oscillator(43.65, "square");
+const textureBOsc2 = new Tone.Oscillator(87.3, "sine");
+const textureBOsc3 = new Tone.Oscillator(65.4, "triangle");
 
-          <div class="effect-row">
-            <div class="effect-title">Hit Down</div>
-            <select id="hitDownTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <input type="range" id="hitDownDuration" min="0" max="2" step="0.1" value="0.8">
-            <span id="hitDownDurationValue">0.8s</span>
-            <button id="hitDownButton">Trigger</button>
-          </div>
+const textureCFilter = new Tone.Filter(1400, "bandpass");
+const textureCDistortion = new Tone.Distortion(0);
+const textureCGain = new Tone.Gain(0);
+const textureCNoise = new Tone.Noise("pink");
+const textureCOsc = new Tone.Oscillator(523.25, "sine");
+const textureCFilterLFO = new Tone.LFO(0.22, 900, 2200);
 
-          <div class="effect-row">
-            <div class="effect-title">Echo Burst</div>
-            <select id="echoBurstTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <input type="range" id="echoBurstDuration" min="0" max="2" step="0.1" value="1">
-            <span id="echoBurstDurationValue">1.0s</span>
-            <button id="echoBurstButton">Trigger</button>
-          </div>
+const textureDFilter = new Tone.Filter(260, "lowpass");
+const textureDDistortion = new Tone.Distortion(0);
+const textureDGain = new Tone.Gain(0);
+const textureDOsc1 = new Tone.Oscillator(48, "sawtooth");
+const textureDOsc2 = new Tone.Oscillator(50.5, "square");
 
-          <div class="effect-row">
-            <div class="effect-title">Muffle</div>
-            <select id="muffleTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <input type="range" id="muffleDuration" min="0" max="2" step="0.1" value="1">
-            <span id="muffleDurationValue">1.0s</span>
-            <button id="muffleButton">Trigger</button>
-          </div>
+const textureEFilter = new Tone.Filter(1200, "bandpass");
+const textureEDistortion = new Tone.Distortion(0);
+const textureEGain = new Tone.Gain(0);
+const textureENoiseGain = new Tone.Gain(0.3);
+const textureENoise = new Tone.Noise("pink");
+const textureEOsc = new Tone.Oscillator(620, "triangle");
+const textureEFilterLFO = new Tone.LFO(0.18, 700, 1700);
 
-          <div class="effect-row">
-            <div class="effect-title">Warp</div>
-            <select id="warpTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <input type="range" id="warpDuration" min="0" max="2" step="0.1" value="1">
-            <span id="warpDurationValue">1.0s</span>
-            <button id="warpButton">Trigger</button>
-          </div>
-        </section>
+// connections
+textureAOsc1.connect(textureAFilter);
+textureAOsc2.connect(textureAFilter);
+textureAOsc3.connect(textureAFilter);
+textureAFilter.connect(textureADistortion);
+textureADistortion.connect(textureAGain);
 
-        <section class="panel loops-panel">
-          <h2>effect loops</h2>
+textureBOsc1.connect(textureBFilter);
+textureBOsc2.connect(textureBFilter);
+textureBOsc3.connect(textureBFilter);
+textureBFilter.connect(textureBDistortion);
+textureBDistortion.connect(textureBGain);
 
-          <div class="loop-row">
-            <div class="loop-name">Hit Up</div>
-            <select id="loopHitUpTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <div class="loop-slider-group">
-              <label for="loopHitUpInterval">Interval</label>
-              <input type="range" id="loopHitUpInterval" min="1" max="8" step="0.5" value="4">
-              <span id="loopHitUpIntervalValue">4.0s</span>
-            </div>
-            <div class="loop-slider-group">
-              <label for="loopHitUpDuration">Duration</label>
-              <input type="range" id="loopHitUpDuration" min="0.2" max="4" step="0.1" value="2">
-              <span id="loopHitUpDurationValue">2.0s</span>
-            </div>
-            <div class="loop-buttons">
-              <button id="startLoopHitUpButton">Start</button>
-              <button id="stopLoopHitUpButton">Stop</button>
-            </div>
-          </div>
+textureCNoise.connect(textureCFilter);
+textureCOsc.connect(textureCFilter);
+textureCFilterLFO.connect(textureCFilter.frequency);
+textureCFilter.connect(textureCDistortion);
+textureCDistortion.connect(textureCGain);
 
-          <div class="loop-row">
-            <div class="loop-name">Hit Down</div>
-            <select id="loopHitDownTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <div class="loop-slider-group">
-              <label for="loopHitDownInterval">Interval</label>
-              <input type="range" id="loopHitDownInterval" min="1" max="8" step="0.5" value="4">
-              <span id="loopHitDownIntervalValue">4.0s</span>
-            </div>
-            <div class="loop-slider-group">
-              <label for="loopHitDownDuration">Duration</label>
-              <input type="range" id="loopHitDownDuration" min="0.2" max="4" step="0.1" value="2">
-              <span id="loopHitDownDurationValue">2.0s</span>
-            </div>
-            <div class="loop-buttons">
-              <button id="startLoopHitDownButton">Start</button>
-              <button id="stopLoopHitDownButton">Stop</button>
-            </div>
-          </div>
+textureDOsc1.connect(textureDFilter);
+textureDOsc2.connect(textureDFilter);
+textureDFilter.connect(textureDDistortion);
+textureDDistortion.connect(textureDGain);
 
-          <div class="loop-row">
-            <div class="loop-name">Echo</div>
-            <select id="loopEchoTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <div class="loop-slider-group">
-              <label for="loopEchoInterval">Interval</label>
-              <input type="range" id="loopEchoInterval" min="1" max="8" step="0.5" value="4">
-              <span id="loopEchoIntervalValue">4.0s</span>
-            </div>
-            <div class="loop-slider-group">
-              <label for="loopEchoDuration">Duration</label>
-              <input type="range" id="loopEchoDuration" min="0.2" max="4" step="0.1" value="2">
-              <span id="loopEchoDurationValue">2.0s</span>
-            </div>
-            <div class="loop-buttons">
-              <button id="startLoopEchoButton">Start</button>
-              <button id="stopLoopEchoButton">Stop</button>
-            </div>
-          </div>
+textureENoise.connect(textureENoiseGain);
+textureENoiseGain.connect(textureEFilter);
+textureEOsc.connect(textureEFilter);
+textureEFilterLFO.connect(textureEFilter.frequency);
+textureEFilter.connect(textureEDistortion);
+textureEDistortion.connect(textureEGain);
 
-          <div class="loop-row">
-            <div class="loop-name">Muffle</div>
-            <select id="loopMuffleTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <div class="loop-slider-group">
-              <label for="loopMuffleInterval">Interval</label>
-              <input type="range" id="loopMuffleInterval" min="1" max="8" step="0.5" value="4">
-              <span id="loopMuffleIntervalValue">4.0s</span>
-            </div>
-            <div class="loop-slider-group">
-              <label for="loopMuffleDuration">Duration</label>
-              <input type="range" id="loopMuffleDuration" min="0.2" max="4" step="0.1" value="2">
-              <span id="loopMuffleDurationValue">2.0s</span>
-            </div>
-            <div class="loop-buttons">
-              <button id="startLoopMuffleButton">Start</button>
-              <button id="stopLoopMuffleButton">Stop</button>
-            </div>
-          </div>
+textureAGain.connect(masterFilter);
+textureBGain.connect(masterFilter);
+textureCGain.connect(masterFilter);
+textureDGain.connect(masterFilter);
+textureEGain.connect(masterFilter);
 
-          <div class="loop-row">
-            <div class="loop-name">Warp</div>
-            <select id="loopWarpTargetSelect">
-              <option value="all">All Active</option>
-              <option value="a">Drift Core</option>
-              <option value="b">Low Engine</option>
-              <option value="c">Air Reed</option>
-              <option value="d">Sub Pulse</option>
-              <option value="e">Wind Pipe</option>
-            </select>
-            <div class="loop-slider-group">
-              <label for="loopWarpInterval">Interval</label>
-              <input type="range" id="loopWarpInterval" min="1" max="8" step="0.5" value="4">
-              <span id="loopWarpIntervalValue">4.0s</span>
-            </div>
-            <div class="loop-slider-group">
-              <label for="loopWarpDuration">Duration</label>
-              <input type="range" id="loopWarpDuration" min="0.2" max="4" step="0.1" value="2">
-              <span id="loopWarpDurationValue">2.0s</span>
-            </div>
-            <div class="loop-buttons">
-              <button id="startLoopWarpButton">Start</button>
-              <button id="stopLoopWarpButton">Stop</button>
-            </div>
-          </div>
-        </section>
-      </section>
-    </main>
-  </div>
+masterFilter.connect(masterDistortion);
+masterDistortion.connect(echoDelay);
+echoDelay.connect(masterGain);
 
-  <script src="https://unpkg.com/tone"></script>
-  <script src="app.js"></script>
-</body>
-</html>
+masterGain.connect(waveformAnalyser);
+masterGain.connect(fftAnalyser);
+masterGain.toDestination();
+
+// start sources
+textureAOsc1.start();
+textureAOsc2.start();
+textureAOsc3.start();
+
+textureBOsc1.start();
+textureBOsc2.start();
+textureBOsc3.start();
+
+textureCNoise.start();
+textureCOsc.start();
+textureCFilterLFO.start();
+
+textureDOsc1.start();
+textureDOsc2.start();
+
+textureENoise.start();
+textureEOsc.start();
+textureEFilterLFO.start();
+
+// helpers
+function sliderToGain(target, value) {
+  if (target === "master") return value / 100;
+  return value / 200;
+}
+
+function sliderToFrequency(value) {
+  const minFreq = 100;
+  const maxFreq = 5000;
+  return minFreq + (value / 100) * (maxFreq - minFreq);
+}
+
+function getGainNode(target) {
+  return {
+    a: textureAGain,
+    b: textureBGain,
+    c: textureCGain,
+    d: textureDGain,
+    e: textureEGain
+  }[target];
+}
+
+function getFilterNode(target) {
+  return {
+    a: textureAFilter,
+    b: textureBFilter,
+    c: textureCFilter,
+    d: textureDFilter,
+    e: textureEFilter
+  }[target];
+}
+
+function getDistortionNode(target) {
+  return {
+    a: textureADistortion,
+    b: textureBDistortion,
+    c: textureCDistortion,
+    d: textureDDistortion,
+    e: textureEDistortion
+  }[target];
+}
+
+function isTextureOn(target) {
+  return (
+    (target === "a" && textureAOn) ||
+    (target === "b" && textureBOn) ||
+    (target === "c" && textureCOn) ||
+    (target === "d" && textureDOn) ||
+    (target === "e" && textureEOn)
+  );
+}
+
+function getControlTarget() {
+  return controlTargetSelect.value;
+}
+
+function requireAnyTexture() {
+  if (!audioStarted) {
+    alert("First click Start Audio");
+    return false;
+  }
+  if (!textureAOn && !textureBOn && !textureCOn && !textureDOn && !textureEOn) {
+    alert("Turn on at least one sound first");
+    return false;
+  }
+  return true;
+}
+
+function requireSpecificTexture(target) {
+  if (!audioStarted) {
+    alert("First click Start Audio");
+    return false;
+  }
+  if (!isTextureOn(target)) {
+    alert("Turn on the selected target sound first");
+    return false;
+  }
+  return true;
+}
+
+function applyStoredVolume(target) {
+  if (target === "master") {
+    masterGain.gain.rampTo(sliderToGain("master", controlState.master.volume), 0.1);
+    return;
+  }
+  const gainNode = getGainNode(target);
+  if (gainNode && isTextureOn(target)) {
+    gainNode.gain.rampTo(sliderToGain(target, controlState[target].volume), 0.1);
+  }
+}
+
+function applyStoredFilter(target) {
+  if (target === "master") {
+    masterFilter.frequency.rampTo(sliderToFrequency(controlState.master.filter), 0.1);
+    return;
+  }
+  const filterNode = getFilterNode(target);
+  if (filterNode) {
+    filterNode.frequency.rampTo(sliderToFrequency(controlState[target].filter), 0.1);
+  }
+}
+
+function applyStoredDistortion(target) {
+  if (target === "master") {
+    masterDistortion.distortion = controlState.master.distortion / 100;
+    return;
+  }
+  const distortionNode = getDistortionNode(target);
+  if (distortionNode) {
+    distortionNode.distortion = controlState[target].distortion / 100;
+  }
+}
+
+function applyStoredSpeed(target) {
+  const speedMultiplier = controlState[target].speed / 100;
+
+  if (target === "a") {
+    textureAOsc1.frequency.rampTo(baseFreq1 * speedMultiplier, 0.1);
+    textureAOsc2.frequency.rampTo(baseFreq2 * speedMultiplier, 0.1);
+    textureAOsc3.frequency.rampTo(baseFreq3 * speedMultiplier, 0.1);
+  }
+
+  if (target === "b") {
+    textureBOsc1.frequency.rampTo(43.65 * speedMultiplier, 0.1);
+    textureBOsc2.frequency.rampTo(87.3 * speedMultiplier, 0.1);
+    textureBOsc3.frequency.rampTo(65.4 * speedMultiplier, 0.1);
+  }
+
+  if (target === "c") {
+    textureCOsc.frequency.rampTo(523.25 * speedMultiplier, 0.1);
+    textureCFilterLFO.frequency.rampTo(0.22 * speedMultiplier, 0.1);
+  }
+
+  if (target === "d") {
+    const base = Number(subPulseFreq.value);
+    const detune = Number(subPulseDetune.value);
+    textureDOsc1.frequency.rampTo(base * speedMultiplier, 0.1);
+    textureDOsc2.frequency.rampTo((base + detune) * speedMultiplier, 0.1);
+  }
+
+  if (target === "e") {
+    const tone = Number(windPipeTone.value);
+    textureEOsc.frequency.rampTo(tone * speedMultiplier, 0.1);
+    textureEFilterLFO.frequency.rampTo(0.18 * speedMultiplier, 0.1);
+  }
+
+  if (target === "master") {
+    ["a", "b", "c", "d", "e"].forEach(applyStoredSpeed);
+  }
+}
+
+function syncControlSlidersToTarget() {
+  const target = getControlTarget();
+  volumeSlider.value = controlState[target].volume;
+  filterSlider.value = controlState[target].filter;
+  speedSlider.value = controlState[target].speed;
+  distortionSlider.value = controlState[target].distortion;
+}
+
+controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
+
+// audio start
+startButton.addEventListener("click", async function () {
+  if (audioStarted) return;
+  await Tone.start();
+  audioStarted = true;
+  startButton.textContent = "Audio Ready";
+});
+
+// toggles
+function setTextureAState(isOn) {
+  textureAOn = isOn;
+  if (textureAOn) {
+    textureAGain.gain.rampTo(sliderToGain("a", controlState.a.volume), 0.2);
+    textureAButton.textContent = "ON";
+    textureAButton.classList.add("active");
+  } else {
+    textureAGain.gain.rampTo(0, 0.2);
+    textureAButton.textContent = "OFF";
+    textureAButton.classList.remove("active");
+  }
+}
+
+function setTextureBState(isOn) {
+  textureBOn = isOn;
+  if (textureBOn) {
+    textureBGain.gain.rampTo(sliderToGain("b", controlState.b.volume), 0.2);
+    textureBButton.textContent = "ON";
+    textureBButton.classList.add("active");
+  } else {
+    textureBGain.gain.rampTo(0, 0.2);
+    textureBButton.textContent = "OFF";
+    textureBButton.classList.remove("active");
+  }
+}
+
+function setTextureCState(isOn) {
+  textureCOn = isOn;
+  if (textureCOn) {
+    textureCGain.gain.rampTo(sliderToGain("c", controlState.c.volume), 0.2);
+    textureCButton.textContent = "ON";
+    textureCButton.classList.add("active");
+  } else {
+    textureCGain.gain.rampTo(0, 0.2);
+    textureCButton.textContent = "OFF";
+    textureCButton.classList.remove("active");
+  }
+}
+
+function setTextureDState(isOn) {
+  textureDOn = isOn;
+  if (textureDOn) {
+    textureDGain.gain.rampTo(sliderToGain("d", controlState.d.volume), 0.2);
+    textureDButton.textContent = "ON";
+    textureDButton.classList.add("active");
+  } else {
+    textureDGain.gain.rampTo(0, 0.2);
+    textureDButton.textContent = "OFF";
+    textureDButton.classList.remove("active");
+  }
+}
+
+function setTextureEState(isOn) {
+  textureEOn = isOn;
+  if (textureEOn) {
+    textureEGain.gain.rampTo(sliderToGain("e", controlState.e.volume), 0.2);
+    textureEButton.textContent = "ON";
+    textureEButton.classList.add("active");
+  } else {
+    textureEGain.gain.rampTo(0, 0.2);
+    textureEButton.textContent = "OFF";
+    textureEButton.classList.remove("active");
+  }
+}
+
+textureAButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureAState(!textureAOn);
+});
+
+textureBButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureBState(!textureBOn);
+});
+
+textureCButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureCState(!textureCOn);
+});
+
+textureDButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureDState(!textureDOn);
+});
+
+textureEButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureEState(!textureEOn);
+});
+
+playAllButton.addEventListener("click", function () {
+  if (!audioStarted) return alert("First click Start Audio");
+  setTextureAState(true);
+  setTextureBState(true);
+  setTextureCState(true);
+  setTextureDState(true);
+  setTextureEState(true);
+});
+
+stopAllButton.addEventListener("click", function () {
+  setTextureAState(false);
+  setTextureBState(false);
+  setTextureCState(false);
+  setTextureDState(false);
+  setTextureEState(false);
+});
+
+// sliders
+volumeSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].volume = Number(volumeSlider.value);
+  applyStoredVolume(target);
+});
+
+filterSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].filter = Number(filterSlider.value);
+  applyStoredFilter(target);
+});
+
+speedSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].speed = Number(speedSlider.value);
+  applyStoredSpeed(target);
+});
+
+distortionSlider.addEventListener("input", function () {
+  const target = getControlTarget();
+  controlState[target].distortion = Number(distortionSlider.value);
+  applyStoredDistortion(target);
+});
+
+// sound design labels
+function updateSoundDesignLabels() {
+  subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
+  subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
+  windPipeToneValue.textContent = `${windPipeTone.value}Hz`;
+  windPipeBreathValue.textContent = `${windPipeBreath.value}%`;
+}
+
+function applySubPulseDesign() {
+  const speedMultiplier = controlState.d.speed / 100;
+  const base = Number(subPulseFreq.value);
+  const detune = Number(subPulseDetune.value);
+  textureDOsc1.frequency.rampTo(base * speedMultiplier, 0.1);
+  textureDOsc2.frequency.rampTo((base + detune) * speedMultiplier, 0.1);
+}
+
+function applyWindPipeDesign() {
+  const speedMultiplier = controlState.e.speed / 100;
+  const tone = Number(windPipeTone.value);
+  const breath = Number(windPipeBreath.value);
+  textureEOsc.frequency.rampTo(tone * speedMultiplier, 0.1);
+  textureEFilter.frequency.rampTo(tone, 0.1);
+  textureENoiseGain.gain.rampTo(breath / 180, 0.1);
+}
+
+subPulseFreq.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applySubPulseDesign();
+});
+
+subPulseDetune.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applySubPulseDesign();
+});
+
+windPipeTone.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applyWindPipeDesign();
+});
+
+windPipeBreath.addEventListener("input", function () {
+  updateSoundDesignLabels();
+  applyWindPipeDesign();
+});
+
+// duration labels
+function updateDurationLabels() {
+  hitUpDurationValue.textContent = `${hitUpDuration.value}s`;
+  hitDownDurationValue.textContent = `${hitDownDuration.value}s`;
+  echoBurstDurationValue.textContent = `${echoBurstDuration.value}s`;
+  muffleDurationValue.textContent = `${muffleDuration.value}s`;
+  warpDurationValue.textContent = `${warpDuration.value}s`;
+
+  loopHitUpIntervalValue.textContent = `${Number(loopHitUpInterval.value).toFixed(1)}s`;
+  loopHitUpDurationValue.textContent = `${Number(loopHitUpDuration.value).toFixed(1)}s`;
+
+  loopHitDownIntervalValue.textContent = `${Number(loopHitDownInterval.value).toFixed(1)}s`;
+  loopHitDownDurationValue.textContent = `${Number(loopHitDownDuration.value).toFixed(1)}s`;
+
+  loopEchoIntervalValue.textContent = `${Number(loopEchoInterval.value).toFixed(1)}s`;
+  loopEchoDurationValue.textContent = `${Number(loopEchoDuration.value).toFixed(1)}s`;
+
+  loopMuffleIntervalValue.textContent = `${Number(loopMuffleInterval.value).toFixed(1)}s`;
+  loopMuffleDurationValue.textContent = `${Number(loopMuffleDuration.value).toFixed(1)}s`;
+
+  loopWarpIntervalValue.textContent = `${Number(loopWarpInterval.value).toFixed(1)}s`;
+  loopWarpDurationValue.textContent = `${Number(loopWarpDuration.value).toFixed(1)}s`;
+}
+
+[
+  hitUpDuration,
+  hitDownDuration,
+  echoBurstDuration,
+  muffleDuration,
+  warpDuration,
+  loopHitUpInterval,
+  loopHitUpDuration,
+  loopHitDownInterval,
+  loopHitDownDuration,
+  loopEchoInterval,
+  loopEchoDuration,
+  loopMuffleInterval,
+  loopMuffleDuration,
+  loopWarpInterval,
+  loopWarpDuration
+].forEach(function (slider) {
+  slider.addEventListener("input", updateDurationLabels);
+});
+
+// effect group helpers
+function getGroupsForTarget(target) {
+  if (target === "a" && textureAOn) {
+    return [{
+      oscillators: [textureAOsc1, textureAOsc2, textureAOsc3],
+      baseFrequencies: [
+        baseFreq1 * (controlState.a.speed / 100),
+        baseFreq2 * (controlState.a.speed / 100),
+        baseFreq3 * (controlState.a.speed / 100)
+      ]
+    }];
+  }
+
+  if (target === "b" && textureBOn) {
+    return [{
+      oscillators: [textureBOsc1, textureBOsc2, textureBOsc3],
+      baseFrequencies: [
+        43.65 * (controlState.b.speed / 100),
+        87.3 * (controlState.b.speed / 100),
+        65.4 * (controlState.b.speed / 100)
+      ]
+    }];
+  }
+
+  if (target === "c" && textureCOn) {
+    return [{
+      oscillators: [textureCOsc],
+      baseFrequencies: [523.25 * (controlState.c.speed / 100)]
+    }];
+  }
+
+  if (target === "d" && textureDOn) {
+    const base = Number(subPulseFreq.value);
+    const detune = Number(subPulseDetune.value);
+    return [{
+      oscillators: [textureDOsc1, textureDOsc2],
+      baseFrequencies: [
+        base * (controlState.d.speed / 100),
+        (base + detune) * (controlState.d.speed / 100)
+      ]
+    }];
+  }
+
+  if (target === "e" && textureEOn) {
+    return [{
+      oscillators: [textureEOsc],
+      baseFrequencies: [Number(windPipeTone.value) * (controlState.e.speed / 100)]
+    }];
+  }
+
+  return [];
+}
+
+function getAllActiveGroups() {
+  return [
+    ...getGroupsForTarget("a"),
+    ...getGroupsForTarget("b"),
+    ...getGroupsForTarget("c"),
+    ...getGroupsForTarget("d"),
+    ...getGroupsForTarget("e")
+  ];
+}
+
+function getGroupsFromSelector(selectorValue) {
+  if (selectorValue === "all") {
+    if (!requireAnyTexture()) return null;
+    return getAllActiveGroups();
+  }
+
+  if (!requireSpecificTexture(selectorValue)) return null;
+  return getGroupsForTarget(selectorValue);
+}
+
+// effects
+function applyPitchHit(multiplier, holdTime, targetValue) {
+  const groups = getGroupsFromSelector(targetValue);
+  if (!groups) return;
+
+  groups.forEach(function (group) {
+    group.oscillators.forEach(function (oscillator, index) {
+      oscillator.frequency.value = group.baseFrequencies[index] * multiplier;
+    });
+  });
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.4);
+      });
+    });
+  }, holdTime * 1000);
+}
+
+function triggerEchoBurst(holdTime, targetValue) {
+  if (targetValue === "all") {
+    if (!requireAnyTexture()) return;
+
+    echoDelay.delayTime.rampTo(0.3, 0.05);
+    echoDelay.feedback.rampTo(0.65, 0.1);
+    echoDelay.wet.rampTo(0.85, 0.1);
+
+    setTimeout(function () {
+      echoDelay.feedback.rampTo(0.2, 0.7);
+      echoDelay.wet.rampTo(0, 0.7);
+      echoDelay.delayTime.rampTo(0.25, 0.2);
+    }, holdTime * 1000);
+
+    return;
+  }
+
+  if (!requireSpecificTexture(targetValue)) return;
+
+  const gainNode = getGainNode(targetValue);
+  if (!gainNode) return;
+
+  gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume) * 1.6, 0.05);
+  setTimeout(function () {
+    gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume), 0.4);
+  }, holdTime * 1000);
+}
+
+function triggerMuffle(holdTime, targetValue) {
+  if (targetValue === "all") {
+    if (!requireAnyTexture()) return;
+
+    const normalFreq = sliderToFrequency(controlState.master.filter);
+    masterFilter.frequency.cancelScheduledValues(Tone.now());
+    masterFilter.frequency.rampTo(220, 0.08);
+
+    setTimeout(function () {
+      masterFilter.frequency.rampTo(normalFreq, 0.45);
+    }, holdTime * 1000);
+
+    return;
+  }
+
+  if (!requireSpecificTexture(targetValue)) return;
+
+  const filterNode = getFilterNode(targetValue);
+  const normalFreq = sliderToFrequency(controlState[targetValue].filter);
+  if (!filterNode) return;
+
+  filterNode.frequency.cancelScheduledValues(Tone.now());
+  filterNode.frequency.rampTo(220, 0.08);
+
+  setTimeout(function () {
+    filterNode.frequency.rampTo(normalFreq, 0.45);
+  }, holdTime * 1000);
+}
+
+function triggerWarp(holdTime, targetValue) {
+  const groups = getGroupsFromSelector(targetValue);
+  if (!groups) return;
+
+  groups.forEach(function (group) {
+    group.oscillators.forEach(function (oscillator, index) {
+      oscillator.frequency.rampTo(group.baseFrequencies[index] * 1.55, 0.08);
+    });
+  });
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index] * 0.78, 0.15);
+      });
+    });
+  }, holdTime * 500);
+
+  setTimeout(function () {
+    groups.forEach(function (group) {
+      group.oscillators.forEach(function (oscillator, index) {
+        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.35);
+      });
+    });
+  }, holdTime * 1000);
+}
+
+function triggerEffect(effectName, durationValue, targetValue) {
+  if (effectName === "hitUp") applyPitchHit(1.8, durationValue, targetValue);
+  if (effectName === "hitDown") applyPitchHit(0.45, durationValue, targetValue);
+  if (effectName === "echoBurst") triggerEchoBurst(durationValue, targetValue);
+  if (effectName === "muffle") triggerMuffle(durationValue, targetValue);
+  if (effectName === "warp") triggerWarp(durationValue, targetValue);
+}
+
+// manual effects
+hitUpButton.addEventListener("click", function () {
+  triggerEffect("hitUp", Number(hitUpDuration.value), hitUpTargetSelect.value);
+});
+
+hitDownButton.addEventListener("click", function () {
+  triggerEffect("hitDown", Number(hitDownDuration.value), hitDownTargetSelect.value);
+});
+
+echoBurstButton.addEventListener("click", function () {
+  triggerEffect("echoBurst", Number(echoBurstDuration.value), echoBurstTargetSelect.value);
+});
+
+muffleButton.addEventListener("click", function () {
+  triggerEffect("muffle", Number(muffleDuration.value), muffleTargetSelect.value);
+});
+
+warpButton.addEventListener("click", function () {
+  triggerEffect("warp", Number(warpDuration.value), warpTargetSelect.value);
+});
+
+// loop helpers
+function stopNamedLoop(loopName) {
+  if (loopName === "hitUp" && hitUpLoopId) {
+    clearInterval(hitUpLoopId);
+    hitUpLoopId = null;
+  }
+  if (loopName === "hitDown" && hitDownLoopId) {
+    clearInterval(hitDownLoopId);
+    hitDownLoopId = null;
+  }
+  if (loopName === "echo" && echoLoopId) {
+    clearInterval(echoLoopId);
+    echoLoopId = null;
+  }
+  if (loopName === "muffle" && muffleLoopId) {
+    clearInterval(muffleLoopId);
+    muffleLoopId = null;
+  }
+  if (loopName === "warp" && warpLoopId) {
+    clearInterval(warpLoopId);
+    warpLoopId = null;
+  }
+}
+
+function startNamedLoop(loopName, effectName, targetValue, intervalSeconds, durationSeconds) {
+  if (!audioStarted) {
+    alert("First click Start Audio");
+    return;
+  }
+
+  stopNamedLoop(loopName);
+  triggerEffect(effectName, durationSeconds, targetValue);
+
+  const newId = setInterval(function () {
+    triggerEffect(effectName, durationSeconds, targetValue);
+  }, intervalSeconds * 1000);
+
+  if (loopName === "hitUp") hitUpLoopId = newId;
+  if (loopName === "hitDown") hitDownLoopId = newId;
+  if (loopName === "echo") echoLoopId = newId;
+  if (loopName === "muffle") muffleLoopId = newId;
+  if (loopName === "warp") warpLoopId = newId;
+}
+
+// loop bindings
+startLoopHitUpButton.addEventListener("click", function () {
+  startNamedLoop("hitUp", "hitUp", loopHitUpTargetSelect.value, Number(loopHitUpInterval.value), Number(loopHitUpDuration.value));
+});
+stopLoopHitUpButton.addEventListener("click", function () {
+  stopNamedLoop("hitUp");
+});
+
+startLoopHitDownButton.addEventListener("click", function () {
+  startNamedLoop("hitDown", "hitDown", loopHitDownTargetSelect.value, Number(loopHitDownInterval.value), Number(loopHitDownDuration.value));
+});
+stopLoopHitDownButton.addEventListener("click", function () {
+  stopNamedLoop("hitDown");
+});
+
+startLoopEchoButton.addEventListener("click", function () {
+  startNamedLoop("echo", "echoBurst", loopEchoTargetSelect.value, Number(loopEchoInterval.value), Number(loopEchoDuration.value));
+});
+stopLoopEchoButton.addEventListener("click", function () {
+  stopNamedLoop("echo");
+});
+
+startLoopMuffleButton.addEventListener("click", function () {
+  startNamedLoop("muffle", "muffle", loopMuffleTargetSelect.value, Number(loopMuffleInterval.value), Number(loopMuffleDuration.value));
+});
+stopLoopMuffleButton.addEventListener("click", function () {
+  stopNamedLoop("muffle");
+});
+
+startLoopWarpButton.addEventListener("click", function () {
+  startNamedLoop("warp", "warp", loopWarpTargetSelect.value, Number(loopWarpInterval.value), Number(loopWarpDuration.value));
+});
+stopLoopWarpButton.addEventListener("click", function () {
+  stopNamedLoop("warp");
+});
+
+// oscilloscope controls
+pauseOscilloscopeButton.addEventListener("click", function () {
+  oscilloscopePaused = true;
+});
+
+resumeOscilloscopeButton.addEventListener("click", function () {
+  oscilloscopePaused = false;
+});
+
+// spectrogram controls
+pauseSpectrogramButton.addEventListener("click", function () {
+  spectrogramPaused = true;
+});
+
+resumeSpectrogramButton.addEventListener("click", function () {
+  spectrogramPaused = false;
+});
+
+clearSpectrogramButton.addEventListener("click", function () {
+  spectrogramCtx.fillStyle = "black";
+  spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
+  drawSpectrogramOverlay();
+});
+
+// spectrogram visuals
+function fftToColor(value) {
+  const intensity = Math.max(0, Math.min(1, (value + 140) / 140));
+
+  if (intensity < 0.2) return `rgb(0, 0, ${Math.floor(80 + intensity * 200)})`;
+  if (intensity < 0.4) return `rgb(0, ${Math.floor(intensity * 255)}, 160)`;
+  if (intensity < 0.65) return `rgb(${Math.floor(intensity * 180)}, ${Math.floor(120 + intensity * 100)}, 80)`;
+  if (intensity < 0.85) return `rgb(${Math.floor(180 + intensity * 60)}, ${Math.floor(120 + intensity * 80)}, 40)`;
+  return `rgb(255, 255, ${Math.floor(150 + intensity * 80)})`;
+}
+
+function drawSpectrogramOverlay() {
+  const width = spectrogramOverlayCanvas.width;
+  const height = spectrogramOverlayCanvas.height;
+
+  spectrogramOverlayCtx.clearRect(0, 0, width, height);
+  spectrogramOverlayCtx.save();
+  spectrogramOverlayCtx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+  spectrogramOverlayCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
+  spectrogramOverlayCtx.lineWidth = 1;
+  spectrogramOverlayCtx.font = "12px Arial";
+
+  for (let i = 0; i <= spectrogramSecondsVisible; i++) {
+    const x = (width / spectrogramSecondsVisible) * i;
+    spectrogramOverlayCtx.beginPath();
+    spectrogramOverlayCtx.moveTo(x, 0);
+    spectrogramOverlayCtx.lineTo(x, height);
+    spectrogramOverlayCtx.stroke();
+
+    const secondsAgo = spectrogramSecondsVisible - i;
+    const label = secondsAgo === 0 ? "now" : `-${secondsAgo}s`;
+    spectrogramOverlayCtx.fillText(label, x + 4, 14);
+  }
+
+  spectrogramOverlayCtx.restore();
+}
+
+function drawSpectrogram() {
+  requestAnimationFrame(drawSpectrogram);
+
+  if (spectrogramPaused) {
+    drawSpectrogramOverlay();
+    return;
+  }
+
+  const values = fftAnalyser.getValue();
+  const width = spectrogramCanvas.width;
+  const height = spectrogramCanvas.height;
+
+  spectrogramCtx.drawImage(
+    spectrogramCanvas,
+    2, 0, width - 2, height,
+    0, 0, width - 2, height
+  );
+
+  spectrogramCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
+  spectrogramCtx.fillRect(width - 2, 0, 2, height);
+
+  const binsToUse = Math.floor(values.length * 0.6);
+  const binHeight = height / binsToUse;
+
+  for (let i = 0; i < binsToUse; i++) {
+    const y = height - (i + 1) * binHeight;
+    spectrogramCtx.fillStyle = fftToColor(values[i]);
+    spectrogramCtx.fillRect(width - 2, y, 2, Math.ceil(binHeight) + 1);
+  }
+
+  drawSpectrogramOverlay();
+}
+
+// oscilloscope visuals
+function drawOscilloscope() {
+  requestAnimationFrame(drawOscilloscope);
+
+  if (oscilloscopePaused) return;
+
+  const waveform = waveformAnalyser.getValue();
+  const width = oscilloscopeCanvas.width;
+  const height = oscilloscopeCanvas.height;
+  const centerY = height / 2;
+
+  const zoomX = Number(oscZoomX.value);
+  const zoomY = Number(oscZoomY.value);
+
+  oscilloscopeCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
+  oscilloscopeCtx.fillRect(0, 0, width, height);
+
+  oscilloscopeCtx.save();
+  oscilloscopeCtx.strokeStyle = "rgba(120, 120, 120, 0.18)";
+  oscilloscopeCtx.lineWidth = 1;
+
+  for (let i = 0; i <= 12; i++) {
+    const x = (width / 12) * i;
+    oscilloscopeCtx.beginPath();
+    oscilloscopeCtx.moveTo(x, 0);
+    oscilloscopeCtx.lineTo(x, height);
+    oscilloscopeCtx.stroke();
+  }
+
+  for (let i = 0; i <= 6; i++) {
+    const y = (height / 6) * i;
+    oscilloscopeCtx.beginPath();
+    oscilloscopeCtx.moveTo(0, y);
+    oscilloscopeCtx.lineTo(width, y);
+    oscilloscopeCtx.stroke();
+  }
+
+  oscilloscopeCtx.restore();
+
+  const samplesToShow = Math.max(128, Math.floor(waveform.length / zoomX));
+  const startIndex = Math.floor((waveform.length - samplesToShow) / 2);
+  const visibleWaveform = waveform.slice(startIndex, startIndex + samplesToShow);
+  const sliceWidth = width / visibleWaveform.length;
+
+  oscilloscopeCtx.save();
+  oscilloscopeCtx.beginPath();
+  oscilloscopeCtx.lineWidth = 6;
+  oscilloscopeCtx.strokeStyle = "rgba(124, 255, 124, 0.18)";
+  oscilloscopeCtx.shadowBlur = 18;
+  oscilloscopeCtx.shadowColor = "#7cff7c";
+
+  let x = 0;
+  for (let i = 0; i < visibleWaveform.length; i++) {
+    const y = centerY + visibleWaveform[i] * (height * 0.16 * zoomY);
+    if (i === 0) oscilloscopeCtx.moveTo(x, y);
+    else oscilloscopeCtx.lineTo(x, y);
+    x += sliceWidth;
+  }
+  oscilloscopeCtx.stroke();
+  oscilloscopeCtx.restore();
+
+  oscilloscopeCtx.save();
+  oscilloscopeCtx.beginPath();
+  oscilloscopeCtx.lineWidth = 2.2;
+  oscilloscopeCtx.strokeStyle = "#9dff9d";
+
+  x = 0;
+  for (let i = 0; i < visibleWaveform.length; i++) {
+    const y = centerY + visibleWaveform[i] * (height * 0.16 * zoomY);
+    if (i === 0) oscilloscopeCtx.moveTo(x, y);
+    else oscilloscopeCtx.lineTo(x, y);
+    x += sliceWidth;
+  }
+  oscilloscopeCtx.stroke();
+  oscilloscopeCtx.restore();
+}
+
+// init
+updateSoundDesignLabels();
+updateDurationLabels();
+syncControlSlidersToTarget();
+
+oscilloscopeCtx.fillStyle = "black";
+oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);
+
+spectrogramCtx.fillStyle = "black";
+spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
+drawSpectrogramOverlay();
+
+drawOscilloscope();
+drawSpectrogram();

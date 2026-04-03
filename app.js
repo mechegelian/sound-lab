@@ -7,7 +7,6 @@ const textureAButton = document.getElementById("textureAButton");
 const textureBButton = document.getElementById("textureBButton");
 const textureCButton = document.getElementById("textureCButton");
 const textureDButton = document.getElementById("textureDButton");
-const textureEButton = document.getElementById("textureEButton");
 
 const pauseOscilloscopeButton = document.getElementById("pauseOscilloscopeButton");
 const resumeOscilloscopeButton = document.getElementById("resumeOscilloscopeButton");
@@ -18,87 +17,11 @@ const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton")
 const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
 const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
 
-const hitUpButton = document.getElementById("hitUpButton");
-const hitDownButton = document.getElementById("hitDownButton");
-const echoBurstButton = document.getElementById("echoBurstButton");
-const muffleButton = document.getElementById("muffleButton");
-const warpButton = document.getElementById("warpButton");
-
-const hitUpDuration = document.getElementById("hitUpDuration");
-const hitDownDuration = document.getElementById("hitDownDuration");
-const echoBurstDuration = document.getElementById("echoBurstDuration");
-const muffleDuration = document.getElementById("muffleDuration");
-const warpDuration = document.getElementById("warpDuration");
-
-const hitUpDurationValue = document.getElementById("hitUpDurationValue");
-const hitDownDurationValue = document.getElementById("hitDownDurationValue");
-const echoBurstDurationValue = document.getElementById("echoBurstDurationValue");
-const muffleDurationValue = document.getElementById("muffleDurationValue");
-const warpDurationValue = document.getElementById("warpDurationValue");
-
-const hitUpTargetSelect = document.getElementById("hitUpTargetSelect");
-const hitDownTargetSelect = document.getElementById("hitDownTargetSelect");
-const echoBurstTargetSelect = document.getElementById("echoBurstTargetSelect");
-const muffleTargetSelect = document.getElementById("muffleTargetSelect");
-const warpTargetSelect = document.getElementById("warpTargetSelect");
-
 const controlTargetSelect = document.getElementById("controlTargetSelect");
-
 const volumeSlider = document.getElementById("volumeSlider");
 const filterSlider = document.getElementById("filterSlider");
 const speedSlider = document.getElementById("speedSlider");
 const distortionSlider = document.getElementById("distortionSlider");
-
-const subPulseFreq = document.getElementById("subPulseFreq");
-const subPulseDetune = document.getElementById("subPulseDetune");
-const windPipeTone = document.getElementById("windPipeTone");
-const windPipeBreath = document.getElementById("windPipeBreath");
-
-const subPulseFreqValue = document.getElementById("subPulseFreqValue");
-const subPulseDetuneValue = document.getElementById("subPulseDetuneValue");
-const windPipeToneValue = document.getElementById("windPipeToneValue");
-const windPipeBreathValue = document.getElementById("windPipeBreathValue");
-
-// loop controls
-const loopHitUpTargetSelect = document.getElementById("loopHitUpTargetSelect");
-const loopHitUpInterval = document.getElementById("loopHitUpInterval");
-const loopHitUpIntervalValue = document.getElementById("loopHitUpIntervalValue");
-const loopHitUpDuration = document.getElementById("loopHitUpDuration");
-const loopHitUpDurationValue = document.getElementById("loopHitUpDurationValue");
-const startLoopHitUpButton = document.getElementById("startLoopHitUpButton");
-const stopLoopHitUpButton = document.getElementById("stopLoopHitUpButton");
-
-const loopHitDownTargetSelect = document.getElementById("loopHitDownTargetSelect");
-const loopHitDownInterval = document.getElementById("loopHitDownInterval");
-const loopHitDownIntervalValue = document.getElementById("loopHitDownIntervalValue");
-const loopHitDownDuration = document.getElementById("loopHitDownDuration");
-const loopHitDownDurationValue = document.getElementById("loopHitDownDurationValue");
-const startLoopHitDownButton = document.getElementById("startLoopHitDownButton");
-const stopLoopHitDownButton = document.getElementById("stopLoopHitDownButton");
-
-const loopEchoTargetSelect = document.getElementById("loopEchoTargetSelect");
-const loopEchoInterval = document.getElementById("loopEchoInterval");
-const loopEchoIntervalValue = document.getElementById("loopEchoIntervalValue");
-const loopEchoDuration = document.getElementById("loopEchoDuration");
-const loopEchoDurationValue = document.getElementById("loopEchoDurationValue");
-const startLoopEchoButton = document.getElementById("startLoopEchoButton");
-const stopLoopEchoButton = document.getElementById("stopLoopEchoButton");
-
-const loopMuffleTargetSelect = document.getElementById("loopMuffleTargetSelect");
-const loopMuffleInterval = document.getElementById("loopMuffleInterval");
-const loopMuffleIntervalValue = document.getElementById("loopMuffleIntervalValue");
-const loopMuffleDuration = document.getElementById("loopMuffleDuration");
-const loopMuffleDurationValue = document.getElementById("loopMuffleDurationValue");
-const startLoopMuffleButton = document.getElementById("startLoopMuffleButton");
-const stopLoopMuffleButton = document.getElementById("stopLoopMuffleButton");
-
-const loopWarpTargetSelect = document.getElementById("loopWarpTargetSelect");
-const loopWarpInterval = document.getElementById("loopWarpInterval");
-const loopWarpIntervalValue = document.getElementById("loopWarpIntervalValue");
-const loopWarpDuration = document.getElementById("loopWarpDuration");
-const loopWarpDurationValue = document.getElementById("loopWarpDurationValue");
-const startLoopWarpButton = document.getElementById("startLoopWarpButton");
-const stopLoopWarpButton = document.getElementById("stopLoopWarpButton");
 
 const oscilloscopeCanvas = document.getElementById("oscilloscope");
 const oscilloscopeCtx = oscilloscopeCanvas.getContext("2d");
@@ -109,850 +32,763 @@ const spectrogramCtx = spectrogramCanvas.getContext("2d");
 const spectrogramOverlayCanvas = document.getElementById("spectrogramOverlay");
 const spectrogramOverlayCtx = spectrogramOverlayCanvas.getContext("2d");
 
+// ---------- EQ ELEMENTS ----------
+const eqBands = ["60", "250", "1000", "4000", "8000", "15000"];
+
+function getEqElements(prefix) {
+  const out = {};
+  eqBands.forEach((band) => {
+    out[band] = document.getElementById(`${prefix}Eq${band}`);
+  });
+  return out;
+}
+
+const fluteEqEls = getEqElements("flute");
+const drumEqEls = getEqElements("drum");
+const electroEqEls = getEqElements("electro");
+const bassEqEls = getEqElements("bass");
+
+// ---------- LOOP ELEMENTS ----------
+function getLoopElements(prefix) {
+  return {
+    effect: document.getElementById(`${prefix}LoopEffect`),
+    interval: document.getElementById(`${prefix}LoopInterval`),
+    duration: document.getElementById(`${prefix}LoopDuration`),
+    start: document.getElementById(`${prefix}LoopStart`),
+    stop: document.getElementById(`${prefix}LoopStop`),
+    intervalValue: document.getElementById(`${prefix}LoopIntervalValue`),
+    durationValue: document.getElementById(`${prefix}LoopDurationValue`)
+  };
+}
+
+const fluteLoop = getLoopElements("flute");
+const drumLoop = getLoopElements("drum");
+const electroLoop = getLoopElements("electro");
+const bassLoop = getLoopElements("bass");
+
+// ---------- GLOBAL STATE ----------
 let audioStarted = false;
-let textureAOn = false;
-let textureBOn = false;
-let textureCOn = false;
-let textureDOn = false;
-let textureEOn = false;
+let sourcesStarted = false;
 
 let oscilloscopePaused = false;
 let spectrogramPaused = false;
 
-let hitUpLoopId = null;
-let hitDownLoopId = null;
-let echoLoopId = null;
-let muffleLoopId = null;
-let warpLoopId = null;
+let fluteOn = false;
+let drumOn = false;
+let electroOn = false;
+let bassOn = false;
+
+let fluteLoopId = null;
+let drumLoopId = null;
+let electroLoopId = null;
+let bassLoopId = null;
 
 const spectrogramSecondsVisible = 8;
 
-const baseFreq1 = 110;
-const baseFreq2 = 111.2;
-const baseFreq3 = 55;
-
-const controlState = {
-  master: { volume: 70, filter: 50, speed: 100, distortion: 0 },
-  a: { volume: 70, filter: 50, speed: 100, distortion: 0 },
-  b: { volume: 56, filter: 25, speed: 100, distortion: 0 },
-  c: { volume: 44, filter: 55, speed: 100, distortion: 0 },
-  d: { volume: 50, filter: 30, speed: 100, distortion: 0 },
-  e: { volume: 42, filter: 60, speed: 100, distortion: 0 }
-};
-
-// analysis + master fx
+// ---------- AUDIO GRAPH ----------
 const waveformAnalyser = new Tone.Analyser("waveform", 2048);
 const fftAnalyser = new Tone.Analyser("fft", 256);
 
-const masterGain = new Tone.Gain(0.7);
-const masterFilter = new Tone.Filter(1200, "lowpass");
+const masterGain = new Tone.Gain(0.75);
+const masterFilter = new Tone.Filter(1800, "lowpass");
 const masterDistortion = new Tone.Distortion(0);
-const echoDelay = new Tone.FeedbackDelay(0.25, 0.2);
-echoDelay.wet.value = 0;
 
-// textures
-const textureAFilter = new Tone.Filter(1800, "lowpass");
-const textureADistortion = new Tone.Distortion(0);
-const textureAGain = new Tone.Gain(0);
-const textureAOsc1 = new Tone.Oscillator(baseFreq1, "sine");
-const textureAOsc2 = new Tone.Oscillator(baseFreq2, "triangle");
-const textureAOsc3 = new Tone.Oscillator(baseFreq3, "sine");
+// flute
+const fluteGain = new Tone.Gain(0);
+const fluteFilter = new Tone.Filter(1800, "bandpass");
+const fluteDistortion = new Tone.Distortion(0);
+const fluteNoise = new Tone.Noise("pink");
+const fluteNoiseGain = new Tone.Gain(0.08);
+const fluteOsc = new Tone.Oscillator(660, "triangle");
+const fluteVibrato = new Tone.LFO(5, -10, 10);
 
-const textureBFilter = new Tone.Filter(220, "lowpass");
-const textureBDistortion = new Tone.Distortion(0);
-const textureBGain = new Tone.Gain(0);
-const textureBOsc1 = new Tone.Oscillator(43.65, "square");
-const textureBOsc2 = new Tone.Oscillator(87.3, "sine");
-const textureBOsc3 = new Tone.Oscillator(65.4, "triangle");
+// drum
+const drumGain = new Tone.Gain(0);
+const drumFilter = new Tone.Filter(900, "lowpass");
+const drumDistortion = new Tone.Distortion(0.05);
+const drumSynth = new Tone.MembraneSynth({
+  pitchDecay: 0.03,
+  octaves: 5,
+  oscillator: { type: "sine" },
+  envelope: {
+    attack: 0.001,
+    decay: 0.35,
+    sustain: 0,
+    release: 0.05
+  }
+});
+const drumPulse = new Tone.Loop((time) => {
+  if (drumOn) {
+    drumSynth.triggerAttackRelease("C1", "8n", time, 0.9);
+  }
+}, "2n");
 
-const textureCFilter = new Tone.Filter(1400, "bandpass");
-const textureCDistortion = new Tone.Distortion(0);
-const textureCGain = new Tone.Gain(0);
-const textureCNoise = new Tone.Noise("pink");
-const textureCOsc = new Tone.Oscillator(523.25, "sine");
-const textureCFilterLFO = new Tone.LFO(0.22, 900, 2200);
+// electro
+const electroGain = new Tone.Gain(0);
+const electroFilter = new Tone.Filter(2200, "lowpass");
+const electroDistortion = new Tone.Distortion(0.08);
+const electroOsc1 = new Tone.Oscillator(220, "sawtooth");
+const electroOsc2 = new Tone.Oscillator(224, "square");
+const electroLfo = new Tone.LFO(0.25, 600, 2600);
 
-const textureDFilter = new Tone.Filter(260, "lowpass");
-const textureDDistortion = new Tone.Distortion(0);
-const textureDGain = new Tone.Gain(0);
-const textureDOsc1 = new Tone.Oscillator(48, "sawtooth");
-const textureDOsc2 = new Tone.Oscillator(50.5, "square");
+// bass
+const bassGain = new Tone.Gain(0);
+const bassFilter = new Tone.Filter(220, "lowpass");
+const bassDistortion = new Tone.Distortion(0.03);
+const bassOsc1 = new Tone.Oscillator(55, "sawtooth");
+const bassOsc2 = new Tone.Oscillator(55.5, "square");
 
-const textureEFilter = new Tone.Filter(1200, "bandpass");
-const textureEDistortion = new Tone.Distortion(0);
-const textureEGain = new Tone.Gain(0);
-const textureENoiseGain = new Tone.Gain(0.3);
-const textureENoise = new Tone.Noise("pink");
-const textureEOsc = new Tone.Oscillator(620, "triangle");
-const textureEFilterLFO = new Tone.LFO(0.18, 700, 1700);
+// ---------- 6-BAND EQ ----------
+function createSixBandEq() {
+  const make = (freq) => {
+    const f = new Tone.Filter(freq, "peaking");
+    f.Q.value = 1;
+    f.gain.value = 0;
+    return f;
+  };
 
-// connections
-textureAOsc1.connect(textureAFilter);
-textureAOsc2.connect(textureAFilter);
-textureAOsc3.connect(textureAFilter);
-textureAFilter.connect(textureADistortion);
-textureADistortion.connect(textureAGain);
+  return {
+    b60: make(60),
+    b250: make(250),
+    b1000: make(1000),
+    b4000: make(4000),
+    b8000: make(8000),
+    b15000: make(15000)
+  };
+}
 
-textureBOsc1.connect(textureBFilter);
-textureBOsc2.connect(textureBFilter);
-textureBOsc3.connect(textureBFilter);
-textureBFilter.connect(textureBDistortion);
-textureBDistortion.connect(textureBGain);
+function chainSixBandEq(eq, inputNode, outputNode) {
+  inputNode.connect(eq.b60);
+  eq.b60.connect(eq.b250);
+  eq.b250.connect(eq.b1000);
+  eq.b1000.connect(eq.b4000);
+  eq.b4000.connect(eq.b8000);
+  eq.b8000.connect(eq.b15000);
+  eq.b15000.connect(outputNode);
+}
 
-textureCNoise.connect(textureCFilter);
-textureCOsc.connect(textureCFilter);
-textureCFilterLFO.connect(textureCFilter.frequency);
-textureCFilter.connect(textureCDistortion);
-textureCDistortion.connect(textureCGain);
+const fluteEq = createSixBandEq();
+const drumEq = createSixBandEq();
+const electroEq = createSixBandEq();
+const bassEq = createSixBandEq();
 
-textureDOsc1.connect(textureDFilter);
-textureDOsc2.connect(textureDFilter);
-textureDFilter.connect(textureDDistortion);
-textureDDistortion.connect(textureDGain);
+const fluteEqOut = new Tone.Gain(1);
+const drumEqOut = new Tone.Gain(1);
+const electroEqOut = new Tone.Gain(1);
+const bassEqOut = new Tone.Gain(1);
 
-textureENoise.connect(textureENoiseGain);
-textureENoiseGain.connect(textureEFilter);
-textureEOsc.connect(textureEFilter);
-textureEFilterLFO.connect(textureEFilter.frequency);
-textureEFilter.connect(textureEDistortion);
-textureEDistortion.connect(textureEGain);
+// ---------- CONNECTIONS ----------
+fluteNoise.connect(fluteNoiseGain);
+fluteNoiseGain.connect(fluteFilter);
+fluteOsc.connect(fluteFilter);
+fluteVibrato.connect(fluteOsc.detune);
+fluteFilter.connect(fluteDistortion);
+chainSixBandEq(fluteEq, fluteDistortion, fluteEqOut);
+fluteEqOut.connect(fluteGain);
 
-textureAGain.connect(masterFilter);
-textureBGain.connect(masterFilter);
-textureCGain.connect(masterFilter);
-textureDGain.connect(masterFilter);
-textureEGain.connect(masterFilter);
+drumSynth.connect(drumFilter);
+drumFilter.connect(drumDistortion);
+chainSixBandEq(drumEq, drumDistortion, drumEqOut);
+drumEqOut.connect(drumGain);
+
+electroOsc1.connect(electroFilter);
+electroOsc2.connect(electroFilter);
+electroLfo.connect(electroFilter.frequency);
+electroFilter.connect(electroDistortion);
+chainSixBandEq(electroEq, electroDistortion, electroEqOut);
+electroEqOut.connect(electroGain);
+
+bassOsc1.connect(bassFilter);
+bassOsc2.connect(bassFilter);
+bassFilter.connect(bassDistortion);
+chainSixBandEq(bassEq, bassDistortion, bassEqOut);
+bassEqOut.connect(bassGain);
+
+fluteGain.connect(masterFilter);
+drumGain.connect(masterFilter);
+electroGain.connect(masterFilter);
+bassGain.connect(masterFilter);
 
 masterFilter.connect(masterDistortion);
-masterDistortion.connect(echoDelay);
-echoDelay.connect(masterGain);
-
+masterDistortion.connect(masterGain);
 masterGain.connect(waveformAnalyser);
 masterGain.connect(fftAnalyser);
 masterGain.toDestination();
 
-// start sources
-textureAOsc1.start();
-textureAOsc2.start();
-textureAOsc3.start();
+// ---------- CONTROL STATE ----------
+const controlState = {
+  master: { volume: 75, filter: 50, speed: 100, distortion: 0 },
+  flute: { volume: 70, filter: 55, speed: 100, distortion: 0 },
+  drum: { volume: 75, filter: 45, speed: 100, distortion: 5 },
+  electro: { volume: 68, filter: 60, speed: 100, distortion: 12 },
+  bass: { volume: 72, filter: 30, speed: 100, distortion: 5 }
+};
 
-textureBOsc1.start();
-textureBOsc2.start();
-textureBOsc3.start();
-
-textureCNoise.start();
-textureCOsc.start();
-textureCFilterLFO.start();
-
-textureDOsc1.start();
-textureDOsc2.start();
-
-textureENoise.start();
-textureEOsc.start();
-textureEFilterLFO.start();
-
-// helpers
+// ---------- HELPERS ----------
 function sliderToGain(target, value) {
   if (target === "master") return value / 100;
-  return value / 200;
+  return value / 160;
 }
 
 function sliderToFrequency(value) {
-  const minFreq = 100;
+  const minFreq = 120;
   const maxFreq = 5000;
   return minFreq + (value / 100) * (maxFreq - minFreq);
 }
 
 function getGainNode(target) {
   return {
-    a: textureAGain,
-    b: textureBGain,
-    c: textureCGain,
-    d: textureDGain,
-    e: textureEGain
+    master: masterGain,
+    flute: fluteGain,
+    drum: drumGain,
+    electro: electroGain,
+    bass: bassGain
   }[target];
 }
 
 function getFilterNode(target) {
   return {
-    a: textureAFilter,
-    b: textureBFilter,
-    c: textureCFilter,
-    d: textureDFilter,
-    e: textureEFilter
+    master: masterFilter,
+    flute: fluteFilter,
+    drum: drumFilter,
+    electro: electroFilter,
+    bass: bassFilter
   }[target];
 }
 
 function getDistortionNode(target) {
   return {
-    a: textureADistortion,
-    b: textureBDistortion,
-    c: textureCDistortion,
-    d: textureDDistortion,
-    e: textureEDistortion
+    master: masterDistortion,
+    flute: fluteDistortion,
+    drum: drumDistortion,
+    electro: electroDistortion,
+    bass: bassDistortion
   }[target];
 }
 
-function isTextureOn(target) {
+function isSoundOn(target) {
   return (
-    (target === "a" && textureAOn) ||
-    (target === "b" && textureBOn) ||
-    (target === "c" && textureCOn) ||
-    (target === "d" && textureDOn) ||
-    (target === "e" && textureEOn)
+    (target === "flute" && fluteOn) ||
+    (target === "drum" && drumOn) ||
+    (target === "electro" && electroOn) ||
+    (target === "bass" && bassOn)
   );
 }
 
-function getControlTarget() {
-  return controlTargetSelect.value;
-}
-
-function requireAnyTexture() {
+function requireSound(target) {
   if (!audioStarted) {
     alert("First click Start Audio");
     return false;
   }
-  if (!textureAOn && !textureBOn && !textureCOn && !textureDOn && !textureEOn) {
-    alert("Turn on at least one sound first");
+  if (!isSoundOn(target)) {
+    alert("Turn on the sound first");
     return false;
   }
   return true;
-}
-
-function requireSpecificTexture(target) {
-  if (!audioStarted) {
-    alert("First click Start Audio");
-    return false;
-  }
-  if (!isTextureOn(target)) {
-    alert("Turn on the selected target sound first");
-    return false;
-  }
-  return true;
-}
-
-function applyStoredVolume(target) {
-  if (target === "master") {
-    masterGain.gain.rampTo(sliderToGain("master", controlState.master.volume), 0.1);
-    return;
-  }
-  const gainNode = getGainNode(target);
-  if (gainNode && isTextureOn(target)) {
-    gainNode.gain.rampTo(sliderToGain(target, controlState[target].volume), 0.1);
-  }
-}
-
-function applyStoredFilter(target) {
-  if (target === "master") {
-    masterFilter.frequency.rampTo(sliderToFrequency(controlState.master.filter), 0.1);
-    return;
-  }
-  const filterNode = getFilterNode(target);
-  if (filterNode) {
-    filterNode.frequency.rampTo(sliderToFrequency(controlState[target].filter), 0.1);
-  }
-}
-
-function applyStoredDistortion(target) {
-  if (target === "master") {
-    masterDistortion.distortion = controlState.master.distortion / 100;
-    return;
-  }
-  const distortionNode = getDistortionNode(target);
-  if (distortionNode) {
-    distortionNode.distortion = controlState[target].distortion / 100;
-  }
-}
-
-function applyStoredSpeed(target) {
-  const speedMultiplier = controlState[target].speed / 100;
-
-  if (target === "a") {
-    textureAOsc1.frequency.rampTo(baseFreq1 * speedMultiplier, 0.1);
-    textureAOsc2.frequency.rampTo(baseFreq2 * speedMultiplier, 0.1);
-    textureAOsc3.frequency.rampTo(baseFreq3 * speedMultiplier, 0.1);
-  }
-
-  if (target === "b") {
-    textureBOsc1.frequency.rampTo(43.65 * speedMultiplier, 0.1);
-    textureBOsc2.frequency.rampTo(87.3 * speedMultiplier, 0.1);
-    textureBOsc3.frequency.rampTo(65.4 * speedMultiplier, 0.1);
-  }
-
-  if (target === "c") {
-    textureCOsc.frequency.rampTo(523.25 * speedMultiplier, 0.1);
-    textureCFilterLFO.frequency.rampTo(0.22 * speedMultiplier, 0.1);
-  }
-
-  if (target === "d") {
-    const base = Number(subPulseFreq.value);
-    const detune = Number(subPulseDetune.value);
-    textureDOsc1.frequency.rampTo(base * speedMultiplier, 0.1);
-    textureDOsc2.frequency.rampTo((base + detune) * speedMultiplier, 0.1);
-  }
-
-  if (target === "e") {
-    const tone = Number(windPipeTone.value);
-    textureEOsc.frequency.rampTo(tone * speedMultiplier, 0.1);
-    textureEFilterLFO.frequency.rampTo(0.18 * speedMultiplier, 0.1);
-  }
-
-  if (target === "master") {
-    ["a", "b", "c", "d", "e"].forEach(applyStoredSpeed);
-  }
 }
 
 function syncControlSlidersToTarget() {
-  const target = getControlTarget();
+  const target = controlTargetSelect.value;
   volumeSlider.value = controlState[target].volume;
   filterSlider.value = controlState[target].filter;
   speedSlider.value = controlState[target].speed;
   distortionSlider.value = controlState[target].distortion;
 }
 
-controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
+function applyStoredVolume(target) {
+  const value = controlState[target].volume;
 
-// audio start
-startButton.addEventListener("click", async function () {
-  if (audioStarted) return;
-  await Tone.start();
-  audioStarted = true;
-  startButton.textContent = "Audio Ready";
-});
+  if (target === "master") {
+    masterGain.gain.value = sliderToGain("master", value);
+    return;
+  }
 
-// toggles
-function setTextureAState(isOn) {
-  textureAOn = isOn;
-  if (textureAOn) {
-    textureAGain.gain.rampTo(sliderToGain("a", controlState.a.volume), 0.2);
+  const gainNode = getGainNode(target);
+  if (gainNode && isSoundOn(target)) {
+    gainNode.gain.value = sliderToGain(target, value);
+  }
+}
+
+function applyStoredFilter(target) {
+  const value = controlState[target].filter;
+  const freq = sliderToFrequency(value);
+
+  if (target === "master") {
+    masterFilter.frequency.value = freq;
+    return;
+  }
+
+  const filterNode = getFilterNode(target);
+  if (filterNode) {
+    filterNode.frequency.value = freq;
+  }
+}
+
+function applyStoredDistortion(target) {
+  const node = getDistortionNode(target);
+  if (!node) return;
+  node.distortion = controlState[target].distortion / 100;
+}
+
+function applyStoredSpeed(target) {
+  const mult = controlState[target].speed / 100;
+
+  if (target === "flute") {
+    fluteOsc.frequency.value = 660 * mult;
+    fluteVibrato.frequency.value = 5 * mult;
+  }
+
+  if (target === "drum") {
+    drumPulse.interval = `${Math.max(0.25, 2 / mult)}n`;
+  }
+
+  if (target === "electro") {
+    electroOsc1.frequency.value = 220 * mult;
+    electroOsc2.frequency.value = 224 * mult;
+    electroLfo.frequency.value = 0.25 * mult;
+  }
+
+  if (target === "bass") {
+    bassOsc1.frequency.value = 55 * mult;
+    bassOsc2.frequency.value = 55.5 * mult;
+  }
+
+  if (target === "master") {
+    ["flute", "drum", "electro", "bass"].forEach(applyStoredSpeed);
+  }
+}
+
+function applyAllStoredControls() {
+  ["master", "flute", "drum", "electro", "bass"].forEach((target) => {
+    applyStoredFilter(target);
+    applyStoredDistortion(target);
+    applyStoredSpeed(target);
+  });
+}
+
+function getOscillatorGroup(target) {
+  if (target === "flute") {
+    return {
+      oscillators: [fluteOsc],
+      baseFrequencies: [660 * (controlState.flute.speed / 100)]
+    };
+  }
+
+  if (target === "electro") {
+    return {
+      oscillators: [electroOsc1, electroOsc2],
+      baseFrequencies: [
+        220 * (controlState.electro.speed / 100),
+        224 * (controlState.electro.speed / 100)
+      ]
+    };
+  }
+
+  if (target === "bass") {
+    return {
+      oscillators: [bassOsc1, bassOsc2],
+      baseFrequencies: [
+        55 * (controlState.bass.speed / 100),
+        55.5 * (controlState.bass.speed / 100)
+      ]
+    };
+  }
+
+  return null;
+}
+
+// ---------- EQ ----------
+function readEqValues(elementMap) {
+  return {
+    "60": Number(elementMap["60"].value),
+    "250": Number(elementMap["250"].value),
+    "1000": Number(elementMap["1000"].value),
+    "4000": Number(elementMap["4000"].value),
+    "8000": Number(elementMap["8000"].value),
+    "15000": Number(elementMap["15000"].value)
+  };
+}
+
+function applySixBandEq(eq, values) {
+  eq.b60.gain.value = values["60"];
+  eq.b250.gain.value = values["250"];
+  eq.b1000.gain.value = values["1000"];
+  eq.b4000.gain.value = values["4000"];
+  eq.b8000.gain.value = values["8000"];
+  eq.b15000.gain.value = values["15000"];
+}
+
+function bindEq(elementMap, eqNode) {
+  eqBands.forEach((band) => {
+    elementMap[band].addEventListener("input", () => {
+      applySixBandEq(eqNode, readEqValues(elementMap));
+    });
+  });
+}
+
+// ---------- SOURCE START ----------
+function startSourcesOnce() {
+  if (sourcesStarted) return;
+
+  fluteNoise.start();
+  fluteOsc.start();
+  fluteVibrato.start();
+
+  electroOsc1.start();
+  electroOsc2.start();
+  electroLfo.start();
+
+  bassOsc1.start();
+  bassOsc2.start();
+
+  Tone.Transport.start();
+  drumPulse.start(0);
+
+  sourcesStarted = true;
+}
+
+// ---------- SOUND ON/OFF ----------
+function setFluteState(isOn) {
+  fluteOn = isOn;
+  if (isOn) {
+    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume);
     textureAButton.textContent = "ON";
     textureAButton.classList.add("active");
   } else {
-    textureAGain.gain.rampTo(0, 0.2);
+    fluteGain.gain.value = 0;
     textureAButton.textContent = "OFF";
     textureAButton.classList.remove("active");
   }
 }
 
-function setTextureBState(isOn) {
-  textureBOn = isOn;
-  if (textureBOn) {
-    textureBGain.gain.rampTo(sliderToGain("b", controlState.b.volume), 0.2);
+function setDrumState(isOn) {
+  drumOn = isOn;
+  if (isOn) {
+    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume);
     textureBButton.textContent = "ON";
     textureBButton.classList.add("active");
   } else {
-    textureBGain.gain.rampTo(0, 0.2);
+    drumGain.gain.value = 0;
     textureBButton.textContent = "OFF";
     textureBButton.classList.remove("active");
   }
 }
 
-function setTextureCState(isOn) {
-  textureCOn = isOn;
-  if (textureCOn) {
-    textureCGain.gain.rampTo(sliderToGain("c", controlState.c.volume), 0.2);
+function setElectroState(isOn) {
+  electroOn = isOn;
+  if (isOn) {
+    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume);
     textureCButton.textContent = "ON";
     textureCButton.classList.add("active");
   } else {
-    textureCGain.gain.rampTo(0, 0.2);
+    electroGain.gain.value = 0;
     textureCButton.textContent = "OFF";
     textureCButton.classList.remove("active");
   }
 }
 
-function setTextureDState(isOn) {
-  textureDOn = isOn;
-  if (textureDOn) {
-    textureDGain.gain.rampTo(sliderToGain("d", controlState.d.volume), 0.2);
+function setBassState(isOn) {
+  bassOn = isOn;
+  if (isOn) {
+    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume);
     textureDButton.textContent = "ON";
     textureDButton.classList.add("active");
   } else {
-    textureDGain.gain.rampTo(0, 0.2);
+    bassGain.gain.value = 0;
     textureDButton.textContent = "OFF";
     textureDButton.classList.remove("active");
   }
 }
 
-function setTextureEState(isOn) {
-  textureEOn = isOn;
-  if (textureEOn) {
-    textureEGain.gain.rampTo(sliderToGain("e", controlState.e.volume), 0.2);
-    textureEButton.textContent = "ON";
-    textureEButton.classList.add("active");
-  } else {
-    textureEGain.gain.rampTo(0, 0.2);
-    textureEButton.textContent = "OFF";
-    textureEButton.classList.remove("active");
-  }
-}
+// ---------- LOOP FX ----------
+function triggerLoopEffectForSound(soundName, effectName, durationValue) {
+  if (!requireSound(soundName)) return;
 
-textureAButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureAState(!textureAOn);
-});
+  if (effectName === "hitUp") {
+    const group = getOscillatorGroup(soundName);
+    if (!group) return;
 
-textureBButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureBState(!textureBOn);
-});
-
-textureCButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureCState(!textureCOn);
-});
-
-textureDButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureDState(!textureDOn);
-});
-
-textureEButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureEState(!textureEOn);
-});
-
-playAllButton.addEventListener("click", function () {
-  if (!audioStarted) return alert("First click Start Audio");
-  setTextureAState(true);
-  setTextureBState(true);
-  setTextureCState(true);
-  setTextureDState(true);
-  setTextureEState(true);
-});
-
-stopAllButton.addEventListener("click", function () {
-  setTextureAState(false);
-  setTextureBState(false);
-  setTextureCState(false);
-  setTextureDState(false);
-  setTextureEState(false);
-});
-
-// sliders
-volumeSlider.addEventListener("input", function () {
-  const target = getControlTarget();
-  controlState[target].volume = Number(volumeSlider.value);
-  applyStoredVolume(target);
-});
-
-filterSlider.addEventListener("input", function () {
-  const target = getControlTarget();
-  controlState[target].filter = Number(filterSlider.value);
-  applyStoredFilter(target);
-});
-
-speedSlider.addEventListener("input", function () {
-  const target = getControlTarget();
-  controlState[target].speed = Number(speedSlider.value);
-  applyStoredSpeed(target);
-});
-
-distortionSlider.addEventListener("input", function () {
-  const target = getControlTarget();
-  controlState[target].distortion = Number(distortionSlider.value);
-  applyStoredDistortion(target);
-});
-
-// sound design labels
-function updateSoundDesignLabels() {
-  subPulseFreqValue.textContent = `${subPulseFreq.value}Hz`;
-  subPulseDetuneValue.textContent = `${subPulseDetune.value}Hz`;
-  windPipeToneValue.textContent = `${windPipeTone.value}Hz`;
-  windPipeBreathValue.textContent = `${windPipeBreath.value}%`;
-}
-
-function applySubPulseDesign() {
-  const speedMultiplier = controlState.d.speed / 100;
-  const base = Number(subPulseFreq.value);
-  const detune = Number(subPulseDetune.value);
-  textureDOsc1.frequency.rampTo(base * speedMultiplier, 0.1);
-  textureDOsc2.frequency.rampTo((base + detune) * speedMultiplier, 0.1);
-}
-
-function applyWindPipeDesign() {
-  const speedMultiplier = controlState.e.speed / 100;
-  const tone = Number(windPipeTone.value);
-  const breath = Number(windPipeBreath.value);
-  textureEOsc.frequency.rampTo(tone * speedMultiplier, 0.1);
-  textureEFilter.frequency.rampTo(tone, 0.1);
-  textureENoiseGain.gain.rampTo(breath / 180, 0.1);
-}
-
-subPulseFreq.addEventListener("input", function () {
-  updateSoundDesignLabels();
-  applySubPulseDesign();
-});
-
-subPulseDetune.addEventListener("input", function () {
-  updateSoundDesignLabels();
-  applySubPulseDesign();
-});
-
-windPipeTone.addEventListener("input", function () {
-  updateSoundDesignLabels();
-  applyWindPipeDesign();
-});
-
-windPipeBreath.addEventListener("input", function () {
-  updateSoundDesignLabels();
-  applyWindPipeDesign();
-});
-
-// duration labels
-function updateDurationLabels() {
-  hitUpDurationValue.textContent = `${hitUpDuration.value}s`;
-  hitDownDurationValue.textContent = `${hitDownDuration.value}s`;
-  echoBurstDurationValue.textContent = `${echoBurstDuration.value}s`;
-  muffleDurationValue.textContent = `${muffleDuration.value}s`;
-  warpDurationValue.textContent = `${warpDuration.value}s`;
-
-  loopHitUpIntervalValue.textContent = `${Number(loopHitUpInterval.value).toFixed(1)}s`;
-  loopHitUpDurationValue.textContent = `${Number(loopHitUpDuration.value).toFixed(1)}s`;
-
-  loopHitDownIntervalValue.textContent = `${Number(loopHitDownInterval.value).toFixed(1)}s`;
-  loopHitDownDurationValue.textContent = `${Number(loopHitDownDuration.value).toFixed(1)}s`;
-
-  loopEchoIntervalValue.textContent = `${Number(loopEchoInterval.value).toFixed(1)}s`;
-  loopEchoDurationValue.textContent = `${Number(loopEchoDuration.value).toFixed(1)}s`;
-
-  loopMuffleIntervalValue.textContent = `${Number(loopMuffleInterval.value).toFixed(1)}s`;
-  loopMuffleDurationValue.textContent = `${Number(loopMuffleDuration.value).toFixed(1)}s`;
-
-  loopWarpIntervalValue.textContent = `${Number(loopWarpInterval.value).toFixed(1)}s`;
-  loopWarpDurationValue.textContent = `${Number(loopWarpDuration.value).toFixed(1)}s`;
-}
-
-[
-  hitUpDuration,
-  hitDownDuration,
-  echoBurstDuration,
-  muffleDuration,
-  warpDuration,
-  loopHitUpInterval,
-  loopHitUpDuration,
-  loopHitDownInterval,
-  loopHitDownDuration,
-  loopEchoInterval,
-  loopEchoDuration,
-  loopMuffleInterval,
-  loopMuffleDuration,
-  loopWarpInterval,
-  loopWarpDuration
-].forEach(function (slider) {
-  slider.addEventListener("input", updateDurationLabels);
-});
-
-// effect group helpers
-function getGroupsForTarget(target) {
-  if (target === "a" && textureAOn) {
-    return [{
-      oscillators: [textureAOsc1, textureAOsc2, textureAOsc3],
-      baseFrequencies: [
-        baseFreq1 * (controlState.a.speed / 100),
-        baseFreq2 * (controlState.a.speed / 100),
-        baseFreq3 * (controlState.a.speed / 100)
-      ]
-    }];
-  }
-
-  if (target === "b" && textureBOn) {
-    return [{
-      oscillators: [textureBOsc1, textureBOsc2, textureBOsc3],
-      baseFrequencies: [
-        43.65 * (controlState.b.speed / 100),
-        87.3 * (controlState.b.speed / 100),
-        65.4 * (controlState.b.speed / 100)
-      ]
-    }];
-  }
-
-  if (target === "c" && textureCOn) {
-    return [{
-      oscillators: [textureCOsc],
-      baseFrequencies: [523.25 * (controlState.c.speed / 100)]
-    }];
-  }
-
-  if (target === "d" && textureDOn) {
-    const base = Number(subPulseFreq.value);
-    const detune = Number(subPulseDetune.value);
-    return [{
-      oscillators: [textureDOsc1, textureDOsc2],
-      baseFrequencies: [
-        base * (controlState.d.speed / 100),
-        (base + detune) * (controlState.d.speed / 100)
-      ]
-    }];
-  }
-
-  if (target === "e" && textureEOn) {
-    return [{
-      oscillators: [textureEOsc],
-      baseFrequencies: [Number(windPipeTone.value) * (controlState.e.speed / 100)]
-    }];
-  }
-
-  return [];
-}
-
-function getAllActiveGroups() {
-  return [
-    ...getGroupsForTarget("a"),
-    ...getGroupsForTarget("b"),
-    ...getGroupsForTarget("c"),
-    ...getGroupsForTarget("d"),
-    ...getGroupsForTarget("e")
-  ];
-}
-
-function getGroupsFromSelector(selectorValue) {
-  if (selectorValue === "all") {
-    if (!requireAnyTexture()) return null;
-    return getAllActiveGroups();
-  }
-
-  if (!requireSpecificTexture(selectorValue)) return null;
-  return getGroupsForTarget(selectorValue);
-}
-
-// effects
-function applyPitchHit(multiplier, holdTime, targetValue) {
-  const groups = getGroupsFromSelector(targetValue);
-  if (!groups) return;
-
-  groups.forEach(function (group) {
-    group.oscillators.forEach(function (oscillator, index) {
-      oscillator.frequency.value = group.baseFrequencies[index] * multiplier;
+    group.oscillators.forEach((osc, i) => {
+      osc.frequency.value = group.baseFrequencies[i] * 1.8;
     });
+
+    setTimeout(() => {
+      group.oscillators.forEach((osc, i) => {
+        osc.frequency.value = group.baseFrequencies[i];
+      });
+    }, durationValue * 1000);
+  }
+
+  if (effectName === "hitDown") {
+    const group = getOscillatorGroup(soundName);
+    if (!group) return;
+
+    group.oscillators.forEach((osc, i) => {
+      osc.frequency.value = group.baseFrequencies[i] * 0.45;
+    });
+
+    setTimeout(() => {
+      group.oscillators.forEach((osc, i) => {
+        osc.frequency.value = group.baseFrequencies[i];
+      });
+    }, durationValue * 1000);
+  }
+
+  if (effectName === "warp") {
+    const group = getOscillatorGroup(soundName);
+    if (!group) return;
+
+    group.oscillators.forEach((osc, i) => {
+      osc.frequency.value = group.baseFrequencies[i] * 1.55;
+    });
+
+    setTimeout(() => {
+      group.oscillators.forEach((osc, i) => {
+        osc.frequency.value = group.baseFrequencies[i] * 0.78;
+      });
+    }, durationValue * 500);
+
+    setTimeout(() => {
+      group.oscillators.forEach((osc, i) => {
+        osc.frequency.value = group.baseFrequencies[i];
+      });
+    }, durationValue * 1000);
+  }
+
+  if (effectName === "muffle") {
+    const filterNode = getFilterNode(soundName);
+    if (!filterNode) return;
+
+    const normalFreq = sliderToFrequency(controlState[soundName].filter);
+    filterNode.frequency.value = 220;
+
+    setTimeout(() => {
+      filterNode.frequency.value = normalFreq;
+    }, durationValue * 1000);
+  }
+
+  if (effectName === "echoBurst") {
+    const gainNode = getGainNode(soundName);
+    if (!gainNode) return;
+
+    const normalGain = sliderToGain(soundName, controlState[soundName].volume);
+    gainNode.gain.value = normalGain * 1.6;
+
+    setTimeout(() => {
+      gainNode.gain.value = normalGain;
+    }, durationValue * 1000);
+  }
+}
+
+// ---------- LOOP ENGINE ----------
+function updateLoopLabels() {
+  [fluteLoop, drumLoop, electroLoop, bassLoop].forEach((loop) => {
+    loop.intervalValue.textContent = `${Number(loop.interval.value).toFixed(1)}s`;
+    loop.durationValue.textContent = `${Number(loop.duration.value).toFixed(1)}s`;
   });
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (oscillator, index) {
-        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.4);
-      });
-    });
-  }, holdTime * 1000);
 }
 
-function triggerEchoBurst(holdTime, targetValue) {
-  if (targetValue === "all") {
-    if (!requireAnyTexture()) return;
-
-    echoDelay.delayTime.rampTo(0.3, 0.05);
-    echoDelay.feedback.rampTo(0.65, 0.1);
-    echoDelay.wet.rampTo(0.85, 0.1);
-
-    setTimeout(function () {
-      echoDelay.feedback.rampTo(0.2, 0.7);
-      echoDelay.wet.rampTo(0, 0.7);
-      echoDelay.delayTime.rampTo(0.25, 0.2);
-    }, holdTime * 1000);
-
-    return;
+function stopLoop(name) {
+  if (name === "flute" && fluteLoopId) {
+    clearInterval(fluteLoopId);
+    fluteLoopId = null;
   }
-
-  if (!requireSpecificTexture(targetValue)) return;
-
-  const gainNode = getGainNode(targetValue);
-  if (!gainNode) return;
-
-  gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume) * 1.6, 0.05);
-  setTimeout(function () {
-    gainNode.gain.rampTo(sliderToGain(targetValue, controlState[targetValue].volume), 0.4);
-  }, holdTime * 1000);
-}
-
-function triggerMuffle(holdTime, targetValue) {
-  if (targetValue === "all") {
-    if (!requireAnyTexture()) return;
-
-    const normalFreq = sliderToFrequency(controlState.master.filter);
-    masterFilter.frequency.cancelScheduledValues(Tone.now());
-    masterFilter.frequency.rampTo(220, 0.08);
-
-    setTimeout(function () {
-      masterFilter.frequency.rampTo(normalFreq, 0.45);
-    }, holdTime * 1000);
-
-    return;
+  if (name === "drum" && drumLoopId) {
+    clearInterval(drumLoopId);
+    drumLoopId = null;
   }
-
-  if (!requireSpecificTexture(targetValue)) return;
-
-  const filterNode = getFilterNode(targetValue);
-  const normalFreq = sliderToFrequency(controlState[targetValue].filter);
-  if (!filterNode) return;
-
-  filterNode.frequency.cancelScheduledValues(Tone.now());
-  filterNode.frequency.rampTo(220, 0.08);
-
-  setTimeout(function () {
-    filterNode.frequency.rampTo(normalFreq, 0.45);
-  }, holdTime * 1000);
-}
-
-function triggerWarp(holdTime, targetValue) {
-  const groups = getGroupsFromSelector(targetValue);
-  if (!groups) return;
-
-  groups.forEach(function (group) {
-    group.oscillators.forEach(function (oscillator, index) {
-      oscillator.frequency.rampTo(group.baseFrequencies[index] * 1.55, 0.08);
-    });
-  });
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (oscillator, index) {
-        oscillator.frequency.rampTo(group.baseFrequencies[index] * 0.78, 0.15);
-      });
-    });
-  }, holdTime * 500);
-
-  setTimeout(function () {
-    groups.forEach(function (group) {
-      group.oscillators.forEach(function (oscillator, index) {
-        oscillator.frequency.rampTo(group.baseFrequencies[index], 0.35);
-      });
-    });
-  }, holdTime * 1000);
-}
-
-function triggerEffect(effectName, durationValue, targetValue) {
-  if (effectName === "hitUp") applyPitchHit(1.8, durationValue, targetValue);
-  if (effectName === "hitDown") applyPitchHit(0.45, durationValue, targetValue);
-  if (effectName === "echoBurst") triggerEchoBurst(durationValue, targetValue);
-  if (effectName === "muffle") triggerMuffle(durationValue, targetValue);
-  if (effectName === "warp") triggerWarp(durationValue, targetValue);
-}
-
-// manual effects
-hitUpButton.addEventListener("click", function () {
-  triggerEffect("hitUp", Number(hitUpDuration.value), hitUpTargetSelect.value);
-});
-
-hitDownButton.addEventListener("click", function () {
-  triggerEffect("hitDown", Number(hitDownDuration.value), hitDownTargetSelect.value);
-});
-
-echoBurstButton.addEventListener("click", function () {
-  triggerEffect("echoBurst", Number(echoBurstDuration.value), echoBurstTargetSelect.value);
-});
-
-muffleButton.addEventListener("click", function () {
-  triggerEffect("muffle", Number(muffleDuration.value), muffleTargetSelect.value);
-});
-
-warpButton.addEventListener("click", function () {
-  triggerEffect("warp", Number(warpDuration.value), warpTargetSelect.value);
-});
-
-// loop helpers
-function stopNamedLoop(loopName) {
-  if (loopName === "hitUp" && hitUpLoopId) {
-    clearInterval(hitUpLoopId);
-    hitUpLoopId = null;
+  if (name === "electro" && electroLoopId) {
+    clearInterval(electroLoopId);
+    electroLoopId = null;
   }
-  if (loopName === "hitDown" && hitDownLoopId) {
-    clearInterval(hitDownLoopId);
-    hitDownLoopId = null;
-  }
-  if (loopName === "echo" && echoLoopId) {
-    clearInterval(echoLoopId);
-    echoLoopId = null;
-  }
-  if (loopName === "muffle" && muffleLoopId) {
-    clearInterval(muffleLoopId);
-    muffleLoopId = null;
-  }
-  if (loopName === "warp" && warpLoopId) {
-    clearInterval(warpLoopId);
-    warpLoopId = null;
+  if (name === "bass" && bassLoopId) {
+    clearInterval(bassLoopId);
+    bassLoopId = null;
   }
 }
 
-function startNamedLoop(loopName, effectName, targetValue, intervalSeconds, durationSeconds) {
+function stopAllLoops() {
+  stopLoop("flute");
+  stopLoop("drum");
+  stopLoop("electro");
+  stopLoop("bass");
+}
+
+function startLoop(name, soundName, loopConfig) {
   if (!audioStarted) {
     alert("First click Start Audio");
     return;
   }
 
-  stopNamedLoop(loopName);
-  triggerEffect(effectName, durationSeconds, targetValue);
+  stopLoop(name);
 
-  const newId = setInterval(function () {
-    triggerEffect(effectName, durationSeconds, targetValue);
+  const effectName = loopConfig.effect.value;
+  const intervalSeconds = Number(loopConfig.interval.value);
+  const durationSeconds = Number(loopConfig.duration.value);
+
+  triggerLoopEffectForSound(soundName, effectName, durationSeconds);
+
+  const id = setInterval(() => {
+    triggerLoopEffectForSound(soundName, effectName, durationSeconds);
   }, intervalSeconds * 1000);
 
-  if (loopName === "hitUp") hitUpLoopId = newId;
-  if (loopName === "hitDown") hitDownLoopId = newId;
-  if (loopName === "echo") echoLoopId = newId;
-  if (loopName === "muffle") muffleLoopId = newId;
-  if (loopName === "warp") warpLoopId = newId;
+  if (name === "flute") fluteLoopId = id;
+  if (name === "drum") drumLoopId = id;
+  if (name === "electro") electroLoopId = id;
+  if (name === "bass") bassLoopId = id;
 }
 
+// ---------- BUTTONS ----------
+startButton.addEventListener("click", async () => {
+  if (audioStarted) return;
+
+  await Tone.start();
+  startSourcesOnce();
+  audioStarted = true;
+  startButton.textContent = "Audio Ready";
+
+  applyAllStoredControls();
+});
+
+textureAButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setFluteState(!fluteOn);
+});
+
+textureBButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setDrumState(!drumOn);
+});
+
+textureCButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setElectroState(!electroOn);
+});
+
+textureDButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setBassState(!bassOn);
+});
+
+playAllButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setFluteState(true);
+  setDrumState(true);
+  setElectroState(true);
+  setBassState(true);
+});
+
+stopAllButton.addEventListener("click", () => {
+  setFluteState(false);
+  setDrumState(false);
+  setElectroState(false);
+  setBassState(false);
+  stopAllLoops();
+});
+
+randomButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+
+  const target = controlTargetSelect.value;
+  controlState[target].volume = Math.floor(Math.random() * 101);
+  controlState[target].filter = Math.floor(Math.random() * 101);
+  controlState[target].speed = 70 + Math.floor(Math.random() * 61);
+  controlState[target].distortion = Math.floor(Math.random() * 40);
+
+  syncControlSlidersToTarget();
+  applyStoredVolume(target);
+  applyStoredFilter(target);
+  applyStoredSpeed(target);
+  applyStoredDistortion(target);
+});
+
+controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
+
+volumeSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].volume = Number(volumeSlider.value);
+  applyStoredVolume(target);
+});
+
+filterSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].filter = Number(filterSlider.value);
+  applyStoredFilter(target);
+});
+
+speedSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].speed = Number(speedSlider.value);
+  applyStoredSpeed(target);
+});
+
+distortionSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].distortion = Number(distortionSlider.value);
+  applyStoredDistortion(target);
+});
+
 // loop bindings
-startLoopHitUpButton.addEventListener("click", function () {
-  startNamedLoop("hitUp", "hitUp", loopHitUpTargetSelect.value, Number(loopHitUpInterval.value), Number(loopHitUpDuration.value));
-});
-stopLoopHitUpButton.addEventListener("click", function () {
-  stopNamedLoop("hitUp");
+fluteLoop.start.addEventListener("click", () => startLoop("flute", "flute", fluteLoop));
+fluteLoop.stop.addEventListener("click", () => stopLoop("flute"));
+
+drumLoop.start.addEventListener("click", () => startLoop("drum", "drum", drumLoop));
+drumLoop.stop.addEventListener("click", () => stopLoop("drum"));
+
+electroLoop.start.addEventListener("click", () => startLoop("electro", "electro", electroLoop));
+electroLoop.stop.addEventListener("click", () => stopLoop("electro"));
+
+bassLoop.start.addEventListener("click", () => startLoop("bass", "bass", bassLoop));
+bassLoop.stop.addEventListener("click", () => stopLoop("bass"));
+
+// loop labels
+[
+  fluteLoop.interval,
+  fluteLoop.duration,
+  drumLoop.interval,
+  drumLoop.duration,
+  electroLoop.interval,
+  electroLoop.duration,
+  bassLoop.interval,
+  bassLoop.duration
+].forEach((slider) => {
+  slider.addEventListener("input", updateLoopLabels);
 });
 
-startLoopHitDownButton.addEventListener("click", function () {
-  startNamedLoop("hitDown", "hitDown", loopHitDownTargetSelect.value, Number(loopHitDownInterval.value), Number(loopHitDownDuration.value));
-});
-stopLoopHitDownButton.addEventListener("click", function () {
-  stopNamedLoop("hitDown");
-});
+// eq bind
+bindEq(fluteEqEls, fluteEq);
+bindEq(drumEqEls, drumEq);
+bindEq(electroEqEls, electroEq);
+bindEq(bassEqEls, bassEq);
 
-startLoopEchoButton.addEventListener("click", function () {
-  startNamedLoop("echo", "echoBurst", loopEchoTargetSelect.value, Number(loopEchoInterval.value), Number(loopEchoDuration.value));
-});
-stopLoopEchoButton.addEventListener("click", function () {
-  stopNamedLoop("echo");
-});
+applySixBandEq(fluteEq, readEqValues(fluteEqEls));
+applySixBandEq(drumEq, readEqValues(drumEqEls));
+applySixBandEq(electroEq, readEqValues(electroEqEls));
+applySixBandEq(bassEq, readEqValues(bassEqEls));
 
-startLoopMuffleButton.addEventListener("click", function () {
-  startNamedLoop("muffle", "muffle", loopMuffleTargetSelect.value, Number(loopMuffleInterval.value), Number(loopMuffleDuration.value));
-});
-stopLoopMuffleButton.addEventListener("click", function () {
-  stopNamedLoop("muffle");
-});
-
-startLoopWarpButton.addEventListener("click", function () {
-  startNamedLoop("warp", "warp", loopWarpTargetSelect.value, Number(loopWarpInterval.value), Number(loopWarpDuration.value));
-});
-stopLoopWarpButton.addEventListener("click", function () {
-  stopNamedLoop("warp");
-});
-
-// oscilloscope controls
-pauseOscilloscopeButton.addEventListener("click", function () {
+// ---------- SCOPE ----------
+pauseOscilloscopeButton.addEventListener("click", () => {
   oscilloscopePaused = true;
 });
 
-resumeOscilloscopeButton.addEventListener("click", function () {
+resumeOscilloscopeButton.addEventListener("click", () => {
   oscilloscopePaused = false;
 });
 
-// spectrogram controls
-pauseSpectrogramButton.addEventListener("click", function () {
+pauseSpectrogramButton.addEventListener("click", () => {
   spectrogramPaused = true;
 });
 
-resumeSpectrogramButton.addEventListener("click", function () {
+resumeSpectrogramButton.addEventListener("click", () => {
   spectrogramPaused = false;
 });
 
-clearSpectrogramButton.addEventListener("click", function () {
+clearSpectrogramButton.addEventListener("click", () => {
   spectrogramCtx.fillStyle = "black";
   spectrogramCtx.fillRect(0, 0, spectrogramCanvas.width, spectrogramCanvas.height);
   drawSpectrogramOverlay();
 });
 
-// spectrogram visuals
 function fftToColor(value) {
   const intensity = Math.max(0, Math.min(1, (value + 140) / 140));
 
@@ -969,8 +805,8 @@ function drawSpectrogramOverlay() {
 
   spectrogramOverlayCtx.clearRect(0, 0, width, height);
   spectrogramOverlayCtx.save();
-  spectrogramOverlayCtx.strokeStyle = "rgba(255, 255, 255, 0.14)";
-  spectrogramOverlayCtx.fillStyle = "rgba(255, 255, 255, 0.55)";
+  spectrogramOverlayCtx.strokeStyle = "rgba(255,255,255,0.14)";
+  spectrogramOverlayCtx.fillStyle = "rgba(255,255,255,0.55)";
   spectrogramOverlayCtx.lineWidth = 1;
   spectrogramOverlayCtx.font = "12px Arial";
 
@@ -1007,7 +843,7 @@ function drawSpectrogram() {
     0, 0, width - 2, height
   );
 
-  spectrogramCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
+  spectrogramCtx.fillStyle = "rgba(0,0,0,0.18)";
   spectrogramCtx.fillRect(width - 2, 0, 2, height);
 
   const binsToUse = Math.floor(values.length * 0.6);
@@ -1022,7 +858,6 @@ function drawSpectrogram() {
   drawSpectrogramOverlay();
 }
 
-// oscilloscope visuals
 function drawOscilloscope() {
   requestAnimationFrame(drawOscilloscope);
 
@@ -1036,11 +871,11 @@ function drawOscilloscope() {
   const zoomX = Number(oscZoomX.value);
   const zoomY = Number(oscZoomY.value);
 
-  oscilloscopeCtx.fillStyle = "rgba(0, 0, 0, 0.18)";
+  oscilloscopeCtx.fillStyle = "rgba(0,0,0,0.18)";
   oscilloscopeCtx.fillRect(0, 0, width, height);
 
   oscilloscopeCtx.save();
-  oscilloscopeCtx.strokeStyle = "rgba(120, 120, 120, 0.18)";
+  oscilloscopeCtx.strokeStyle = "rgba(120,120,120,0.18)";
   oscilloscopeCtx.lineWidth = 1;
 
   for (let i = 0; i <= 12; i++) {
@@ -1069,7 +904,7 @@ function drawOscilloscope() {
   oscilloscopeCtx.save();
   oscilloscopeCtx.beginPath();
   oscilloscopeCtx.lineWidth = 6;
-  oscilloscopeCtx.strokeStyle = "rgba(124, 255, 124, 0.18)";
+  oscilloscopeCtx.strokeStyle = "rgba(124,255,124,0.18)";
   oscilloscopeCtx.shadowBlur = 18;
   oscilloscopeCtx.shadowColor = "#7cff7c";
 
@@ -1099,10 +934,9 @@ function drawOscilloscope() {
   oscilloscopeCtx.restore();
 }
 
-// init
-updateSoundDesignLabels();
-updateDurationLabels();
+// ---------- INIT ----------
 syncControlSlidersToTarget();
+updateLoopLabels();
 
 oscilloscopeCtx.fillStyle = "black";
 oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);

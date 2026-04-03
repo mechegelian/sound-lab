@@ -10,7 +10,7 @@ body {
 }
 
 .app-shell {
-  max-width: 1500px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -170,12 +170,6 @@ select {
   color: #ccc;
 }
 
-.sub-block {
-  margin-top: 28px;
-  padding-top: 18px;
-  border-top: 1px solid #3a3a3a;
-}
-
 .sound-row {
   display: flex;
   justify-content: space-between;
@@ -195,81 +189,83 @@ select {
   background: #7cff7c;
 }
 
-.effects-panel,
-.loops-panel {
-  width: 100%;
+/* EQ */
+.eq-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 
-.effect-row {
+.eq-card {
+  background: #202020;
+  border: 1px solid #3d3d3d;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.eq-grid {
   display: grid;
-  grid-template-columns: 120px 180px 1fr 70px 100px;
-  gap: 12px;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 14px;
+}
+
+.eq-band {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  margin-bottom: 14px;
+  gap: 8px;
 }
 
-.effect-row:last-child {
-  margin-bottom: 0;
-}
-
-.effect-title {
-  font-size: 14px;
-}
-
-.loop-row {
-  display: grid;
-  grid-template-columns: 110px 180px 1fr 1fr 180px;
-  gap: 16px;
-  align-items: center;
-  padding: 14px 0;
-  border-bottom: 1px solid #333;
-}
-
-.loop-row:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-.loop-name {
-  font-size: 15px;
-}
-
-.loop-slider-group label {
-  display: block;
+.eq-band label {
   font-size: 13px;
   color: #ccc;
-  margin-bottom: 6px;
 }
 
-.loop-slider-group span {
-  display: inline-block;
-  margin-top: 8px;
-  font-size: 14px;
-  color: #ccc;
+.eq-band input[type="range"] {
+  writing-mode: vertical-lr;
+  -webkit-appearance: slider-vertical;
+  width: 28px;
+  height: 150px;
+}
+
+/* LOOPS */
+.loops-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.loop-card {
+  background: #202020;
+  border: 1px solid #3d3d3d;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.loop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 18px;
 }
 
 .loop-buttons {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
 }
 
-@media (max-width: 1100px) {
+/* RESPONSIVE */
+@media (max-width: 1200px) {
   .workspace-grid {
     grid-template-columns: 1fr;
   }
 
-  .effect-row {
+  .loop-grid {
     grid-template-columns: 1fr;
   }
 
-  .loop-row {
-    grid-template-columns: 1fr;
-  }
-
-  .loop-buttons {
-    justify-content: flex-start;
+  .eq-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
@@ -283,5 +279,9 @@ select {
   #spectrogramOverlay {
     height: 16vh;
     min-height: 150px;
+  }
+
+  .eq-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

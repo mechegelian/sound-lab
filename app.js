@@ -1,82 +1,104 @@
-const startButton = document.getElementById("startButton");
-const playAllButton = document.getElementById("playAllButton");
-const stopAllButton = document.getElementById("stopAllButton");
-const randomButton = document.getElementById("randomButton");
+const $ = (id) => document.getElementById(id);
 
-const textureAButton = document.getElementById("textureAButton");
-const textureBButton = document.getElementById("textureBButton");
-const textureCButton = document.getElementById("textureCButton");
-const textureDButton = document.getElementById("textureDButton");
+// ---------------- BASIC UI ----------------
+const startButton = $("startButton");
+const playAllButton = $("playAllButton");
+const stopAllButton = $("stopAllButton");
+const randomButton = $("randomButton");
 
-const pauseOscilloscopeButton = document.getElementById("pauseOscilloscopeButton");
-const resumeOscilloscopeButton = document.getElementById("resumeOscilloscopeButton");
-const oscZoomX = document.getElementById("oscZoomX");
-const oscZoomY = document.getElementById("oscZoomY");
+const presetFog = $("presetFog");
+const presetGlass = $("presetGlass");
+const presetUnderground = $("presetUnderground");
+const presetPunch = $("presetPunch");
 
-const pauseSpectrogramButton = document.getElementById("pauseSpectrogramButton");
-const resumeSpectrogramButton = document.getElementById("resumeSpectrogramButton");
-const clearSpectrogramButton = document.getElementById("clearSpectrogramButton");
+const textureAButton = $("textureAButton");
+const textureBButton = $("textureBButton");
+const textureCButton = $("textureCButton");
+const textureDButton = $("textureDButton");
 
-const controlTargetSelect = document.getElementById("controlTargetSelect");
-const volumeSlider = document.getElementById("volumeSlider");
-const filterSlider = document.getElementById("filterSlider");
-const speedSlider = document.getElementById("speedSlider");
-const distortionSlider = document.getElementById("distortionSlider");
+const controlTargetSelect = $("controlTargetSelect");
+const volumeSlider = $("volumeSlider");
+const filterSlider = $("filterSlider");
+const speedSlider = $("speedSlider");
+const distortionSlider = $("distortionSlider");
 
-const oscilloscopeCanvas = document.getElementById("oscilloscope");
+const masterReverbSlider = $("masterReverbSlider");
+const masterDelaySlider = $("masterDelaySlider");
+const masterWidthSlider = $("masterWidthSlider");
+const masterOutputSlider = $("masterOutputSlider");
+
+// ---------------- OSC / SPEC ----------------
+const pauseOscilloscopeButton = $("pauseOscilloscopeButton");
+const resumeOscilloscopeButton = $("resumeOscilloscopeButton");
+const holdOscilloscopeButton = $("holdOscilloscopeButton");
+const resetOscilloscopeZoomButton = $("resetOscilloscopeZoomButton");
+const toggleOscilloscopeGridButton = $("toggleOscilloscopeGridButton");
+const oscZoomX = $("oscZoomX");
+const oscZoomY = $("oscZoomY");
+const oscGlowAmount = $("oscGlowAmount");
+const oscTrailAmount = $("oscTrailAmount");
+const oscLineSize = $("oscLineSize");
+
+const pauseSpectrogramButton = $("pauseSpectrogramButton");
+const resumeSpectrogramButton = $("resumeSpectrogramButton");
+const clearSpectrogramButton = $("clearSpectrogramButton");
+
+const oscilloscopeCanvas = $("oscilloscope");
 const oscilloscopeCtx = oscilloscopeCanvas.getContext("2d");
-
-const spectrogramCanvas = document.getElementById("spectrogram");
+const spectrogramCanvas = $("spectrogram");
 const spectrogramCtx = spectrogramCanvas.getContext("2d");
-
-const spectrogramOverlayCanvas = document.getElementById("spectrogramOverlay");
+const spectrogramOverlayCanvas = $("spectrogramOverlay");
 const spectrogramOverlayCtx = spectrogramOverlayCanvas.getContext("2d");
 
-// ---------- EQ ELEMENTS ----------
-const eqBands = ["60", "250", "1000", "4000", "8000", "15000"];
+// ---------------- TWEAKS ----------------
+const driftSlider = $("driftSlider");
+const driftValue = $("driftValue");
+const smearSlider = $("smearSlider");
+const smearValue = $("smearValue");
+const grainSlider = $("grainSlider");
+const grainValue = $("grainValue");
+const crushSlider = $("crushSlider");
+const crushValue = $("crushValue");
+const stretchSlider = $("stretchSlider");
+const stretchValue = $("stretchValue");
+const motionSlider = $("motionSlider");
+const motionValue = $("motionValue");
+const blurSlider = $("blurSlider");
+const blurValue = $("blurValue");
+const flutterSlider = $("flutterSlider");
+const flutterValue = $("flutterValue");
 
-function getEqElements(prefix) {
-  const out = {};
-  eqBands.forEach((band) => {
-    out[band] = document.getElementById(`${prefix}Eq${band}`);
-  });
-  return out;
-}
+// ---------------- MIX ----------------
+const dryWetSlider = $("dryWetSlider");
+const dryWetValue = $("dryWetValue");
+const glueSlider = $("glueSlider");
+const glueValue = $("glueValue");
+const widthMixSlider = $("widthMixSlider");
+const widthMixValue = $("widthMixValue");
+const punchSlider = $("punchSlider");
+const punchValue = $("punchValue");
+const airSlider = $("airSlider");
+const airValue = $("airValue");
+const lowWeightSlider = $("lowWeightSlider");
+const lowWeightValue = $("lowWeightValue");
+const noiseFloorSlider = $("noiseFloorSlider");
+const noiseFloorValue = $("noiseFloorValue");
+const crossmixSlider = $("crossmixSlider");
+const crossmixValue = $("crossmixValue");
 
-const fluteEqEls = getEqElements("flute");
-const drumEqEls = getEqElements("drum");
-const electroEqEls = getEqElements("electro");
-const bassEqEls = getEqElements("bass");
-
-// ---------- LOOP ELEMENTS ----------
-function getLoopElements(prefix) {
-  return {
-    effect: document.getElementById(`${prefix}LoopEffect`),
-    interval: document.getElementById(`${prefix}LoopInterval`),
-    duration: document.getElementById(`${prefix}LoopDuration`),
-    start: document.getElementById(`${prefix}LoopStart`),
-    stop: document.getElementById(`${prefix}LoopStop`),
-    intervalValue: document.getElementById(`${prefix}LoopIntervalValue`),
-    durationValue: document.getElementById(`${prefix}LoopDurationValue`)
-  };
-}
-
-const fluteLoop = getLoopElements("flute");
-const drumLoop = getLoopElements("drum");
-const electroLoop = getLoopElements("electro");
-const bassLoop = getLoopElements("bass");
-
-// ---------- GLOBAL STATE ----------
+// ---------------- GLOBAL STATE ----------------
 let audioStarted = false;
 let sourcesStarted = false;
-
-let oscilloscopePaused = false;
-let spectrogramPaused = false;
 
 let fluteOn = false;
 let drumOn = false;
 let electroOn = false;
 let bassOn = false;
+
+let oscilloscopePaused = false;
+let oscilloscopeHold = false;
+let oscilloscopeGrid = true;
+let spectrogramPaused = false;
 
 let fluteLoopId = null;
 let drumLoopId = null;
@@ -85,13 +107,24 @@ let bassLoopId = null;
 
 const spectrogramSecondsVisible = 8;
 
-// ---------- AUDIO GRAPH ----------
-const waveformAnalyser = new Tone.Analyser("waveform", 2048);
-const fftAnalyser = new Tone.Analyser("fft", 256);
+// ---------------- AUDIO ----------------
+const waveformAnalyser = new Tone.Waveform(2048);
+const fftAnalyser = new Tone.FFT(256);
 
 const masterGain = new Tone.Gain(0.75);
 const masterFilter = new Tone.Filter(1800, "lowpass");
+const masterLowShelf = new Tone.Filter(140, "lowshelf");
+const masterHighShelf = new Tone.Filter(7000, "highshelf");
 const masterDistortion = new Tone.Distortion(0);
+const masterWidth = new Tone.StereoWidener(0.5);
+const masterDelay = new Tone.FeedbackDelay(0.25, 0.25);
+const masterReverb = new Tone.Reverb({ decay: 2.5, preDelay: 0.01 });
+const masterCompressor = new Tone.Compressor(-18, 3);
+const floorNoise = new Tone.Noise("pink");
+const floorNoiseGain = new Tone.Gain(0);
+
+masterDelay.wet.value = 0.1;
+masterReverb.wet.value = 0.2;
 
 // flute
 const fluteGain = new Tone.Gain(0);
@@ -117,11 +150,6 @@ const drumSynth = new Tone.MembraneSynth({
     release: 0.05
   }
 });
-const drumPulse = new Tone.Loop((time) => {
-  if (drumOn) {
-    drumSynth.triggerAttackRelease("C1", "8n", time, 0.9);
-  }
-}, "2n");
 
 // electro
 const electroGain = new Tone.Gain(0);
@@ -138,7 +166,9 @@ const bassDistortion = new Tone.Distortion(0.03);
 const bassOsc1 = new Tone.Oscillator(55, "sawtooth");
 const bassOsc2 = new Tone.Oscillator(55.5, "square");
 
-// ---------- 6-BAND EQ ----------
+// ---------------- EQ ----------------
+const eqBands = ["60", "250", "1000", "4000", "8000", "15000"];
+
 function createSixBandEq() {
   const make = (freq) => {
     const f = new Tone.Filter(freq, "peaking");
@@ -177,7 +207,7 @@ const drumEqOut = new Tone.Gain(1);
 const electroEqOut = new Tone.Gain(1);
 const bassEqOut = new Tone.Gain(1);
 
-// ---------- CONNECTIONS ----------
+// ---------------- CONNECT ----------------
 fluteNoise.connect(fluteNoiseGain);
 fluteNoiseGain.connect(fluteFilter);
 fluteOsc.connect(fluteFilter);
@@ -204,27 +234,28 @@ bassFilter.connect(bassDistortion);
 chainSixBandEq(bassEq, bassDistortion, bassEqOut);
 bassEqOut.connect(bassGain);
 
+// master chain
 fluteGain.connect(masterFilter);
 drumGain.connect(masterFilter);
 electroGain.connect(masterFilter);
 bassGain.connect(masterFilter);
+floorNoise.connect(floorNoiseGain);
+floorNoiseGain.connect(masterFilter);
 
-masterFilter.connect(masterDistortion);
-masterDistortion.connect(masterGain);
+masterFilter.connect(masterLowShelf);
+masterLowShelf.connect(masterHighShelf);
+masterHighShelf.connect(masterDistortion);
+masterDistortion.connect(masterCompressor);
+masterCompressor.connect(masterWidth);
+masterWidth.connect(masterDelay);
+masterDelay.connect(masterReverb);
+masterReverb.connect(masterGain);
+
 masterGain.connect(waveformAnalyser);
 masterGain.connect(fftAnalyser);
 masterGain.toDestination();
 
-// ---------- CONTROL STATE ----------
-const controlState = {
-  master: { volume: 75, filter: 50, speed: 100, distortion: 0 },
-  flute: { volume: 70, filter: 55, speed: 100, distortion: 0 },
-  drum: { volume: 75, filter: 45, speed: 100, distortion: 5 },
-  electro: { volume: 68, filter: 60, speed: 100, distortion: 12 },
-  bass: { volume: 72, filter: 30, speed: 100, distortion: 5 }
-};
-
-// ---------- HELPERS ----------
+// ---------------- HELPERS ----------------
 function sliderToGain(target, value) {
   if (target === "master") return value / 100;
   return value / 160;
@@ -287,6 +318,19 @@ function requireSound(target) {
   return true;
 }
 
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+// ---------------- CONTROL STATE ----------------
+const controlState = {
+  master: { volume: 75, filter: 50, speed: 100, distortion: 0 },
+  flute: { volume: 70, filter: 55, speed: 100, distortion: 0 },
+  drum: { volume: 75, filter: 45, speed: 100, distortion: 5 },
+  electro: { volume: 68, filter: 60, speed: 100, distortion: 12 },
+  bass: { volume: 72, filter: 30, speed: 100, distortion: 5 }
+};
+
 function syncControlSlidersToTarget() {
   const target = controlTargetSelect.value;
   volumeSlider.value = controlState[target].volume;
@@ -305,7 +349,7 @@ function applyStoredVolume(target) {
 
   const gainNode = getGainNode(target);
   if (gainNode && isSoundOn(target)) {
-    gainNode.gain.value = sliderToGain(target, value);
+    gainNode.gain.value = sliderToGain(target, value) * getCrossmixMultiplier(target);
   }
 }
 
@@ -314,7 +358,7 @@ function applyStoredFilter(target) {
   const freq = sliderToFrequency(value);
 
   if (target === "master") {
-    masterFilter.frequency.value = freq;
+    masterFilter.frequency.value = Math.max(120, freq - Number(blurSlider?.value || 0) * 10);
     return;
   }
 
@@ -332,29 +376,22 @@ function applyStoredDistortion(target) {
 
 function applyStoredSpeed(target) {
   const mult = controlState[target].speed / 100;
+  const stretch = 1 + (Number(stretchSlider?.value || 0) / 200);
 
   if (target === "flute") {
-    fluteOsc.frequency.value = 660 * mult;
-    fluteVibrato.frequency.value = 5 * mult;
-  }
-
-  if (target === "drum") {
-    drumPulse.interval = `${Math.max(0.25, 2 / mult)}n`;
+    fluteOsc.frequency.value = 660 * mult / stretch;
+    fluteVibrato.frequency.value = 5 * (1 + Number(motionSlider?.value || 0) / 100);
   }
 
   if (target === "electro") {
-    electroOsc1.frequency.value = 220 * mult;
-    electroOsc2.frequency.value = 224 * mult;
-    electroLfo.frequency.value = 0.25 * mult;
+    electroOsc1.frequency.value = 220 * mult / stretch;
+    electroOsc2.frequency.value = 224 * mult / stretch;
+    electroLfo.frequency.value = 0.25 + Number(motionSlider?.value || 0) / 200;
   }
 
   if (target === "bass") {
-    bassOsc1.frequency.value = 55 * mult;
-    bassOsc2.frequency.value = 55.5 * mult;
-  }
-
-  if (target === "master") {
-    ["flute", "drum", "electro", "bass"].forEach(applyStoredSpeed);
+    bassOsc1.frequency.value = 55 * mult / stretch;
+    bassOsc2.frequency.value = 55.5 * mult / stretch;
   }
 }
 
@@ -365,6 +402,649 @@ function applyAllStoredControls() {
     applyStoredSpeed(target);
   });
 }
+
+// ---------------- MASTER FX ----------------
+function applyMasterFx() {
+  masterReverb.wet.value = Number(masterReverbSlider.value) / 100;
+  masterDelay.wet.value = Number(masterDelaySlider.value) / 100;
+  masterWidth.width.value = Number(masterWidthSlider.value) / 100;
+  masterGain.gain.value = Number(masterOutputSlider.value) / 100;
+}
+
+masterReverbSlider.addEventListener("input", applyMasterFx);
+masterDelaySlider.addEventListener("input", applyMasterFx);
+masterWidthSlider.addEventListener("input", applyMasterFx);
+masterOutputSlider.addEventListener("input", applyMasterFx);
+
+// ---------------- SOURCE START ----------------
+function startSourcesOnce() {
+  if (sourcesStarted) return;
+
+  fluteNoise.start();
+  fluteOsc.start();
+  fluteVibrato.start();
+
+  electroOsc1.start();
+  electroOsc2.start();
+  electroLfo.start();
+
+  bassOsc1.start();
+  bassOsc2.start();
+
+  floorNoise.start();
+
+  Tone.Transport.start();
+  sourcesStarted = true;
+}
+
+startButton.addEventListener("click", async () => {
+  if (audioStarted) return;
+
+  await Tone.start();
+  await masterReverb.ready;
+  startSourcesOnce();
+
+  audioStarted = true;
+  startButton.textContent = "Audio Ready";
+
+  applyAllStoredControls();
+  applyMasterFx();
+  applyTweaks();
+  applyMix();
+});
+
+// ---------------- SOUND TOGGLES ----------------
+function setFluteState(isOn) {
+  fluteOn = isOn;
+  if (isOn) {
+    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume) * getCrossmixMultiplier("flute");
+    textureAButton.textContent = "ON";
+    textureAButton.classList.add("active");
+  } else {
+    fluteGain.gain.value = 0;
+    textureAButton.textContent = "OFF";
+    textureAButton.classList.remove("active");
+  }
+}
+
+function setDrumState(isOn) {
+  drumOn = isOn;
+  if (isOn) {
+    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume) * getCrossmixMultiplier("drum");
+    textureBButton.textContent = "ON";
+    textureBButton.classList.add("active");
+  } else {
+    drumGain.gain.value = 0;
+    textureBButton.textContent = "OFF";
+    textureBButton.classList.remove("active");
+  }
+}
+
+function setElectroState(isOn) {
+  electroOn = isOn;
+  if (isOn) {
+    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume) * getCrossmixMultiplier("electro");
+    textureCButton.textContent = "ON";
+    textureCButton.classList.add("active");
+  } else {
+    electroGain.gain.value = 0;
+    textureCButton.textContent = "OFF";
+    textureCButton.classList.remove("active");
+  }
+}
+
+function setBassState(isOn) {
+  bassOn = isOn;
+  if (isOn) {
+    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume) * getCrossmixMultiplier("bass");
+    textureDButton.textContent = "ON";
+    textureDButton.classList.add("active");
+  } else {
+    bassGain.gain.value = 0;
+    textureDButton.textContent = "OFF";
+    textureDButton.classList.remove("active");
+  }
+}
+
+textureAButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setFluteState(!fluteOn);
+});
+
+textureBButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setDrumState(!drumOn);
+});
+
+textureCButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setElectroState(!electroOn);
+});
+
+textureDButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setBassState(!bassOn);
+});
+
+playAllButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setFluteState(true);
+  setDrumState(true);
+  setElectroState(true);
+  setBassState(true);
+});
+
+stopAllButton.addEventListener("click", () => {
+  setFluteState(false);
+  setDrumState(false);
+  setElectroState(false);
+  setBassState(false);
+  stopAllLoops();
+});
+
+// ---------------- MAIN CONTROLS ----------------
+controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
+
+volumeSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].volume = Number(volumeSlider.value);
+  applyStoredVolume(target);
+});
+
+filterSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].filter = Number(filterSlider.value);
+  applyStoredFilter(target);
+});
+
+speedSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].speed = Number(speedSlider.value);
+  applyStoredSpeed(target);
+});
+
+distortionSlider.addEventListener("input", () => {
+  const target = controlTargetSelect.value;
+  controlState[target].distortion = Number(distortionSlider.value);
+  applyStoredDistortion(target);
+});
+
+// ---------------- EQ HELPERS ----------------
+function getEqElements(prefix) {
+  const out = {};
+  eqBands.forEach((band) => {
+    out[band] = $(`${prefix}Eq${band}`);
+  });
+  return out;
+}
+
+const fluteEqEls = getEqElements("flute");
+const drumEqEls = getEqElements("drum");
+const electroEqEls = getEqElements("electro");
+const bassEqEls = getEqElements("bass");
+
+function readEqValues(elementMap) {
+  return {
+    "60": Number(elementMap["60"].value),
+    "250": Number(elementMap["250"].value),
+    "1000": Number(elementMap["1000"].value),
+    "4000": Number(elementMap["4000"].value),
+    "8000": Number(elementMap["8000"].value),
+    "15000": Number(elementMap["15000"].value)
+  };
+}
+
+function applySixBandEq(eq, values) {
+  eq.b60.gain.value = values["60"];
+  eq.b250.gain.value = values["250"];
+  eq.b1000.gain.value = values["1000"];
+  eq.b4000.gain.value = values["4000"];
+  eq.b8000.gain.value = values["8000"];
+  eq.b15000.gain.value = values["15000"];
+}
+
+function bindEq(elementMap, eqNode) {
+  eqBands.forEach((band) => {
+    elementMap[band].addEventListener("input", () => {
+      applySixBandEq(eqNode, readEqValues(elementMap));
+    });
+  });
+}
+
+bindEq(fluteEqEls, fluteEq);
+bindEq(drumEqEls, drumEq);
+bindEq(electroEqEls, electroEq);
+bindEq(bassEqEls, bassEq);
+
+applySixBandEq(fluteEq, readEqValues(fluteEqEls));
+applySixBandEq(drumEq, readEqValues(drumEqEls));
+applySixBandEq(electroEq, readEqValues(electroEqEls));
+applySixBandEq(bassEq, readEqValues(bassEqEls));
+
+// ---------------- EQ UI + GRAPH ----------------
+function setupEqUI(config) {
+  const toggle = $(config.toggleId);
+  const drawer = $(config.drawerId);
+  const canvas = $(config.canvasId);
+  if (!toggle || !drawer || !canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const sliders = config.sliderIds.map((id) => $(id)).filter(Boolean);
+
+  let dragging = false;
+
+  function values() {
+    return sliders.map((slider) => Number(slider.value));
+  }
+
+  function valueToY(value, height) {
+    const min = -12;
+    const max = 12;
+    const t = (value - min) / (max - min);
+    return height - t * height;
+  }
+
+  function yToValue(y, height) {
+    const min = -12;
+    const max = 12;
+    const t = 1 - y / height;
+    return Math.round(min + t * (max - min));
+  }
+
+  function draw() {
+    const width = canvas.width;
+    const height = canvas.height;
+
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#050505";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    ctx.lineWidth = 1;
+    for (let i = 0; i <= 6; i++) {
+      const x = (width / 6) * i;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+    for (let i = 0; i <= 6; i++) {
+      const y = (height / 6) * i;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    const centerY = valueToY(0, height);
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,0.18)";
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(0, centerY);
+    ctx.lineTo(width, centerY);
+    ctx.stroke();
+    ctx.restore();
+
+    const vals = values();
+    const points = vals.map((value, i) => ({
+      x: (width / (vals.length - 1)) * i,
+      y: valueToY(value, height)
+    }));
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "rgba(140,255,109,0.16)";
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = "#8cff6d";
+    points.forEach((p, i) => {
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 2.6;
+    ctx.strokeStyle = "#8cff6d";
+    points.forEach((p, i) => {
+      if (i === 0) ctx.moveTo(p.x, p.y);
+      else ctx.lineTo(p.x, p.y);
+    });
+    ctx.stroke();
+
+    points.forEach((p) => {
+      ctx.beginPath();
+      ctx.fillStyle = "#b7ff9f";
+      ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function updateFromPointer(event) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+
+    const bandWidth = canvas.width / sliders.length;
+    const bandIndex = clamp(Math.floor(x / bandWidth), 0, sliders.length - 1);
+    const newValue = clamp(yToValue(y, canvas.height), -12, 12);
+
+    sliders[bandIndex].value = newValue;
+    sliders[bandIndex].dispatchEvent(new Event("input", { bubbles: true }));
+    draw();
+  }
+
+  toggle.addEventListener("click", () => {
+    drawer.classList.toggle("open");
+    toggle.classList.toggle("active");
+    draw();
+  });
+
+  sliders.forEach((slider) => {
+    slider.addEventListener("input", draw);
+  });
+
+  canvas.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    updateFromPointer(event);
+  });
+
+  window.addEventListener("pointerup", () => {
+    dragging = false;
+  });
+
+  canvas.addEventListener("pointermove", (event) => {
+    if (!dragging) return;
+    updateFromPointer(event);
+  });
+
+  draw();
+}
+
+setupEqUI({
+  toggleId: "fluteEqToggle",
+  drawerId: "fluteEqDrawer",
+  canvasId: "fluteEqCanvas",
+  sliderIds: ["fluteEq60", "fluteEq250", "fluteEq1000", "fluteEq4000", "fluteEq8000", "fluteEq15000"]
+});
+
+setupEqUI({
+  toggleId: "drumEqToggle",
+  drawerId: "drumEqDrawer",
+  canvasId: "drumEqCanvas",
+  sliderIds: ["drumEq60", "drumEq250", "drumEq1000", "drumEq4000", "drumEq8000", "drumEq15000"]
+});
+
+setupEqUI({
+  toggleId: "electroEqToggle",
+  drawerId: "electroEqDrawer",
+  canvasId: "electroEqCanvas",
+  sliderIds: ["electroEq60", "electroEq250", "electroEq1000", "electroEq4000", "electroEq8000", "electroEq15000"]
+});
+
+setupEqUI({
+  toggleId: "bassEqToggle",
+  drawerId: "bassEqDrawer",
+  canvasId: "bassEqCanvas",
+  sliderIds: ["bassEq60", "bassEq250", "bassEq1000", "bassEq4000", "bassEq8000", "bassEq15000"]
+});
+
+// ---------------- PRESETS ----------------
+const presetButtons = [presetFog, presetGlass, presetUnderground, presetPunch];
+
+function clearPresetActive() {
+  presetButtons.forEach((btn) => btn.classList.remove("active"));
+}
+
+function setPresetButton(button) {
+  clearPresetActive();
+  button.classList.add("active");
+}
+
+function setEqValues(prefix, values) {
+  eqBands.forEach((band, i) => {
+    const el = $(`${prefix}Eq${band}`);
+    if (el) {
+      el.value = values[i];
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  });
+}
+
+presetFog.addEventListener("click", () => {
+  setPresetButton(presetFog);
+
+  masterReverbSlider.value = 60;
+  masterDelaySlider.value = 18;
+  masterWidthSlider.value = 55;
+  masterOutputSlider.value = 72;
+
+  oscGlowAmount.value = 78;
+  oscTrailAmount.value = 28;
+  oscLineSize.value = 3;
+
+  controlState.master.filter = 40;
+  applyStoredFilter("master");
+  applyMasterFx();
+
+  setEqValues("flute", [0, 2, 3, 1, 2, 1]);
+  setEqValues("drum", [1, 0, -1, -2, -2, -1]);
+  setEqValues("electro", [0, 0, 2, 4, 5, 2]);
+  setEqValues("bass", [4, 2, -1, -3, -4, -4]);
+
+  if (driftSlider) driftSlider.value = driftValue.value = 18;
+  if (smearSlider) smearSlider.value = smearValue.value = 35;
+  if (grainSlider) grainSlider.value = grainValue.value = 28;
+  if (crushSlider) crushSlider.value = crushValue.value = 8;
+  if (stretchSlider) stretchSlider.value = stretchValue.value = 22;
+  if (motionSlider) motionSlider.value = motionValue.value = 26;
+  if (blurSlider) blurSlider.value = blurValue.value = 32;
+  if (flutterSlider) flutterSlider.value = flutterValue.value = 10;
+
+  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 42;
+  if (glueSlider) glueSlider.value = glueValue.value = 28;
+  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 56;
+  if (punchSlider) punchSlider.value = punchValue.value = 26;
+  if (airSlider) airSlider.value = airValue.value = 24;
+  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 42;
+  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 10;
+  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 18;
+
+  applyTweaks();
+  applyMix();
+});
+
+presetGlass.addEventListener("click", () => {
+  setPresetButton(presetGlass);
+
+  masterReverbSlider.value = 34;
+  masterDelaySlider.value = 15;
+  masterWidthSlider.value = 72;
+  masterOutputSlider.value = 75;
+
+  oscGlowAmount.value = 85;
+  oscTrailAmount.value = 15;
+  oscLineSize.value = 2;
+
+  controlState.master.filter = 62;
+  applyStoredFilter("master");
+  applyMasterFx();
+
+  setEqValues("flute", [-2, 0, 3, 5, 6, 4]);
+  setEqValues("drum", [0, -1, 1, 2, 1, 0]);
+  setEqValues("electro", [-1, 1, 3, 5, 6, 3]);
+  setEqValues("bass", [2, 1, -2, -4, -5, -5]);
+
+  if (driftSlider) driftSlider.value = driftValue.value = 12;
+  if (smearSlider) smearSlider.value = smearValue.value = 20;
+  if (grainSlider) grainSlider.value = grainValue.value = 18;
+  if (crushSlider) crushSlider.value = crushValue.value = 4;
+  if (stretchSlider) stretchSlider.value = stretchValue.value = 14;
+  if (motionSlider) motionSlider.value = motionValue.value = 18;
+  if (blurSlider) blurSlider.value = blurValue.value = 8;
+  if (flutterSlider) flutterSlider.value = flutterValue.value = 18;
+
+  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 32;
+  if (glueSlider) glueSlider.value = glueValue.value = 18;
+  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 74;
+  if (punchSlider) punchSlider.value = punchValue.value = 18;
+  if (airSlider) airSlider.value = airValue.value = 44;
+  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 24;
+  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 4;
+  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 30;
+
+  applyTweaks();
+  applyMix();
+});
+
+presetUnderground.addEventListener("click", () => {
+  setPresetButton(presetUnderground);
+
+  masterReverbSlider.value = 12;
+  masterDelaySlider.value = 10;
+  masterWidthSlider.value = 38;
+  masterOutputSlider.value = 80;
+
+  oscGlowAmount.value = 58;
+  oscTrailAmount.value = 22;
+  oscLineSize.value = 4;
+
+  controlState.master.filter = 30;
+  applyStoredFilter("master");
+  applyMasterFx();
+
+  setEqValues("flute", [-3, -1, 1, 0, -1, -2]);
+  setEqValues("drum", [5, 3, 0, -2, -3, -4]);
+  setEqValues("electro", [3, 2, 1, 0, -1, -2]);
+  setEqValues("bass", [6, 5, 2, -2, -4, -5]);
+
+  if (driftSlider) driftSlider.value = driftValue.value = 26;
+  if (smearSlider) smearSlider.value = smearValue.value = 30;
+  if (grainSlider) grainSlider.value = grainValue.value = 42;
+  if (crushSlider) crushSlider.value = crushValue.value = 22;
+  if (stretchSlider) stretchSlider.value = stretchValue.value = 20;
+  if (motionSlider) motionSlider.value = motionValue.value = 34;
+  if (blurSlider) blurSlider.value = blurValue.value = 38;
+  if (flutterSlider) flutterSlider.value = flutterValue.value = 14;
+
+  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 24;
+  if (glueSlider) glueSlider.value = glueValue.value = 38;
+  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 34;
+  if (punchSlider) punchSlider.value = punchValue.value = 52;
+  if (airSlider) airSlider.value = airValue.value = 14;
+  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 68;
+  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 18;
+  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 28;
+
+  applyTweaks();
+  applyMix();
+});
+
+presetPunch.addEventListener("click", () => {
+  setPresetButton(presetPunch);
+
+  masterReverbSlider.value = 8;
+  masterDelaySlider.value = 6;
+  masterWidthSlider.value = 50;
+  masterOutputSlider.value = 82;
+
+  oscGlowAmount.value = 70;
+  oscTrailAmount.value = 8;
+  oscLineSize.value = 5;
+
+  controlState.master.filter = 55;
+  applyStoredFilter("master");
+  applyMasterFx();
+
+  setEqValues("flute", [0, 1, 2, 1, 0, -1]);
+  setEqValues("drum", [6, 4, 1, -2, -3, -4]);
+  setEqValues("electro", [2, 2, 3, 4, 3, 1]);
+  setEqValues("bass", [7, 4, 0, -3, -4, -5]);
+
+  if (driftSlider) driftSlider.value = driftValue.value = 10;
+  if (smearSlider) smearSlider.value = smearValue.value = 8;
+  if (grainSlider) grainSlider.value = grainValue.value = 12;
+  if (crushSlider) crushSlider.value = crushValue.value = 6;
+  if (stretchSlider) stretchSlider.value = stretchValue.value = 8;
+  if (motionSlider) motionSlider.value = motionValue.value = 14;
+  if (blurSlider) blurSlider.value = blurValue.value = 6;
+  if (flutterSlider) flutterSlider.value = flutterValue.value = 6;
+
+  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 14;
+  if (glueSlider) glueSlider.value = glueValue.value = 30;
+  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 50;
+  if (punchSlider) punchSlider.value = punchValue.value = 72;
+  if (airSlider) airSlider.value = airValue.value = 18;
+  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 58;
+  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 4;
+  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 12;
+
+  applyTweaks();
+  applyMix();
+});
+
+// ---------------- LOOPS ----------------
+function getLoopElements(prefix) {
+  return {
+    effect: $(`${prefix}LoopEffect`),
+    interval: $(`${prefix}LoopInterval`),
+    duration: $(`${prefix}LoopDuration`),
+    start: $(`${prefix}LoopStart`),
+    stop: $(`${prefix}LoopStop`),
+    warning: $(`${prefix}LoopWarning`)
+  };
+}
+
+const fluteLoop = getLoopElements("flute");
+const drumLoop = getLoopElements("drum");
+const electroLoop = getLoopElements("electro");
+const bassLoop = getLoopElements("bass");
+
+function validateLoop(loopObj) {
+  const interval = Number(loopObj.interval.value);
+  const duration = Number(loopObj.duration.value);
+
+  if (Number.isNaN(interval) || Number.isNaN(duration)) {
+    loopObj.warning.textContent = "Please enter valid numbers.";
+    return false;
+  }
+
+  if (interval <= 0 || duration <= 0) {
+    loopObj.warning.textContent = "Interval and duration must be positive.";
+    return false;
+  }
+
+  if (interval <= duration) {
+    loopObj.warning.textContent = "Interval must be bigger than duration.";
+    return false;
+  }
+
+  loopObj.warning.textContent = "";
+  return true;
+}
+
+[
+  fluteLoop.interval, fluteLoop.duration,
+  drumLoop.interval, drumLoop.duration,
+  electroLoop.interval, electroLoop.duration,
+  bassLoop.interval, bassLoop.duration
+].forEach((el) => {
+  el.addEventListener("input", () => {
+    validateLoop(fluteLoop);
+    validateLoop(drumLoop);
+    validateLoop(electroLoop);
+    validateLoop(bassLoop);
+  });
+});
 
 function getOscillatorGroup(target) {
   if (target === "flute") {
@@ -397,112 +1077,32 @@ function getOscillatorGroup(target) {
   return null;
 }
 
-// ---------- EQ ----------
-function readEqValues(elementMap) {
-  return {
-    "60": Number(elementMap["60"].value),
-    "250": Number(elementMap["250"].value),
-    "1000": Number(elementMap["1000"].value),
-    "4000": Number(elementMap["4000"].value),
-    "8000": Number(elementMap["8000"].value),
-    "15000": Number(elementMap["15000"].value)
-  };
+function getDrumVelocity() {
+  return 0.7 + Number(punchSlider?.value || 0) / 300;
 }
 
-function applySixBandEq(eq, values) {
-  eq.b60.gain.value = values["60"];
-  eq.b250.gain.value = values["250"];
-  eq.b1000.gain.value = values["1000"];
-  eq.b4000.gain.value = values["4000"];
-  eq.b8000.gain.value = values["8000"];
-  eq.b15000.gain.value = values["15000"];
-}
-
-function bindEq(elementMap, eqNode) {
-  eqBands.forEach((band) => {
-    elementMap[band].addEventListener("input", () => {
-      applySixBandEq(eqNode, readEqValues(elementMap));
-    });
-  });
-}
-
-// ---------- SOURCE START ----------
-function startSourcesOnce() {
-  if (sourcesStarted) return;
-
-  fluteNoise.start();
-  fluteOsc.start();
-  fluteVibrato.start();
-
-  electroOsc1.start();
-  electroOsc2.start();
-  electroLfo.start();
-
-  bassOsc1.start();
-  bassOsc2.start();
-
-  Tone.Transport.start();
-  drumPulse.start(0);
-
-  sourcesStarted = true;
-}
-
-// ---------- SOUND ON/OFF ----------
-function setFluteState(isOn) {
-  fluteOn = isOn;
-  if (isOn) {
-    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume);
-    textureAButton.textContent = "ON";
-    textureAButton.classList.add("active");
-  } else {
-    fluteGain.gain.value = 0;
-    textureAButton.textContent = "OFF";
-    textureAButton.classList.remove("active");
-  }
-}
-
-function setDrumState(isOn) {
-  drumOn = isOn;
-  if (isOn) {
-    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume);
-    textureBButton.textContent = "ON";
-    textureBButton.classList.add("active");
-  } else {
-    drumGain.gain.value = 0;
-    textureBButton.textContent = "OFF";
-    textureBButton.classList.remove("active");
-  }
-}
-
-function setElectroState(isOn) {
-  electroOn = isOn;
-  if (isOn) {
-    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume);
-    textureCButton.textContent = "ON";
-    textureCButton.classList.add("active");
-  } else {
-    electroGain.gain.value = 0;
-    textureCButton.textContent = "OFF";
-    textureCButton.classList.remove("active");
-  }
-}
-
-function setBassState(isOn) {
-  bassOn = isOn;
-  if (isOn) {
-    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume);
-    textureDButton.textContent = "ON";
-    textureDButton.classList.add("active");
-  } else {
-    bassGain.gain.value = 0;
-    textureDButton.textContent = "OFF";
-    textureDButton.classList.remove("active");
-  }
-}
-
-// ---------- LOOP FX ----------
 function triggerLoopEffectForSound(soundName, effectName, durationValue) {
   if (!requireSound(soundName)) return;
+
+  if (soundName === "drum" && effectName === "echoBurst") {
+    drumSynth.triggerAttackRelease("C1", "8n", undefined, getDrumVelocity() + 0.2);
+    return;
+  }
+
+  if (soundName === "drum" && effectName === "muffle") {
+    const normalFreq = drumFilter.frequency.value;
+    drumFilter.frequency.value = 180;
+    setTimeout(() => {
+      drumFilter.frequency.value = normalFreq;
+    }, durationValue * 1000);
+    return;
+  }
+
+  if (soundName === "drum" && (effectName === "hitUp" || effectName === "hitDown" || effectName === "warp")) {
+    const note = effectName === "hitDown" ? "A0" : effectName === "warp" ? "D1" : "E1";
+    drumSynth.triggerAttackRelease(note, "8n", undefined, getDrumVelocity());
+    return;
+  }
 
   if (effectName === "hitUp") {
     const group = getOscillatorGroup(soundName);
@@ -559,7 +1159,7 @@ function triggerLoopEffectForSound(soundName, effectName, durationValue) {
     const filterNode = getFilterNode(soundName);
     if (!filterNode) return;
 
-    const normalFreq = sliderToFrequency(controlState[soundName].filter);
+    const normalFreq = filterNode.frequency.value;
     filterNode.frequency.value = 220;
 
     setTimeout(() => {
@@ -571,21 +1171,13 @@ function triggerLoopEffectForSound(soundName, effectName, durationValue) {
     const gainNode = getGainNode(soundName);
     if (!gainNode) return;
 
-    const normalGain = sliderToGain(soundName, controlState[soundName].volume);
-    gainNode.gain.value = normalGain * 1.6;
+    const normalGain = sliderToGain(soundName, controlState[soundName].volume) * getCrossmixMultiplier(soundName);
+    gainNode.gain.value = normalGain * 1.5;
 
     setTimeout(() => {
       gainNode.gain.value = normalGain;
     }, durationValue * 1000);
   }
-}
-
-// ---------- LOOP ENGINE ----------
-function updateLoopLabels() {
-  [fluteLoop, drumLoop, electroLoop, bassLoop].forEach((loop) => {
-    loop.intervalValue.textContent = `${Number(loop.interval.value).toFixed(1)}s`;
-    loop.durationValue.textContent = `${Number(loop.duration.value).toFixed(1)}s`;
-  });
 }
 
 function stopLoop(name) {
@@ -620,6 +1212,8 @@ function startLoop(name, soundName, loopConfig) {
     return;
   }
 
+  if (!validateLoop(loopConfig)) return;
+
   stopLoop(name);
 
   const effectName = loopConfig.effect.value;
@@ -638,97 +1232,6 @@ function startLoop(name, soundName, loopConfig) {
   if (name === "bass") bassLoopId = id;
 }
 
-// ---------- BUTTONS ----------
-startButton.addEventListener("click", async () => {
-  if (audioStarted) return;
-
-  await Tone.start();
-  startSourcesOnce();
-  audioStarted = true;
-  startButton.textContent = "Audio Ready";
-
-  applyAllStoredControls();
-});
-
-textureAButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-  setFluteState(!fluteOn);
-});
-
-textureBButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-  setDrumState(!drumOn);
-});
-
-textureCButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-  setElectroState(!electroOn);
-});
-
-textureDButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-  setBassState(!bassOn);
-});
-
-playAllButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-  setFluteState(true);
-  setDrumState(true);
-  setElectroState(true);
-  setBassState(true);
-});
-
-stopAllButton.addEventListener("click", () => {
-  setFluteState(false);
-  setDrumState(false);
-  setElectroState(false);
-  setBassState(false);
-  stopAllLoops();
-});
-
-randomButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-
-  const target = controlTargetSelect.value;
-  controlState[target].volume = Math.floor(Math.random() * 101);
-  controlState[target].filter = Math.floor(Math.random() * 101);
-  controlState[target].speed = 70 + Math.floor(Math.random() * 61);
-  controlState[target].distortion = Math.floor(Math.random() * 40);
-
-  syncControlSlidersToTarget();
-  applyStoredVolume(target);
-  applyStoredFilter(target);
-  applyStoredSpeed(target);
-  applyStoredDistortion(target);
-});
-
-controlTargetSelect.addEventListener("change", syncControlSlidersToTarget);
-
-volumeSlider.addEventListener("input", () => {
-  const target = controlTargetSelect.value;
-  controlState[target].volume = Number(volumeSlider.value);
-  applyStoredVolume(target);
-});
-
-filterSlider.addEventListener("input", () => {
-  const target = controlTargetSelect.value;
-  controlState[target].filter = Number(filterSlider.value);
-  applyStoredFilter(target);
-});
-
-speedSlider.addEventListener("input", () => {
-  const target = controlTargetSelect.value;
-  controlState[target].speed = Number(speedSlider.value);
-  applyStoredSpeed(target);
-});
-
-distortionSlider.addEventListener("input", () => {
-  const target = controlTargetSelect.value;
-  controlState[target].distortion = Number(distortionSlider.value);
-  applyStoredDistortion(target);
-});
-
-// loop bindings
 fluteLoop.start.addEventListener("click", () => startLoop("flute", "flute", fluteLoop));
 fluteLoop.stop.addEventListener("click", () => stopLoop("flute"));
 
@@ -741,38 +1244,148 @@ electroLoop.stop.addEventListener("click", () => stopLoop("electro"));
 bassLoop.start.addEventListener("click", () => startLoop("bass", "bass", bassLoop));
 bassLoop.stop.addEventListener("click", () => stopLoop("bass"));
 
-// loop labels
+// ---------------- TWEAKS + MIX BINDINGS ----------------
+function bindSliderNumber(slider, number, callback) {
+  if (!slider || !number) return;
+
+  slider.addEventListener("input", () => {
+    number.value = slider.value;
+    if (callback) callback();
+  });
+
+  number.addEventListener("input", () => {
+    const val = clamp(Number(number.value), Number(slider.min), Number(slider.max));
+    slider.value = val;
+    number.value = val;
+    if (callback) callback();
+  });
+}
+
+function getCrossmixMultiplier(target) {
+  const v = Number(crossmixSlider?.value || 0) / 100;
+
+  if (target === "flute") return 1 - v * 0.15;
+  if (target === "drum") return 1 + v * 0.12;
+  if (target === "electro") return 1 + v * 0.18;
+  if (target === "bass") return 1 - v * 0.08;
+  return 1;
+}
+
+function applyTweaks() {
+  const drift = Number(driftSlider?.value || 0);
+  const smear = Number(smearSlider?.value || 0);
+  const grain = Number(grainSlider?.value || 0);
+  const crush = Number(crushSlider?.value || 0);
+  const stretch = Number(stretchSlider?.value || 0);
+  const motion = Number(motionSlider?.value || 0);
+  const blur = Number(blurSlider?.value || 0);
+  const flutter = Number(flutterSlider?.value || 0);
+
+  // drift / flutter / motion
+  fluteVibrato.min = -10 - drift * 0.4 - flutter * 0.4;
+  fluteVibrato.max = 10 + drift * 0.4 + flutter * 0.4;
+  fluteVibrato.frequency.value = 5 + motion * 0.06 + flutter * 0.08;
+
+  electroLfo.min = 600 - motion * 6;
+  electroLfo.max = 2600 + motion * 8;
+  electroLfo.frequency.value = 0.25 + motion * 0.02;
+
+  // grain / noise
+  fluteNoiseGain.gain.value = 0.05 + grain / 700;
+  floorNoiseGain.gain.value = Number(noiseFloorSlider?.value || 0) / 2000 + grain / 4000;
+
+  // crush
+  masterDistortion.distortion = Math.min(0.9, Number(masterOutputSlider?.value || 75) / 2000 + crush / 120);
+
+  // blur
+  masterFilter.frequency.value = Math.max(160, sliderToFrequency(controlState.master.filter) - blur * 18);
+
+  // smear / stretch
+  masterReverb.decay = 1.2 + smear / 20 + stretch / 40;
+  masterDelay.delayTime.value = 0.15 + stretch / 400;
+}
+
+function applyMix() {
+  const dryWet = Number(dryWetSlider?.value || 0);
+  const glue = Number(glueSlider?.value || 0);
+  const widthMix = Number(widthMixSlider?.value || 0);
+  const punch = Number(punchSlider?.value || 0);
+  const air = Number(airSlider?.value || 0);
+  const lowWeight = Number(lowWeightSlider?.value || 0);
+  const noiseFloor = Number(noiseFloorSlider?.value || 0);
+
+  const wet = dryWet / 100;
+  masterReverb.wet.value = wet * 0.75 + Number(masterReverbSlider?.value || 0) / 400;
+  masterDelay.wet.value = wet * 0.55 + Number(masterDelaySlider?.value || 0) / 500;
+
+  masterWidth.width.value = Math.min(1, widthMix / 100);
+
+  masterCompressor.threshold.value = -8 - glue * 0.22;
+  masterCompressor.ratio.value = 1 + glue / 18;
+
+  masterHighShelf.gain.value = air / 4;
+  masterLowShelf.gain.value = lowWeight / 4;
+
+  floorNoiseGain.gain.value = noiseFloor / 1500 + Number(grainSlider?.value || 0) / 4000;
+
+  if (drumOn) {
+    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume) * (1 + punch / 250) * getCrossmixMultiplier("drum");
+  }
+  if (bassOn) {
+    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume) * (1 + lowWeight / 300) * getCrossmixMultiplier("bass");
+  }
+  if (fluteOn) {
+    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume) * getCrossmixMultiplier("flute");
+  }
+  if (electroOn) {
+    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume) * getCrossmixMultiplier("electro");
+  }
+}
+
 [
-  fluteLoop.interval,
-  fluteLoop.duration,
-  drumLoop.interval,
-  drumLoop.duration,
-  electroLoop.interval,
-  electroLoop.duration,
-  bassLoop.interval,
-  bassLoop.duration
-].forEach((slider) => {
-  slider.addEventListener("input", updateLoopLabels);
-});
+  [driftSlider, driftValue, applyTweaks],
+  [smearSlider, smearValue, applyTweaks],
+  [grainSlider, grainValue, applyTweaks],
+  [crushSlider, crushValue, applyTweaks],
+  [stretchSlider, stretchValue, applyTweaks],
+  [motionSlider, motionValue, applyTweaks],
+  [blurSlider, blurValue, applyTweaks],
+  [flutterSlider, flutterValue, applyTweaks],
 
-// eq bind
-bindEq(fluteEqEls, fluteEq);
-bindEq(drumEqEls, drumEq);
-bindEq(electroEqEls, electroEq);
-bindEq(bassEqEls, bassEq);
+  [dryWetSlider, dryWetValue, applyMix],
+  [glueSlider, glueValue, applyMix],
+  [widthMixSlider, widthMixValue, applyMix],
+  [punchSlider, punchValue, applyMix],
+  [airSlider, airValue, applyMix],
+  [lowWeightSlider, lowWeightValue, applyMix],
+  [noiseFloorSlider, noiseFloorValue, applyMix],
+  [crossmixSlider, crossmixValue, applyMix]
+].forEach(([slider, number, callback]) => bindSliderNumber(slider, number, callback));
 
-applySixBandEq(fluteEq, readEqValues(fluteEqEls));
-applySixBandEq(drumEq, readEqValues(drumEqEls));
-applySixBandEq(electroEq, readEqValues(electroEqEls));
-applySixBandEq(bassEq, readEqValues(bassEqEls));
-
-// ---------- SCOPE ----------
+// ---------------- OSC / SPEC ----------------
 pauseOscilloscopeButton.addEventListener("click", () => {
   oscilloscopePaused = true;
 });
 
 resumeOscilloscopeButton.addEventListener("click", () => {
   oscilloscopePaused = false;
+  oscilloscopeHold = false;
+});
+
+holdOscilloscopeButton.addEventListener("click", () => {
+  oscilloscopeHold = !oscilloscopeHold;
+});
+
+resetOscilloscopeZoomButton.addEventListener("click", () => {
+  oscZoomX.value = 1;
+  oscZoomY.value = 2;
+  oscGlowAmount.value = 65;
+  oscTrailAmount.value = 18;
+  oscLineSize.value = 3;
+});
+
+toggleOscilloscopeGridButton.addEventListener("click", () => {
+  oscilloscopeGrid = !oscilloscopeGrid;
 });
 
 pauseSpectrogramButton.addEventListener("click", () => {
@@ -861,7 +1474,7 @@ function drawSpectrogram() {
 function drawOscilloscope() {
   requestAnimationFrame(drawOscilloscope);
 
-  if (oscilloscopePaused) return;
+  if (oscilloscopePaused || oscilloscopeHold) return;
 
   const waveform = waveformAnalyser.getValue();
   const width = oscilloscopeCanvas.width;
@@ -870,31 +1483,37 @@ function drawOscilloscope() {
 
   const zoomX = Number(oscZoomX.value);
   const zoomY = Number(oscZoomY.value);
+  const glow = Number(oscGlowAmount.value);
+  const trail = Number(oscTrailAmount.value);
+  const lineSize = Number(oscLineSize.value);
 
-  oscilloscopeCtx.fillStyle = "rgba(0,0,0,0.18)";
+  const fadeAlpha = 0.03 + (100 - trail) / 100 * 0.35;
+  oscilloscopeCtx.fillStyle = `rgba(0,0,0,${fadeAlpha})`;
   oscilloscopeCtx.fillRect(0, 0, width, height);
 
-  oscilloscopeCtx.save();
-  oscilloscopeCtx.strokeStyle = "rgba(120,120,120,0.18)";
-  oscilloscopeCtx.lineWidth = 1;
+  if (oscilloscopeGrid) {
+    oscilloscopeCtx.save();
+    oscilloscopeCtx.strokeStyle = "rgba(120,120,120,0.18)";
+    oscilloscopeCtx.lineWidth = 1;
 
-  for (let i = 0; i <= 12; i++) {
-    const x = (width / 12) * i;
-    oscilloscopeCtx.beginPath();
-    oscilloscopeCtx.moveTo(x, 0);
-    oscilloscopeCtx.lineTo(x, height);
-    oscilloscopeCtx.stroke();
+    for (let i = 0; i <= 12; i++) {
+      const x = (width / 12) * i;
+      oscilloscopeCtx.beginPath();
+      oscilloscopeCtx.moveTo(x, 0);
+      oscilloscopeCtx.lineTo(x, height);
+      oscilloscopeCtx.stroke();
+    }
+
+    for (let i = 0; i <= 6; i++) {
+      const y = (height / 6) * i;
+      oscilloscopeCtx.beginPath();
+      oscilloscopeCtx.moveTo(0, y);
+      oscilloscopeCtx.lineTo(width, y);
+      oscilloscopeCtx.stroke();
+    }
+
+    oscilloscopeCtx.restore();
   }
-
-  for (let i = 0; i <= 6; i++) {
-    const y = (height / 6) * i;
-    oscilloscopeCtx.beginPath();
-    oscilloscopeCtx.moveTo(0, y);
-    oscilloscopeCtx.lineTo(width, y);
-    oscilloscopeCtx.stroke();
-  }
-
-  oscilloscopeCtx.restore();
 
   const samplesToShow = Math.max(128, Math.floor(waveform.length / zoomX));
   const startIndex = Math.floor((waveform.length - samplesToShow) / 2);
@@ -903,10 +1522,10 @@ function drawOscilloscope() {
 
   oscilloscopeCtx.save();
   oscilloscopeCtx.beginPath();
-  oscilloscopeCtx.lineWidth = 6;
-  oscilloscopeCtx.strokeStyle = "rgba(124,255,124,0.18)";
-  oscilloscopeCtx.shadowBlur = 18;
-  oscilloscopeCtx.shadowColor = "#7cff7c";
+  oscilloscopeCtx.lineWidth = lineSize + 4;
+  oscilloscopeCtx.strokeStyle = `rgba(124,255,124,${0.08 + glow / 400})`;
+  oscilloscopeCtx.shadowBlur = 6 + glow / 3;
+  oscilloscopeCtx.shadowColor = "#8cff6d";
 
   let x = 0;
   for (let i = 0; i < visibleWaveform.length; i++) {
@@ -920,8 +1539,8 @@ function drawOscilloscope() {
 
   oscilloscopeCtx.save();
   oscilloscopeCtx.beginPath();
-  oscilloscopeCtx.lineWidth = 2.2;
-  oscilloscopeCtx.strokeStyle = "#9dff9d";
+  oscilloscopeCtx.lineWidth = lineSize;
+  oscilloscopeCtx.strokeStyle = "#b8ff99";
 
   x = 0;
   for (let i = 0; i < visibleWaveform.length; i++) {
@@ -934,9 +1553,49 @@ function drawOscilloscope() {
   oscilloscopeCtx.restore();
 }
 
-// ---------- INIT ----------
+// ---------------- RANDOMIZE ----------------
+randomButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+
+  const target = controlTargetSelect.value;
+  controlState[target].volume = Math.floor(Math.random() * 101);
+  controlState[target].filter = Math.floor(Math.random() * 101);
+  controlState[target].speed = 70 + Math.floor(Math.random() * 61);
+  controlState[target].distortion = Math.floor(Math.random() * 40);
+
+  syncControlSlidersToTarget();
+  applyStoredVolume(target);
+  applyStoredFilter(target);
+  applyStoredSpeed(target);
+  applyStoredDistortion(target);
+
+  if (driftSlider) driftSlider.value = driftValue.value = Math.floor(Math.random() * 40);
+  if (smearSlider) smearSlider.value = smearValue.value = Math.floor(Math.random() * 45);
+  if (grainSlider) grainSlider.value = grainValue.value = Math.floor(Math.random() * 50);
+  if (crushSlider) crushSlider.value = crushValue.value = Math.floor(Math.random() * 25);
+  if (stretchSlider) stretchSlider.value = stretchValue.value = Math.floor(Math.random() * 30);
+  if (motionSlider) motionSlider.value = motionValue.value = Math.floor(Math.random() * 40);
+  if (blurSlider) blurSlider.value = blurValue.value = Math.floor(Math.random() * 40);
+  if (flutterSlider) flutterSlider.value = flutterValue.value = Math.floor(Math.random() * 20);
+
+  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = Math.floor(Math.random() * 60);
+  if (glueSlider) glueSlider.value = glueValue.value = Math.floor(Math.random() * 50);
+  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 30 + Math.floor(Math.random() * 50);
+  if (punchSlider) punchSlider.value = punchValue.value = Math.floor(Math.random() * 70);
+  if (airSlider) airSlider.value = airValue.value = Math.floor(Math.random() * 50);
+  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 20 + Math.floor(Math.random() * 60);
+  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = Math.floor(Math.random() * 25);
+  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = Math.floor(Math.random() * 40);
+
+  applyTweaks();
+  applyMix();
+});
+
+// ---------------- INIT ----------------
 syncControlSlidersToTarget();
-updateLoopLabels();
+applyMasterFx();
+applyTweaks();
+applyMix();
 
 oscilloscopeCtx.fillStyle = "black";
 oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);

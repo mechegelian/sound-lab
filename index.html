@@ -23,23 +23,56 @@
       </div>
     </section>
 
+    <section class="panel presets-panel">
+      <div class="panel-head compact-head">
+        <h2>presets</h2>
+      </div>
+
+      <div class="preset-buttons">
+        <button class="preset-button" id="presetFog">Fog</button>
+        <button class="preset-button" id="presetGlass">Glass</button>
+        <button class="preset-button" id="presetUnderground">Underground</button>
+        <button class="preset-button" id="presetPunch">Punch</button>
+      </div>
+    </section>
+
     <section class="panel osc-panel">
       <div class="panel-head">
         <h2>oscilloscope</h2>
 
         <div class="osc-tools">
-          <button id="pauseOscilloscopeButton">Pause Osc</button>
-          <button id="resumeOscilloscopeButton">Resume Osc</button>
+          <button id="pauseOscilloscopeButton">Pause</button>
+          <button id="resumeOscilloscopeButton">Resume</button>
+          <button id="holdOscilloscopeButton">Hold</button>
+          <button id="resetOscilloscopeZoomButton">Reset Zoom</button>
+          <button id="toggleOscilloscopeGridButton">Grid</button>
+        </div>
+      </div>
 
-          <div class="mini-control">
-            <label for="oscZoomX">Zoom X</label>
-            <input type="range" id="oscZoomX" min="1" max="8" step="1" value="1">
-          </div>
+      <div class="osc-settings-row">
+        <div class="mini-control">
+          <label for="oscZoomX">Zoom X</label>
+          <input type="range" id="oscZoomX" min="1" max="8" step="1" value="1">
+        </div>
 
-          <div class="mini-control">
-            <label for="oscZoomY">Zoom Y</label>
-            <input type="range" id="oscZoomY" min="1" max="8" step="1" value="2">
-          </div>
+        <div class="mini-control">
+          <label for="oscZoomY">Zoom Y</label>
+          <input type="range" id="oscZoomY" min="1" max="8" step="1" value="2">
+        </div>
+
+        <div class="mini-control">
+          <label for="oscGlowAmount">Glow</label>
+          <input type="range" id="oscGlowAmount" min="0" max="100" step="1" value="65">
+        </div>
+
+        <div class="mini-control">
+          <label for="oscTrailAmount">Trail</label>
+          <input type="range" id="oscTrailAmount" min="0" max="100" step="1" value="18">
+        </div>
+
+        <div class="mini-control">
+          <label for="oscLineSize">Line Size</label>
+          <input type="range" id="oscLineSize" min="1" max="8" step="1" value="3">
         </div>
       </div>
 
@@ -51,9 +84,9 @@
         <h2>spectrogram</h2>
 
         <div class="spec-tools">
-          <button id="pauseSpectrogramButton">Pause Spec</button>
-          <button id="resumeSpectrogramButton">Resume Spec</button>
-          <button id="clearSpectrogramButton">Clear Spec</button>
+          <button id="pauseSpectrogramButton">Pause</button>
+          <button id="resumeSpectrogramButton">Resume</button>
+          <button id="clearSpectrogramButton">Clear</button>
         </div>
       </div>
 
@@ -64,219 +97,99 @@
     </section>
 
     <main class="workspace-grid">
-      <aside class="panel controls-panel">
-        <h2>controls</h2>
+      <aside class="left-stack">
+        <section class="panel controls-panel">
+          <h2>controls</h2>
 
-        <div class="control-group">
-          <label for="controlTargetSelect">Target</label>
-          <select id="controlTargetSelect">
-            <option value="master">Master</option>
-            <option value="flute">Flute</option>
-            <option value="drum">Drum</option>
-            <option value="electro">Electro</option>
-            <option value="bass">Bass</option>
-          </select>
-        </div>
+          <div class="control-group">
+            <label for="controlTargetSelect">Target</label>
+            <select id="controlTargetSelect">
+              <option value="master">Master</option>
+              <option value="flute">Flute</option>
+              <option value="drum">Drum</option>
+              <option value="electro">Electro</option>
+              <option value="bass">Bass</option>
+            </select>
+          </div>
 
-        <div class="control-group">
-          <label for="volumeSlider">Volume</label>
-          <input type="range" id="volumeSlider" min="0" max="100" value="75">
-        </div>
+          <div class="control-group">
+            <label for="volumeSlider">Volume</label>
+            <input type="range" id="volumeSlider" min="0" max="100" value="75">
+          </div>
 
-        <div class="control-group">
-          <label for="filterSlider">Filter</label>
-          <input type="range" id="filterSlider" min="0" max="100" value="50">
-        </div>
+          <div class="control-group">
+            <label for="filterSlider">Filter</label>
+            <input type="range" id="filterSlider" min="0" max="100" value="50">
+          </div>
 
-        <div class="control-group">
-          <label for="speedSlider">Speed</label>
-          <input type="range" id="speedSlider" min="50" max="150" value="100">
-        </div>
+          <div class="control-group">
+            <label for="speedSlider">Speed</label>
+            <input type="range" id="speedSlider" min="50" max="150" value="100">
+          </div>
 
-        <div class="control-group">
-          <label for="distortionSlider">Distortion</label>
-          <input type="range" id="distortionSlider" min="0" max="100" value="0">
-        </div>
+          <div class="control-group">
+            <label for="distortionSlider">Distortion</label>
+            <input type="range" id="distortionSlider" min="0" max="100" value="0">
+          </div>
+        </section>
+
+        <section class="panel masterfx-panel">
+          <h2>master fx</h2>
+
+          <div class="control-group">
+            <label for="masterReverbSlider">Reverb</label>
+            <input type="range" id="masterReverbSlider" min="0" max="100" value="20">
+          </div>
+
+          <div class="control-group">
+            <label for="masterDelaySlider">Delay</label>
+            <input type="range" id="masterDelaySlider" min="0" max="100" value="10">
+          </div>
+
+          <div class="control-group">
+            <label for="masterWidthSlider">Width</label>
+            <input type="range" id="masterWidthSlider" min="0" max="100" value="50">
+          </div>
+
+          <div class="control-group">
+            <label for="masterOutputSlider">Output</label>
+            <input type="range" id="masterOutputSlider" min="0" max="100" value="75">
+          </div>
+        </section>
       </aside>
 
-      <section class="right-stack">
+      <section class="panel sounds-panel">
+        <h2>sounds</h2>
 
-        <section class="panel sounds-panel">
-          <h2>sounds</h2>
-
-          <div class="sound-row">
-            <span>Flute</span>
-            <button class="sound-toggle" id="textureAButton">OFF</button>
-          </div>
-
-          <div class="sound-row">
-            <span>Drum</span>
-            <button class="sound-toggle" id="textureBButton">OFF</button>
-          </div>
-
-          <div class="sound-row">
-            <span>Electro</span>
-            <button class="sound-toggle" id="textureCButton">OFF</button>
-          </div>
-
-          <div class="sound-row">
-            <span>Bass</span>
-            <button class="sound-toggle" id="textureDButton">OFF</button>
-          </div>
-        </section>
-
-        <section class="panel eq-panel">
-          <h2>equalizers</h2>
-
-          <div class="eq-card">
-            <h3>flute eq</h3>
-            <div class="eq-grid">
-              <div class="eq-band">
-                <label for="fluteEq60">60</label>
-                <input type="range" id="fluteEq60" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="fluteEq250">250</label>
-                <input type="range" id="fluteEq250" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="fluteEq1000">1k</label>
-                <input type="range" id="fluteEq1000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="fluteEq4000">4k</label>
-                <input type="range" id="fluteEq4000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="fluteEq8000">8k</label>
-                <input type="range" id="fluteEq8000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="fluteEq15000">15k</label>
-                <input type="range" id="fluteEq15000" min="-18" max="18" step="1" value="0">
-              </div>
+        <div class="sound-card">
+          <div class="sound-head">
+            <div class="sound-name">Flute</div>
+            <div class="sound-actions">
+              <button class="sound-toggle" id="textureAButton">OFF</button>
+              <button class="eq-toggle" id="fluteEqToggle">EQ</button>
             </div>
           </div>
 
-          <div class="eq-card">
-            <h3>drum eq</h3>
-            <div class="eq-grid">
-              <div class="eq-band">
-                <label for="drumEq60">60</label>
-                <input type="range" id="drumEq60" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="drumEq250">250</label>
-                <input type="range" id="drumEq250" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="drumEq1000">1k</label>
-                <input type="range" id="drumEq1000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="drumEq4000">4k</label>
-                <input type="range" id="drumEq4000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="drumEq8000">8k</label>
-                <input type="range" id="drumEq8000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="drumEq15000">15k</label>
-                <input type="range" id="drumEq15000" min="-18" max="18" step="1" value="0">
-              </div>
+          <div class="loop-row">
+            <div class="loop-field">
+              <label for="fluteLoopEffect">Loop Effect</label>
+              <select id="fluteLoopEffect">
+                <option value="hitUp">Hit Up</option>
+                <option value="hitDown">Hit Down</option>
+                <option value="warp">Warp</option>
+                <option value="muffle">Muffle</option>
+                <option value="echoBurst">Echo Burst</option>
+              </select>
             </div>
-          </div>
 
-          <div class="eq-card">
-            <h3>electro eq</h3>
-            <div class="eq-grid">
-              <div class="eq-band">
-                <label for="electroEq60">60</label>
-                <input type="range" id="electroEq60" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="electroEq250">250</label>
-                <input type="range" id="electroEq250" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="electroEq1000">1k</label>
-                <input type="range" id="electroEq1000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="electroEq4000">4k</label>
-                <input type="range" id="electroEq4000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="electroEq8000">8k</label>
-                <input type="range" id="electroEq8000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="electroEq15000">15k</label>
-                <input type="range" id="electroEq15000" min="-18" max="18" step="1" value="0">
-              </div>
+            <div class="loop-field">
+              <label for="fluteLoopInterval">Interval (sec)</label>
+              <input type="number" id="fluteLoopInterval" min="1" step="0.5" value="4">
             </div>
-          </div>
 
-          <div class="eq-card">
-            <h3>bass eq</h3>
-            <div class="eq-grid">
-              <div class="eq-band">
-                <label for="bassEq60">60</label>
-                <input type="range" id="bassEq60" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="bassEq250">250</label>
-                <input type="range" id="bassEq250" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="bassEq1000">1k</label>
-                <input type="range" id="bassEq1000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="bassEq4000">4k</label>
-                <input type="range" id="bassEq4000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="bassEq8000">8k</label>
-                <input type="range" id="bassEq8000" min="-18" max="18" step="1" value="0">
-              </div>
-              <div class="eq-band">
-                <label for="bassEq15000">15k</label>
-                <input type="range" id="bassEq15000" min="-18" max="18" step="1" value="0">
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="panel loops-panel">
-          <h2>loops per sound</h2>
-
-          <div class="loop-card">
-            <h3>flute loop</h3>
-            <div class="loop-grid">
-              <div class="control-group">
-                <label for="fluteLoopEffect">Effect</label>
-                <select id="fluteLoopEffect">
-                  <option value="hitUp">Hit Up</option>
-                  <option value="hitDown">Hit Down</option>
-                  <option value="warp">Warp</option>
-                  <option value="muffle">Muffle</option>
-                  <option value="echoBurst">Echo Burst</option>
-                </select>
-              </div>
-
-              <div class="control-group">
-                <label for="fluteLoopInterval">Interval</label>
-                <input type="range" id="fluteLoopInterval" min="1" max="8" step="0.5" value="4">
-                <div class="value-label" id="fluteLoopIntervalValue">4.0s</div>
-              </div>
-
-              <div class="control-group">
-                <label for="fluteLoopDuration">Duration</label>
-                <input type="range" id="fluteLoopDuration" min="0.2" max="4" step="0.1" value="2">
-                <div class="value-label" id="fluteLoopDurationValue">2.0s</div>
-              </div>
+            <div class="loop-field">
+              <label for="fluteLoopDuration">Duration (sec)</label>
+              <input type="number" id="fluteLoopDuration" min="0.2" step="0.1" value="2">
             </div>
 
             <div class="loop-buttons">
@@ -285,31 +198,52 @@
             </div>
           </div>
 
-          <div class="loop-card">
-            <h3>drum loop</h3>
-            <div class="loop-grid">
-              <div class="control-group">
-                <label for="drumLoopEffect">Effect</label>
-                <select id="drumLoopEffect">
-                  <option value="hitUp">Hit Up</option>
-                  <option value="hitDown">Hit Down</option>
-                  <option value="warp">Warp</option>
-                  <option value="muffle">Muffle</option>
-                  <option value="echoBurst">Echo Burst</option>
-                </select>
-              </div>
+          <div class="loop-warning" id="fluteLoopWarning"></div>
 
-              <div class="control-group">
-                <label for="drumLoopInterval">Interval</label>
-                <input type="range" id="drumLoopInterval" min="1" max="8" step="0.5" value="4">
-                <div class="value-label" id="drumLoopIntervalValue">4.0s</div>
+          <div class="eq-drawer" id="fluteEqDrawer">
+            <div class="eq-inner">
+              <canvas class="eq-canvas" id="fluteEqCanvas" width="900" height="220"></canvas>
+              <div class="eq-sliders">
+                <div class="eq-band"><label for="fluteEq60">60</label><input type="range" id="fluteEq60" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="fluteEq250">250</label><input type="range" id="fluteEq250" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="fluteEq1000">1K</label><input type="range" id="fluteEq1000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="fluteEq4000">4K</label><input type="range" id="fluteEq4000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="fluteEq8000">8K</label><input type="range" id="fluteEq8000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="fluteEq15000">15K</label><input type="range" id="fluteEq15000" min="-12" max="12" step="1" value="0"></div>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="control-group">
-                <label for="drumLoopDuration">Duration</label>
-                <input type="range" id="drumLoopDuration" min="0.2" max="4" step="0.1" value="2">
-                <div class="value-label" id="drumLoopDurationValue">2.0s</div>
-              </div>
+        <div class="sound-card">
+          <div class="sound-head">
+            <div class="sound-name">Drum</div>
+            <div class="sound-actions">
+              <button class="sound-toggle" id="textureBButton">OFF</button>
+              <button class="eq-toggle" id="drumEqToggle">EQ</button>
+            </div>
+          </div>
+
+          <div class="loop-row">
+            <div class="loop-field">
+              <label for="drumLoopEffect">Loop Effect</label>
+              <select id="drumLoopEffect">
+                <option value="hitUp">Hit Up</option>
+                <option value="hitDown">Hit Down</option>
+                <option value="warp">Warp</option>
+                <option value="muffle">Muffle</option>
+                <option value="echoBurst">Echo Burst</option>
+              </select>
+            </div>
+
+            <div class="loop-field">
+              <label for="drumLoopInterval">Interval (sec)</label>
+              <input type="number" id="drumLoopInterval" min="1" step="0.5" value="4">
+            </div>
+
+            <div class="loop-field">
+              <label for="drumLoopDuration">Duration (sec)</label>
+              <input type="number" id="drumLoopDuration" min="0.2" step="0.1" value="2">
             </div>
 
             <div class="loop-buttons">
@@ -318,31 +252,52 @@
             </div>
           </div>
 
-          <div class="loop-card">
-            <h3>electro loop</h3>
-            <div class="loop-grid">
-              <div class="control-group">
-                <label for="electroLoopEffect">Effect</label>
-                <select id="electroLoopEffect">
-                  <option value="hitUp">Hit Up</option>
-                  <option value="hitDown">Hit Down</option>
-                  <option value="warp">Warp</option>
-                  <option value="muffle">Muffle</option>
-                  <option value="echoBurst">Echo Burst</option>
-                </select>
-              </div>
+          <div class="loop-warning" id="drumLoopWarning"></div>
 
-              <div class="control-group">
-                <label for="electroLoopInterval">Interval</label>
-                <input type="range" id="electroLoopInterval" min="1" max="8" step="0.5" value="4">
-                <div class="value-label" id="electroLoopIntervalValue">4.0s</div>
+          <div class="eq-drawer" id="drumEqDrawer">
+            <div class="eq-inner">
+              <canvas class="eq-canvas" id="drumEqCanvas" width="900" height="220"></canvas>
+              <div class="eq-sliders">
+                <div class="eq-band"><label for="drumEq60">60</label><input type="range" id="drumEq60" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="drumEq250">250</label><input type="range" id="drumEq250" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="drumEq1000">1K</label><input type="range" id="drumEq1000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="drumEq4000">4K</label><input type="range" id="drumEq4000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="drumEq8000">8K</label><input type="range" id="drumEq8000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="drumEq15000">15K</label><input type="range" id="drumEq15000" min="-12" max="12" step="1" value="0"></div>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="control-group">
-                <label for="electroLoopDuration">Duration</label>
-                <input type="range" id="electroLoopDuration" min="0.2" max="4" step="0.1" value="2">
-                <div class="value-label" id="electroLoopDurationValue">2.0s</div>
-              </div>
+        <div class="sound-card">
+          <div class="sound-head">
+            <div class="sound-name">Electro</div>
+            <div class="sound-actions">
+              <button class="sound-toggle" id="textureCButton">OFF</button>
+              <button class="eq-toggle" id="electroEqToggle">EQ</button>
+            </div>
+          </div>
+
+          <div class="loop-row">
+            <div class="loop-field">
+              <label for="electroLoopEffect">Loop Effect</label>
+              <select id="electroLoopEffect">
+                <option value="hitUp">Hit Up</option>
+                <option value="hitDown">Hit Down</option>
+                <option value="warp">Warp</option>
+                <option value="muffle">Muffle</option>
+                <option value="echoBurst">Echo Burst</option>
+              </select>
+            </div>
+
+            <div class="loop-field">
+              <label for="electroLoopInterval">Interval (sec)</label>
+              <input type="number" id="electroLoopInterval" min="1" step="0.5" value="4">
+            </div>
+
+            <div class="loop-field">
+              <label for="electroLoopDuration">Duration (sec)</label>
+              <input type="number" id="electroLoopDuration" min="0.2" step="0.1" value="2">
             </div>
 
             <div class="loop-buttons">
@@ -351,31 +306,52 @@
             </div>
           </div>
 
-          <div class="loop-card">
-            <h3>bass loop</h3>
-            <div class="loop-grid">
-              <div class="control-group">
-                <label for="bassLoopEffect">Effect</label>
-                <select id="bassLoopEffect">
-                  <option value="hitUp">Hit Up</option>
-                  <option value="hitDown">Hit Down</option>
-                  <option value="warp">Warp</option>
-                  <option value="muffle">Muffle</option>
-                  <option value="echoBurst">Echo Burst</option>
-                </select>
-              </div>
+          <div class="loop-warning" id="electroLoopWarning"></div>
 
-              <div class="control-group">
-                <label for="bassLoopInterval">Interval</label>
-                <input type="range" id="bassLoopInterval" min="1" max="8" step="0.5" value="4">
-                <div class="value-label" id="bassLoopIntervalValue">4.0s</div>
+          <div class="eq-drawer" id="electroEqDrawer">
+            <div class="eq-inner">
+              <canvas class="eq-canvas" id="electroEqCanvas" width="900" height="220"></canvas>
+              <div class="eq-sliders">
+                <div class="eq-band"><label for="electroEq60">60</label><input type="range" id="electroEq60" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="electroEq250">250</label><input type="range" id="electroEq250" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="electroEq1000">1K</label><input type="range" id="electroEq1000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="electroEq4000">4K</label><input type="range" id="electroEq4000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="electroEq8000">8K</label><input type="range" id="electroEq8000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="electroEq15000">15K</label><input type="range" id="electroEq15000" min="-12" max="12" step="1" value="0"></div>
               </div>
+            </div>
+          </div>
+        </div>
 
-              <div class="control-group">
-                <label for="bassLoopDuration">Duration</label>
-                <input type="range" id="bassLoopDuration" min="0.2" max="4" step="0.1" value="2">
-                <div class="value-label" id="bassLoopDurationValue">2.0s</div>
-              </div>
+        <div class="sound-card">
+          <div class="sound-head">
+            <div class="sound-name">Bass</div>
+            <div class="sound-actions">
+              <button class="sound-toggle" id="textureDButton">OFF</button>
+              <button class="eq-toggle" id="bassEqToggle">EQ</button>
+            </div>
+          </div>
+
+          <div class="loop-row">
+            <div class="loop-field">
+              <label for="bassLoopEffect">Loop Effect</label>
+              <select id="bassLoopEffect">
+                <option value="hitUp">Hit Up</option>
+                <option value="hitDown">Hit Down</option>
+                <option value="warp">Warp</option>
+                <option value="muffle">Muffle</option>
+                <option value="echoBurst">Echo Burst</option>
+              </select>
+            </div>
+
+            <div class="loop-field">
+              <label for="bassLoopInterval">Interval (sec)</label>
+              <input type="number" id="bassLoopInterval" min="1" step="0.5" value="4">
+            </div>
+
+            <div class="loop-field">
+              <label for="bassLoopDuration">Duration (sec)</label>
+              <input type="number" id="bassLoopDuration" min="0.2" step="0.1" value="2">
             </div>
 
             <div class="loop-buttons">
@@ -383,11 +359,139 @@
               <button id="bassLoopStop">Stop</button>
             </div>
           </div>
-        </section>
+
+          <div class="loop-warning" id="bassLoopWarning"></div>
+
+          <div class="eq-drawer" id="bassEqDrawer">
+            <div class="eq-inner">
+              <canvas class="eq-canvas" id="bassEqCanvas" width="900" height="220"></canvas>
+              <div class="eq-sliders">
+                <div class="eq-band"><label for="bassEq60">60</label><input type="range" id="bassEq60" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="bassEq250">250</label><input type="range" id="bassEq250" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="bassEq1000">1K</label><input type="range" id="bassEq1000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="bassEq4000">4K</label><input type="range" id="bassEq4000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="bassEq8000">8K</label><input type="range" id="bassEq8000" min="-12" max="12" step="1" value="0"></div>
+                <div class="eq-band"><label for="bassEq15000">15K</label><input type="range" id="bassEq15000" min="-12" max="12" step="1" value="0"></div>
+              </div>
+            </div>
+          </div>
+        </div>
 
       </section>
     </main>
   </div>
+  <section class="bottom-lab-grid">
+
+  <section class="panel tweaks-panel">
+    <h2>texture tweaks</h2>
+
+    <div class="tweak-grid">
+      <div class="tweak-row">
+        <label for="driftSlider">Drift</label>
+        <input type="range" id="driftSlider" min="0" max="100" value="18">
+        <input type="number" id="driftValue" min="0" max="100" value="18">
+      </div>
+
+      <div class="tweak-row">
+        <label for="smearSlider">Smear</label>
+        <input type="range" id="smearSlider" min="0" max="100" value="24">
+        <input type="number" id="smearValue" min="0" max="100" value="24">
+      </div>
+
+      <div class="tweak-row">
+        <label for="grainSlider">Grain</label>
+        <input type="range" id="grainSlider" min="0" max="100" value="32">
+        <input type="number" id="grainValue" min="0" max="100" value="32">
+      </div>
+
+      <div class="tweak-row">
+        <label for="crushSlider">Crush</label>
+        <input type="range" id="crushSlider" min="0" max="100" value="10">
+        <input type="number" id="crushValue" min="0" max="100" value="10">
+      </div>
+
+      <div class="tweak-row">
+        <label for="stretchSlider">Stretch</label>
+        <input type="range" id="stretchSlider" min="0" max="100" value="20">
+        <input type="number" id="stretchValue" min="0" max="100" value="20">
+      </div>
+
+      <div class="tweak-row">
+        <label for="motionSlider">Motion</label>
+        <input type="range" id="motionSlider" min="0" max="100" value="28">
+        <input type="number" id="motionValue" min="0" max="100" value="28">
+      </div>
+
+      <div class="tweak-row">
+        <label for="blurSlider">Blur</label>
+        <input type="range" id="blurSlider" min="0" max="100" value="16">
+        <input type="number" id="blurValue" min="0" max="100" value="16">
+      </div>
+
+      <div class="tweak-row">
+        <label for="flutterSlider">Flutter</label>
+        <input type="range" id="flutterSlider" min="0" max="100" value="12">
+        <input type="number" id="flutterValue" min="0" max="100" value="12">
+      </div>
+    </div>
+  </section>
+
+  <section class="panel mix-panel">
+    <h2>mix lab</h2>
+
+    <div class="mix-grid">
+      <div class="mix-row">
+        <label for="dryWetSlider">Dry / Wet</label>
+        <input type="range" id="dryWetSlider" min="0" max="100" value="35">
+        <input type="number" id="dryWetValue" min="0" max="100" value="35">
+      </div>
+
+      <div class="mix-row">
+        <label for="glueSlider">Glue</label>
+        <input type="range" id="glueSlider" min="0" max="100" value="22">
+        <input type="number" id="glueValue" min="0" max="100" value="22">
+      </div>
+
+      <div class="mix-row">
+        <label for="widthMixSlider">Width</label>
+        <input type="range" id="widthMixSlider" min="0" max="100" value="58">
+        <input type="number" id="widthMixValue" min="0" max="100" value="58">
+      </div>
+
+      <div class="mix-row">
+        <label for="punchSlider">Punch</label>
+        <input type="range" id="punchSlider" min="0" max="100" value="40">
+        <input type="number" id="punchValue" min="0" max="100" value="40">
+      </div>
+
+      <div class="mix-row">
+        <label for="airSlider">Air</label>
+        <input type="range" id="airSlider" min="0" max="100" value="26">
+        <input type="number" id="airValue" min="0" max="100" value="26">
+      </div>
+
+      <div class="mix-row">
+        <label for="lowWeightSlider">Low Weight</label>
+        <input type="range" id="lowWeightSlider" min="0" max="100" value="54">
+        <input type="number" id="lowWeightValue" min="0" max="100" value="54">
+      </div>
+
+      <div class="mix-row">
+        <label for="noiseFloorSlider">Noise Floor</label>
+        <input type="range" id="noiseFloorSlider" min="0" max="100" value="8">
+        <input type="number" id="noiseFloorValue" min="0" max="100" value="8">
+      </div>
+
+      <div class="mix-row">
+        <label for="crossmixSlider">Crossmix</label>
+        <input type="range" id="crossmixSlider" min="0" max="100" value="18">
+        <input type="number" id="crossmixValue" min="0" max="100" value="18">
+      </div>
+    </div>
+  </section>
+
+</section>
+
 
   <script src="https://unpkg.com/tone"></script>
   <script src="app.js"></script>

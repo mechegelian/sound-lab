@@ -6,15 +6,11 @@ const playAllButton = $("playAllButton");
 const stopAllButton = $("stopAllButton");
 const randomButton = $("randomButton");
 
-const presetFog = $("presetFog");
-const presetGlass = $("presetGlass");
-const presetUnderground = $("presetUnderground");
-const presetPunch = $("presetPunch");
-
 const textureAButton = $("textureAButton");
 const textureBButton = $("textureBButton");
 const textureCButton = $("textureCButton");
 const textureDButton = $("textureDButton");
+const textureEButton = $("textureEButton");
 
 const controlTargetSelect = $("controlTargetSelect");
 const volumeSlider = $("volumeSlider");
@@ -26,6 +22,32 @@ const masterReverbSlider = $("masterReverbSlider");
 const masterDelaySlider = $("masterDelaySlider");
 const masterWidthSlider = $("masterWidthSlider");
 const masterOutputSlider = $("masterOutputSlider");
+
+// ---------------- MUSIC ENGINE ----------------
+const bpmSlider = $("bpmSlider");
+const bpmValue = $("bpmValue");
+const swingSlider = $("swingSlider");
+const swingValue = $("swingValue");
+const sceneSelect = $("sceneSelect");
+const patternSelect = $("patternSelect");
+const rootSelect = $("rootSelect");
+const scaleSelect = $("scaleSelect");
+const modDepthSlider = $("modDepthSlider");
+const modDepthValue = $("modDepthValue");
+const applySceneButton = $("applySceneButton");
+const drumTestButton = $("drumTestButton");
+
+// ---------------- GLITCH ----------------
+const glitchChanceSlider = $("glitchChanceSlider");
+const glitchChanceValue = $("glitchChanceValue");
+const glitchRateSlider = $("glitchRateSlider");
+const glitchRateValue = $("glitchRateValue");
+const glitchPitchSlider = $("glitchPitchSlider");
+const glitchPitchValue = $("glitchPitchValue");
+const glitchToneSlider = $("glitchToneSlider");
+const glitchToneValue = $("glitchToneValue");
+const triggerGlitchButton = $("triggerGlitchButton");
+const toggleAutoGlitchButton = $("toggleAutoGlitchButton");
 
 // ---------------- OSC / SPEC ----------------
 const pauseOscilloscopeButton = $("pauseOscilloscopeButton");
@@ -57,16 +79,8 @@ const smearSlider = $("smearSlider");
 const smearValue = $("smearValue");
 const grainSlider = $("grainSlider");
 const grainValue = $("grainValue");
-const crushSlider = $("crushSlider");
-const crushValue = $("crushValue");
-const stretchSlider = $("stretchSlider");
-const stretchValue = $("stretchValue");
 const motionSlider = $("motionSlider");
 const motionValue = $("motionValue");
-const blurSlider = $("blurSlider");
-const blurValue = $("blurValue");
-const flutterSlider = $("flutterSlider");
-const flutterValue = $("flutterValue");
 
 // ---------------- MIX ----------------
 const dryWetSlider = $("dryWetSlider");
@@ -77,21 +91,69 @@ const widthMixSlider = $("widthMixSlider");
 const widthMixValue = $("widthMixValue");
 const punchSlider = $("punchSlider");
 const punchValue = $("punchValue");
-const airSlider = $("airSlider");
-const airValue = $("airValue");
-const lowWeightSlider = $("lowWeightSlider");
-const lowWeightValue = $("lowWeightValue");
-const noiseFloorSlider = $("noiseFloorSlider");
-const noiseFloorValue = $("noiseFloorValue");
-const crossmixSlider = $("crossmixSlider");
-const crossmixValue = $("crossmixValue");
+
+// ---------------- DRAWERS ----------------
+const drumSeqToggle = $("drumSeqToggle");
+const drumSeqDrawer = $("drumSeqDrawer");
+const acidSeqToggle = $("acidSeqToggle");
+const acidSeqDrawer = $("acidSeqDrawer");
+
+// ---------------- SEQ GRIDS ----------------
+const drumKickGrid = $("drumKickGrid");
+const drumSnareGrid = $("drumSnareGrid");
+const drumHatGrid = $("drumHatGrid");
+const drumClapGrid = $("drumClapGrid");
+const drumPercGrid = $("drumPercGrid");
+const drumSeqLength = $("drumSeqLength");
+
+const acidStepGrid = $("acidStepGrid");
+const acidAccentGrid = $("acidAccentGrid");
+const acidSeqLength = $("acidSeqLength");
+const acidCutoffSlider = $("acidCutoffSlider");
+const acidResSlider = $("acidResSlider");
+const acidEnvSlider = $("acidEnvSlider");
+const acidSlideSlider = $("acidSlideSlider");
+
+// ---------------- EQ ELEMENTS ----------------
+const eqBands = ["60", "250", "1000", "4000", "8000", "15000"];
+
+function getEqElements(prefix) {
+  const out = {};
+  eqBands.forEach((band) => {
+    out[band] = $(`${prefix}Eq${band}`);
+  });
+  return out;
+}
+
+const acidEqEls = getEqElements("acid");
+const drumEqEls = getEqElements("drum");
+const fluteEqEls = getEqElements("flute");
+const electroEqEls = getEqElements("electro");
+const bassEqEls = getEqElements("bass");
+
+// ---------------- LOOP ELEMENTS ----------------
+function getLoopElements(prefix) {
+  return {
+    effect: $(`${prefix}LoopEffect`),
+    interval: $(`${prefix}LoopInterval`),
+    duration: $(`${prefix}LoopDuration`),
+    start: $(`${prefix}LoopStart`),
+    stop: $(`${prefix}LoopStop`),
+    warning: $(`${prefix}LoopWarning`)
+  };
+}
+
+const fluteLoop = getLoopElements("flute");
+const electroLoop = getLoopElements("electro");
+const bassLoop = getLoopElements("bass");
 
 // ---------------- GLOBAL STATE ----------------
 let audioStarted = false;
 let sourcesStarted = false;
 
-let fluteOn = false;
+let acidOn = false;
 let drumOn = false;
+let fluteOn = false;
 let electroOn = false;
 let bassOn = false;
 
@@ -101,54 +163,79 @@ let oscilloscopeGrid = true;
 let spectrogramPaused = false;
 
 let fluteLoopId = null;
-let drumLoopId = null;
 let electroLoopId = null;
 let bassLoopId = null;
+
+let stepIndex = 0;
+let transportRepeatId = null;
+let autoGlitchEnabled = false;
 
 const spectrogramSecondsVisible = 8;
 
 // ---------------- AUDIO ----------------
-const waveformAnalyser = new Tone.Waveform(2048);
-const fftAnalyser = new Tone.FFT(256);
+const waveformAnalyser = new Tone.Waveform(512);
+const fftAnalyser = new Tone.FFT(64);
 
-const masterGain = new Tone.Gain(0.75);
-const masterFilter = new Tone.Filter(1800, "lowpass");
+const masterGain = new Tone.Gain(1.0);
+const masterFilter = new Tone.Filter(2200, "lowpass");
 const masterLowShelf = new Tone.Filter(140, "lowshelf");
 const masterHighShelf = new Tone.Filter(7000, "highshelf");
 const masterDistortion = new Tone.Distortion(0);
-const masterWidth = new Tone.StereoWidener(0.5);
-const masterDelay = new Tone.FeedbackDelay(0.25, 0.25);
-const masterReverb = new Tone.Reverb({ decay: 2.5, preDelay: 0.01 });
-const masterCompressor = new Tone.Compressor(-18, 3);
+const masterWidth = new Tone.StereoWidener(0.55);
+const masterDelay = new Tone.FeedbackDelay(0.25, 0.2);
+const masterReverb = new Tone.Reverb({ decay: 2.1, preDelay: 0.01 });
+const masterCompressor = new Tone.Compressor(-16, 3);
 const floorNoise = new Tone.Noise("pink");
-const floorNoiseGain = new Tone.Gain(0);
+const floorNoiseGain = new Tone.Gain(0.004);
 
-masterDelay.wet.value = 0.1;
-masterReverb.wet.value = 0.2;
+masterDelay.wet.value = 0.08;
+masterReverb.wet.value = 0.16;
 
 // flute
 const fluteGain = new Tone.Gain(0);
 const fluteFilter = new Tone.Filter(1800, "bandpass");
 const fluteDistortion = new Tone.Distortion(0);
 const fluteNoise = new Tone.Noise("pink");
-const fluteNoiseGain = new Tone.Gain(0.08);
+const fluteNoiseGain = new Tone.Gain(0.06);
 const fluteOsc = new Tone.Oscillator(660, "triangle");
 const fluteVibrato = new Tone.LFO(5, -10, 10);
 
 // drum
 const drumGain = new Tone.Gain(0);
-const drumFilter = new Tone.Filter(900, "lowpass");
-const drumDistortion = new Tone.Distortion(0.05);
-const drumSynth = new Tone.MembraneSynth({
+const drumFilter = new Tone.Filter(2000, "lowpass");
+const drumDistortion = new Tone.Distortion(0.04);
+
+const kickSynth = new Tone.MembraneSynth({
   pitchDecay: 0.03,
-  octaves: 5,
+  octaves: 6,
   oscillator: { type: "sine" },
-  envelope: {
-    attack: 0.001,
-    decay: 0.35,
-    sustain: 0,
-    release: 0.05
-  }
+  envelope: { attack: 0.001, decay: 0.5, sustain: 0, release: 0.02 }
+});
+
+const snareNoise = new Tone.NoiseSynth({
+  noise: { type: "white" },
+  envelope: { attack: 0.001, decay: 0.15, sustain: 0 }
+});
+
+const hatSynth = new Tone.MetalSynth({
+  frequency: 260,
+  envelope: { attack: 0.001, decay: 0.08, release: 0.01 },
+  harmonicity: 5.1,
+  modulationIndex: 24,
+  resonance: 3500,
+  octaves: 1.5
+});
+
+const clapNoise = new Tone.NoiseSynth({
+  noise: { type: "pink" },
+  envelope: { attack: 0.001, decay: 0.08, sustain: 0 }
+});
+
+const percSynth = new Tone.MembraneSynth({
+  pitchDecay: 0.015,
+  octaves: 2,
+  oscillator: { type: "triangle" },
+  envelope: { attack: 0.001, decay: 0.12, sustain: 0, release: 0.02 }
 });
 
 // electro
@@ -161,14 +248,24 @@ const electroLfo = new Tone.LFO(0.25, 600, 2600);
 
 // bass
 const bassGain = new Tone.Gain(0);
-const bassFilter = new Tone.Filter(220, "lowpass");
+const bassFilter = new Tone.Filter(260, "lowpass");
 const bassDistortion = new Tone.Distortion(0.03);
 const bassOsc1 = new Tone.Oscillator(55, "sawtooth");
 const bassOsc2 = new Tone.Oscillator(55.5, "square");
 
-// ---------------- EQ ----------------
-const eqBands = ["60", "250", "1000", "4000", "8000", "15000"];
+// acid
+const acidGain = new Tone.Gain(0);
+const acidFilter = new Tone.Filter(1100, "lowpass");
+acidFilter.Q.value = 12;
+const acidDistortion = new Tone.Distortion(0.05);
+const acidSynth = new Tone.MonoSynth({
+  oscillator: { type: "square" },
+  filter: { Q: 8, type: "lowpass", rolloff: -24 },
+  envelope: { attack: 0.001, decay: 0.18, sustain: 0.2, release: 0.08 },
+  filterEnvelope: { attack: 0.001, decay: 0.14, sustain: 0.12, release: 0.05, baseFrequency: 300, octaves: 2.8 }
+});
 
+// ---------------- EQ NODES ----------------
 function createSixBandEq() {
   const make = (freq) => {
     const f = new Tone.Filter(freq, "peaking");
@@ -197,17 +294,19 @@ function chainSixBandEq(eq, inputNode, outputNode) {
   eq.b15000.connect(outputNode);
 }
 
-const fluteEq = createSixBandEq();
+const acidEq = createSixBandEq();
 const drumEq = createSixBandEq();
+const fluteEq = createSixBandEq();
 const electroEq = createSixBandEq();
 const bassEq = createSixBandEq();
 
-const fluteEqOut = new Tone.Gain(1);
+const acidEqOut = new Tone.Gain(1);
 const drumEqOut = new Tone.Gain(1);
+const fluteEqOut = new Tone.Gain(1);
 const electroEqOut = new Tone.Gain(1);
 const bassEqOut = new Tone.Gain(1);
 
-// ---------------- CONNECT ----------------
+// ---------------- CONNECTIONS ----------------
 fluteNoise.connect(fluteNoiseGain);
 fluteNoiseGain.connect(fluteFilter);
 fluteOsc.connect(fluteFilter);
@@ -216,7 +315,11 @@ fluteFilter.connect(fluteDistortion);
 chainSixBandEq(fluteEq, fluteDistortion, fluteEqOut);
 fluteEqOut.connect(fluteGain);
 
-drumSynth.connect(drumFilter);
+kickSynth.connect(drumFilter);
+snareNoise.connect(drumFilter);
+hatSynth.connect(drumFilter);
+clapNoise.connect(drumFilter);
+percSynth.connect(drumFilter);
 drumFilter.connect(drumDistortion);
 chainSixBandEq(drumEq, drumDistortion, drumEqOut);
 drumEqOut.connect(drumGain);
@@ -234,11 +337,16 @@ bassFilter.connect(bassDistortion);
 chainSixBandEq(bassEq, bassDistortion, bassEqOut);
 bassEqOut.connect(bassGain);
 
-// master chain
+acidSynth.connect(acidFilter);
+acidFilter.connect(acidDistortion);
+chainSixBandEq(acidEq, acidDistortion, acidEqOut);
+acidEqOut.connect(acidGain);
+
 fluteGain.connect(masterFilter);
 drumGain.connect(masterFilter);
 electroGain.connect(masterFilter);
 bassGain.connect(masterFilter);
+acidGain.connect(masterFilter);
 floorNoise.connect(floorNoiseGain);
 floorNoiseGain.connect(masterFilter);
 
@@ -255,10 +363,74 @@ masterGain.connect(waveformAnalyser);
 masterGain.connect(fftAnalyser);
 masterGain.toDestination();
 
+// ---------------- DATA ----------------
+const controlState = {
+  master: { volume: 92, filter: 55, speed: 100, distortion: 0 },
+  acid: { volume: 82, filter: 60, speed: 100, distortion: 8 },
+  drum: { volume: 86, filter: 62, speed: 100, distortion: 4 },
+  flute: { volume: 72, filter: 55, speed: 100, distortion: 0 },
+  electro: { volume: 74, filter: 60, speed: 100, distortion: 12 },
+  bass: { volume: 80, filter: 34, speed: 100, distortion: 5 }
+};
+
+const ROOT_MIDI = { C: 48, D: 50, E: 52, F: 53, G: 55, A: 57, B: 59 };
+
+const SCALE_MAP = {
+  minor: [0, 2, 3, 5, 7, 8, 10],
+  dorian: [0, 2, 3, 5, 7, 9, 10],
+  whole: [0, 2, 4, 6, 8, 10],
+  pentatonic: [0, 3, 5, 7, 10]
+};
+
+const PATTERN_MAP = {
+  straight: {
+    bass: [1,0,0,0, 0,0,1,0, 1,0,0,0, 0,0,1,0],
+    electro: [0,0,1,0, 0,1,0,0, 0,0,1,0, 0,1,0,0],
+    flute: [0,1,0,0, 0,0,1,0, 0,1,0,0, 0,0,1,0]
+  },
+  broken: {
+    bass: [1,0,0,1, 0,0,1,0, 1,0,1,0, 0,0,1,0],
+    electro: [0,1,0,1, 1,0,0,0, 0,1,0,1, 1,0,0,0],
+    flute: [1,0,0,0, 0,1,0,0, 1,0,0,1, 0,0,1,0]
+  },
+  syncopated: {
+    bass: [1,0,1,0, 0,1,0,0, 1,0,1,0, 0,0,1,0],
+    electro: [0,1,0,0, 1,0,0,1, 0,1,0,0, 1,0,0,1],
+    flute: [0,0,1,0, 0,1,0,1, 0,0,1,0, 0,1,0,0]
+  },
+  half: {
+    bass: [1,0,0,0, 1,0,0,0, 1,0,0,0, 0,0,1,0],
+    electro: [0,0,1,0, 0,0,0,0, 0,0,1,0, 0,0,0,0],
+    flute: [1,0,0,0, 0,0,1,0, 1,0,0,0, 0,0,1,0]
+  }
+};
+
+const drumPattern = {
+  kick: Array(16).fill(false),
+  snare: Array(16).fill(false),
+  hat: Array(16).fill(false),
+  clap: Array(16).fill(false),
+  perc: Array(16).fill(false)
+};
+
+const acidPattern = {
+  steps: Array(16).fill(false),
+  accent: Array(16).fill(false)
+};
+
+[0, 4, 8, 12].forEach((i) => (drumPattern.kick[i] = true));
+[4, 12].forEach((i) => (drumPattern.snare[i] = true));
+[2, 6, 10, 14].forEach((i) => (drumPattern.hat[i] = true));
+[12].forEach((i) => (drumPattern.clap[i] = true));
+[3, 7, 11, 15].forEach((i) => (drumPattern.perc[i] = true));
+
+[0, 2, 3, 5, 7, 10, 11, 14].forEach((i) => (acidPattern.steps[i] = true));
+[3, 7, 11, 15].forEach((i) => (acidPattern.accent[i] = true));
+
 // ---------------- HELPERS ----------------
 function sliderToGain(target, value) {
   if (target === "master") return value / 100;
-  return value / 160;
+  return value / 130;
 }
 
 function sliderToFrequency(value) {
@@ -270,8 +442,9 @@ function sliderToFrequency(value) {
 function getGainNode(target) {
   return {
     master: masterGain,
-    flute: fluteGain,
+    acid: acidGain,
     drum: drumGain,
+    flute: fluteGain,
     electro: electroGain,
     bass: bassGain
   }[target];
@@ -280,8 +453,9 @@ function getGainNode(target) {
 function getFilterNode(target) {
   return {
     master: masterFilter,
-    flute: fluteFilter,
+    acid: acidFilter,
     drum: drumFilter,
+    flute: fluteFilter,
     electro: electroFilter,
     bass: bassFilter
   }[target];
@@ -290,8 +464,9 @@ function getFilterNode(target) {
 function getDistortionNode(target) {
   return {
     master: masterDistortion,
-    flute: fluteDistortion,
+    acid: acidDistortion,
     drum: drumDistortion,
+    flute: fluteDistortion,
     electro: electroDistortion,
     bass: bassDistortion
   }[target];
@@ -299,8 +474,9 @@ function getDistortionNode(target) {
 
 function isSoundOn(target) {
   return (
-    (target === "flute" && fluteOn) ||
+    (target === "acid" && acidOn) ||
     (target === "drum" && drumOn) ||
+    (target === "flute" && fluteOn) ||
     (target === "electro" && electroOn) ||
     (target === "bass" && bassOn)
   );
@@ -318,18 +494,29 @@ function requireSound(target) {
   return true;
 }
 
-function clamp(value, min, max) {
-  return Math.max(min, Math.min(max, value));
+function getCrossmixMultiplier(target) {
+  const wet = Number(dryWetSlider.value) / 100;
+  if (target === "drum") return 1 + wet * 0.18;
+  if (target === "acid") return 1 + wet * 0.12;
+  return 1;
 }
 
-// ---------------- CONTROL STATE ----------------
-const controlState = {
-  master: { volume: 75, filter: 50, speed: 100, distortion: 0 },
-  flute: { volume: 70, filter: 55, speed: 100, distortion: 0 },
-  drum: { volume: 75, filter: 45, speed: 100, distortion: 5 },
-  electro: { volume: 68, filter: 60, speed: 100, distortion: 12 },
-  bass: { volume: 72, filter: 30, speed: 100, distortion: 5 }
-};
+function getBaseGain(target) {
+  return sliderToGain(target, controlState[target].volume) * getCrossmixMultiplier(target);
+}
+
+function pulseGain(node, baseGain, time, amount = 1.35, release = 0.16) {
+  node.gain.cancelScheduledValues(time);
+  node.gain.setValueAtTime(baseGain, time);
+  node.gain.linearRampToValueAtTime(baseGain * amount, time + 0.01);
+  node.gain.linearRampToValueAtTime(baseGain, time + release);
+}
+
+function buildScaleFrequencies(rootName, scaleName, octaveOffset = 0) {
+  const rootMidi = ROOT_MIDI[rootName] + octaveOffset * 12;
+  const degrees = SCALE_MAP[scaleName];
+  return degrees.map((semi) => Tone.Frequency(rootMidi + semi, "midi").toFrequency());
+}
 
 function syncControlSlidersToTarget() {
   const target = controlTargetSelect.value;
@@ -341,62 +528,51 @@ function syncControlSlidersToTarget() {
 
 function applyStoredVolume(target) {
   const value = controlState[target].volume;
-
   if (target === "master") {
     masterGain.gain.value = sliderToGain("master", value);
     return;
   }
-
   const gainNode = getGainNode(target);
   if (gainNode && isSoundOn(target)) {
-    gainNode.gain.value = sliderToGain(target, value) * getCrossmixMultiplier(target);
+    gainNode.gain.value = getBaseGain(target);
   }
 }
 
 function applyStoredFilter(target) {
   const value = controlState[target].filter;
   const freq = sliderToFrequency(value);
-
-  if (target === "master") {
-    masterFilter.frequency.value = Math.max(120, freq - Number(blurSlider?.value || 0) * 10);
-    return;
-  }
-
   const filterNode = getFilterNode(target);
-  if (filterNode) {
-    filterNode.frequency.value = freq;
-  }
+  if (filterNode) filterNode.frequency.value = freq;
 }
 
 function applyStoredDistortion(target) {
   const node = getDistortionNode(target);
-  if (!node) return;
-  node.distortion = controlState[target].distortion / 100;
+  if (node) node.distortion = controlState[target].distortion / 100;
 }
 
 function applyStoredSpeed(target) {
   const mult = controlState[target].speed / 100;
-  const stretch = 1 + (Number(stretchSlider?.value || 0) / 200);
 
   if (target === "flute") {
-    fluteOsc.frequency.value = 660 * mult / stretch;
-    fluteVibrato.frequency.value = 5 * (1 + Number(motionSlider?.value || 0) / 100);
+    fluteOsc.frequency.value = 660 * mult;
+    fluteVibrato.frequency.value = 4 + Number(motionSlider.value) * 0.06;
   }
-
   if (target === "electro") {
-    electroOsc1.frequency.value = 220 * mult / stretch;
-    electroOsc2.frequency.value = 224 * mult / stretch;
-    electroLfo.frequency.value = 0.25 + Number(motionSlider?.value || 0) / 200;
+    electroOsc1.frequency.value = 220 * mult;
+    electroOsc2.frequency.value = 224 * mult;
+    electroLfo.frequency.value = 0.25 + Number(motionSlider.value) / 200;
   }
-
   if (target === "bass") {
-    bassOsc1.frequency.value = 55 * mult / stretch;
-    bassOsc2.frequency.value = 55.5 * mult / stretch;
+    bassOsc1.frequency.value = 55 * mult;
+    bassOsc2.frequency.value = 55.5 * mult;
+  }
+  if (target === "acid") {
+    acidFilter.frequency.value = 260 + mult * 10;
   }
 }
 
 function applyAllStoredControls() {
-  ["master", "flute", "drum", "electro", "bass"].forEach((target) => {
+  ["master", "acid", "drum", "flute", "electro", "bass"].forEach((target) => {
     applyStoredFilter(target);
     applyStoredDistortion(target);
     applyStoredSpeed(target);
@@ -416,6 +592,367 @@ masterDelaySlider.addEventListener("input", applyMasterFx);
 masterWidthSlider.addEventListener("input", applyMasterFx);
 masterOutputSlider.addEventListener("input", applyMasterFx);
 
+// ---------------- EQ ----------------
+function readEqValues(elementMap) {
+  return {
+    "60": Number(elementMap["60"].value),
+    "250": Number(elementMap["250"].value),
+    "1000": Number(elementMap["1000"].value),
+    "4000": Number(elementMap["4000"].value),
+    "8000": Number(elementMap["8000"].value),
+    "15000": Number(elementMap["15000"].value)
+  };
+}
+
+function applySixBandEq(eq, values) {
+  eq.b60.gain.value = values["60"];
+  eq.b250.gain.value = values["250"];
+  eq.b1000.gain.value = values["1000"];
+  eq.b4000.gain.value = values["4000"];
+  eq.b8000.gain.value = values["8000"];
+  eq.b15000.gain.value = values["15000"];
+}
+
+function bindEq(elementMap, eqNode) {
+  eqBands.forEach((band) => {
+    elementMap[band].addEventListener("input", () => {
+      applySixBandEq(eqNode, readEqValues(elementMap));
+    });
+  });
+}
+
+bindEq(acidEqEls, acidEq);
+bindEq(drumEqEls, drumEq);
+bindEq(fluteEqEls, fluteEq);
+bindEq(electroEqEls, electroEq);
+bindEq(bassEqEls, bassEq);
+
+applySixBandEq(acidEq, readEqValues(acidEqEls));
+applySixBandEq(drumEq, readEqValues(drumEqEls));
+applySixBandEq(fluteEq, readEqValues(fluteEqEls));
+applySixBandEq(electroEq, readEqValues(electroEqEls));
+applySixBandEq(bassEq, readEqValues(bassEqEls));
+
+// ---------------- EQ GRAPH UI ----------------
+function setupEqUI(toggleId, drawerId, canvasId, sliderIds) {
+  const toggle = $(toggleId);
+  const drawer = $(drawerId);
+  const canvas = $(canvasId);
+  if (!toggle || !drawer || !canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  const sliders = sliderIds.map((id) => $(id)).filter(Boolean);
+  let dragging = false;
+
+  function values() {
+    return sliders.map((slider) => Number(slider.value));
+  }
+
+  function valueToY(value, height) {
+    const min = -12;
+    const max = 12;
+    const t = (value - min) / (max - min);
+    return height - t * height;
+  }
+
+  function yToValue(y, height) {
+    const min = -12;
+    const max = 12;
+    const t = 1 - y / height;
+    return Math.round(min + t * (max - min));
+  }
+
+  function draw() {
+    const width = canvas.width;
+    const height = canvas.height;
+    ctx.clearRect(0, 0, width, height);
+    ctx.fillStyle = "#050505";
+    ctx.fillRect(0, 0, width, height);
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,0.08)";
+    for (let i = 0; i <= 6; i++) {
+      const x = (width / 6) * i;
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, height);
+      ctx.stroke();
+    }
+    for (let i = 0; i <= 6; i++) {
+      const y = (height / 6) * i;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(width, y);
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    const vals = values();
+    const points = vals.map((value, i) => ({
+      x: (width / (vals.length - 1)) * i,
+      y: valueToY(value, height)
+    }));
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = "rgba(140,255,109,0.16)";
+    ctx.shadowBlur = 18;
+    ctx.shadowColor = "#8cff6d";
+    points.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
+    ctx.stroke();
+    ctx.restore();
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = 2.6;
+    ctx.strokeStyle = "#8cff6d";
+    points.forEach((p, i) => (i === 0 ? ctx.moveTo(p.x, p.y) : ctx.lineTo(p.x, p.y)));
+    ctx.stroke();
+
+    points.forEach((p) => {
+      ctx.beginPath();
+      ctx.fillStyle = "#b7ff9f";
+      ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.restore();
+  }
+
+  function updateFromPointer(event) {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const x = (event.clientX - rect.left) * scaleX;
+    const y = (event.clientY - rect.top) * scaleY;
+    const bandWidth = canvas.width / sliders.length;
+    const bandIndex = Math.max(0, Math.min(sliders.length - 1, Math.floor(x / bandWidth)));
+    const newValue = Math.max(-12, Math.min(12, yToValue(y, canvas.height)));
+
+    sliders[bandIndex].value = newValue;
+    sliders[bandIndex].dispatchEvent(new Event("input", { bubbles: true }));
+    draw();
+  }
+
+  toggle.addEventListener("click", () => {
+    const open = drawer.classList.toggle("open");
+    toggle.classList.toggle("active", open);
+    draw();
+  });
+
+  sliders.forEach((slider) => slider.addEventListener("input", draw));
+
+  canvas.addEventListener("pointerdown", (event) => {
+    dragging = true;
+    updateFromPointer(event);
+  });
+
+  window.addEventListener("pointerup", () => {
+    dragging = false;
+  });
+
+  canvas.addEventListener("pointermove", (event) => {
+    if (dragging) updateFromPointer(event);
+  });
+
+  draw();
+}
+
+setupEqUI("acidEqToggle", "acidEqDrawer", "acidEqCanvas", ["acidEq60", "acidEq250", "acidEq1000", "acidEq4000", "acidEq8000", "acidEq15000"]);
+setupEqUI("drumEqToggle", "drumEqDrawer", "drumEqCanvas", ["drumEq60", "drumEq250", "drumEq1000", "drumEq4000", "drumEq8000", "drumEq15000"]);
+setupEqUI("fluteEqToggle", "fluteEqDrawer", "fluteEqCanvas", ["fluteEq60", "fluteEq250", "fluteEq1000", "fluteEq4000", "fluteEq8000", "fluteEq15000"]);
+setupEqUI("electroEqToggle", "electroEqDrawer", "electroEqCanvas", ["electroEq60", "electroEq250", "electroEq1000", "electroEq4000", "electroEq8000", "electroEq15000"]);
+setupEqUI("bassEqToggle", "bassEqDrawer", "bassEqCanvas", ["bassEq60", "bassEq250", "bassEq1000", "bassEq4000", "bassEq8000", "bassEq15000"]);
+
+// ---------------- DRAWERS ----------------
+drumSeqToggle.addEventListener("click", () => {
+  const open = drumSeqDrawer.classList.toggle("open");
+  drumSeqToggle.classList.toggle("active", open);
+});
+
+acidSeqToggle.addEventListener("click", () => {
+  const open = acidSeqDrawer.classList.toggle("open");
+  acidSeqToggle.classList.toggle("active", open);
+});
+
+// ---------------- TWEAKS / MIX ----------------
+function bindSliderNumber(slider, number, callback) {
+  slider.addEventListener("input", () => {
+    number.value = slider.value;
+    callback();
+  });
+
+  number.addEventListener("input", () => {
+    const val = Math.max(Number(slider.min), Math.min(Number(slider.max), Number(number.value)));
+    slider.value = val;
+    number.value = val;
+    callback();
+  });
+}
+
+function applyTweaks() {
+  const drift = Number(driftSlider.value);
+  const smear = Number(smearSlider.value);
+  const grain = Number(grainSlider.value);
+  const motion = Number(motionSlider.value);
+
+  fluteVibrato.min = -10 - drift * 0.35;
+  fluteVibrato.max = 10 + drift * 0.35;
+  fluteVibrato.frequency.value = 4 + motion * 0.07;
+
+  electroLfo.min = 700 - motion * 5;
+  electroLfo.max = 2600 + motion * 7;
+  electroLfo.frequency.value = 0.25 + motion * 0.02;
+
+  fluteNoiseGain.gain.value = 0.03 + grain / 900;
+  floorNoiseGain.gain.value = 0.002 + grain / 8000;
+
+  masterReverb.decay = 1.2 + smear / 24;
+  masterDelay.delayTime.value = 0.15 + smear / 500;
+}
+
+function applyMix() {
+  const wet = Number(dryWetSlider.value) / 100;
+  const glue = Number(glueSlider.value);
+  const widthMix = Number(widthMixSlider.value) / 100;
+  const punch = Number(punchSlider.value);
+
+  masterReverb.wet.value = wet * 0.8 + Number(masterReverbSlider.value) / 500;
+  masterDelay.wet.value = wet * 0.45 + Number(masterDelaySlider.value) / 500;
+  masterWidth.width.value = Math.min(1, widthMix);
+
+  masterCompressor.threshold.value = -8 - glue * 0.22;
+  masterCompressor.ratio.value = 1 + glue / 18;
+
+  if (drumOn) drumGain.gain.value = getBaseGain("drum") * (1 + punch / 220);
+  if (bassOn) bassGain.gain.value = getBaseGain("bass") * (1 + punch / 340);
+  if (acidOn) acidGain.gain.value = getBaseGain("acid") * (1 + punch / 260);
+}
+
+[
+  [driftSlider, driftValue, applyTweaks],
+  [smearSlider, smearValue, applyTweaks],
+  [grainSlider, grainValue, applyTweaks],
+  [motionSlider, motionValue, applyTweaks],
+  [dryWetSlider, dryWetValue, applyMix],
+  [glueSlider, glueValue, applyMix],
+  [widthMixSlider, widthMixValue, applyMix],
+  [punchSlider, punchValue, applyMix]
+].forEach(([s, n, cb]) => bindSliderNumber(s, n, cb));
+
+// ---------------- SEQUENCER UI ----------------
+function buildStepGrid(container, dataArray) {
+  container.innerHTML = "";
+  dataArray.forEach((isActive, index) => {
+    const button = document.createElement("button");
+    button.className = "step-button";
+    button.textContent = index + 1;
+    if (isActive) button.classList.add("active-step");
+    button.addEventListener("click", () => {
+      dataArray[index] = !dataArray[index];
+      button.classList.toggle("active-step", dataArray[index]);
+    });
+    container.appendChild(button);
+  });
+}
+
+function refreshSequencers() {
+  buildStepGrid(drumKickGrid, drumPattern.kick);
+  buildStepGrid(drumSnareGrid, drumPattern.snare);
+  buildStepGrid(drumHatGrid, drumPattern.hat);
+  buildStepGrid(drumClapGrid, drumPattern.clap);
+  buildStepGrid(drumPercGrid, drumPattern.perc);
+  buildStepGrid(acidStepGrid, acidPattern.steps);
+  buildStepGrid(acidAccentGrid, acidPattern.accent);
+}
+
+function highlightCurrentStep(container, step, length) {
+  [...container.children].forEach((child, i) => {
+    child.classList.toggle("current-step", i === step && i < length);
+  });
+}
+
+refreshSequencers();
+
+// ---------------- SCENES ----------------
+function setEqValues(prefix, values) {
+  eqBands.forEach((band, i) => {
+    const el = $(`${prefix}Eq${band}`);
+    if (el) {
+      el.value = values[i];
+      el.dispatchEvent(new Event("input", { bubbles: true }));
+    }
+  });
+}
+
+function applySceneSettings(scene) {
+  if (scene === "fog") {
+    controlState.master.filter = 44;
+    controlState.acid.filter = 58;
+    controlState.drum.filter = 64;
+    controlState.flute.filter = 55;
+    controlState.electro.filter = 52;
+    controlState.bass.filter = 30;
+
+    setEqValues("acid", [2, 2, 1, 2, 1, -1]);
+    setEqValues("drum", [2, 1, 0, -1, -2, -2]);
+    setEqValues("flute", [0, 2, 3, 1, 2, 1]);
+    setEqValues("electro", [0, 0, 2, 4, 5, 2]);
+    setEqValues("bass", [4, 2, -1, -3, -4, -4]);
+  }
+
+  if (scene === "glass") {
+    controlState.master.filter = 62;
+    controlState.acid.filter = 68;
+    controlState.drum.filter = 72;
+    controlState.flute.filter = 70;
+    controlState.electro.filter = 74;
+    controlState.bass.filter = 36;
+
+    setEqValues("acid", [1, 1, 2, 4, 5, 2]);
+    setEqValues("drum", [0, -1, 1, 2, 1, 0]);
+    setEqValues("flute", [-2, 0, 3, 5, 6, 4]);
+    setEqValues("electro", [-1, 1, 3, 5, 6, 3]);
+    setEqValues("bass", [2, 1, -2, -4, -5, -5]);
+  }
+
+  if (scene === "underground") {
+    controlState.master.filter = 32;
+    controlState.acid.filter = 44;
+    controlState.drum.filter = 56;
+    controlState.flute.filter = 42;
+    controlState.electro.filter = 34;
+    controlState.bass.filter = 26;
+
+    setEqValues("acid", [5, 4, 1, -1, -2, -3]);
+    setEqValues("drum", [5, 3, 1, -2, -3, -4]);
+    setEqValues("flute", [-3, -1, 1, 0, -1, -2]);
+    setEqValues("electro", [3, 2, 1, 0, -1, -2]);
+    setEqValues("bass", [6, 5, 2, -2, -4, -5]);
+  }
+
+  if (scene === "pulse") {
+    controlState.master.filter = 56;
+    controlState.acid.filter = 64;
+    controlState.drum.filter = 68;
+    controlState.flute.filter = 60;
+    controlState.electro.filter = 58;
+    controlState.bass.filter = 34;
+
+    setEqValues("acid", [4, 2, 2, 3, 2, 0]);
+    setEqValues("drum", [6, 4, 1, -2, -3, -4]);
+    setEqValues("flute", [0, 1, 2, 1, 0, -1]);
+    setEqValues("electro", [2, 2, 3, 4, 3, 1]);
+    setEqValues("bass", [7, 4, 0, -3, -4, -5]);
+  }
+
+  applyAllStoredControls();
+}
+
+applySceneButton.addEventListener("click", () => {
+  applySceneSettings(sceneSelect.value);
+});
+
 // ---------------- SOURCE START ----------------
 function startSourcesOnce() {
   if (sourcesStarted) return;
@@ -433,13 +970,22 @@ function startSourcesOnce() {
 
   floorNoise.start();
 
+  Tone.Transport.bpm.value = Number(bpmSlider.value);
+  Tone.Transport.swing = Number(swingSlider.value) / 100;
+  Tone.Transport.swingSubdivision = "8n";
+
+  if (transportRepeatId === null) {
+    transportRepeatId = Tone.Transport.scheduleRepeat((time) => {
+      runStep(time);
+    }, "8n");
+  }
+
   Tone.Transport.start();
   sourcesStarted = true;
 }
 
 startButton.addEventListener("click", async () => {
   if (audioStarted) return;
-
   await Tone.start();
   await masterReverb.ready;
   startSourcesOnce();
@@ -451,94 +997,70 @@ startButton.addEventListener("click", async () => {
   applyMasterFx();
   applyTweaks();
   applyMix();
+  applySceneSettings(sceneSelect.value);
 });
 
 // ---------------- SOUND TOGGLES ----------------
-function setFluteState(isOn) {
-  fluteOn = isOn;
+function setSoundState(target, isOn, button) {
+  if (target === "acid") acidOn = isOn;
+  if (target === "drum") drumOn = isOn;
+  if (target === "flute") fluteOn = isOn;
+  if (target === "electro") electroOn = isOn;
+  if (target === "bass") bassOn = isOn;
+
+  const gainNode = getGainNode(target);
+
   if (isOn) {
-    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume) * getCrossmixMultiplier("flute");
-    textureAButton.textContent = "ON";
-    textureAButton.classList.add("active");
+    gainNode.gain.value = getBaseGain(target);
+    button.textContent = "ON";
+    button.classList.add("active");
   } else {
-    fluteGain.gain.value = 0;
-    textureAButton.textContent = "OFF";
-    textureAButton.classList.remove("active");
+    gainNode.gain.value = 0;
+    button.textContent = "OFF";
+    button.classList.remove("active");
   }
 }
 
-function setDrumState(isOn) {
-  drumOn = isOn;
-  if (isOn) {
-    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume) * getCrossmixMultiplier("drum");
-    textureBButton.textContent = "ON";
-    textureBButton.classList.add("active");
-  } else {
-    drumGain.gain.value = 0;
-    textureBButton.textContent = "OFF";
-    textureBButton.classList.remove("active");
-  }
-}
-
-function setElectroState(isOn) {
-  electroOn = isOn;
-  if (isOn) {
-    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume) * getCrossmixMultiplier("electro");
-    textureCButton.textContent = "ON";
-    textureCButton.classList.add("active");
-  } else {
-    electroGain.gain.value = 0;
-    textureCButton.textContent = "OFF";
-    textureCButton.classList.remove("active");
-  }
-}
-
-function setBassState(isOn) {
-  bassOn = isOn;
-  if (isOn) {
-    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume) * getCrossmixMultiplier("bass");
-    textureDButton.textContent = "ON";
-    textureDButton.classList.add("active");
-  } else {
-    bassGain.gain.value = 0;
-    textureDButton.textContent = "OFF";
-    textureDButton.classList.remove("active");
-  }
-}
-
-textureAButton.addEventListener("click", () => {
+textureEButton.addEventListener("click", () => {
   if (!audioStarted) return alert("First click Start Audio");
-  setFluteState(!fluteOn);
+  setSoundState("acid", !acidOn, textureEButton);
 });
 
 textureBButton.addEventListener("click", () => {
   if (!audioStarted) return alert("First click Start Audio");
-  setDrumState(!drumOn);
+  setSoundState("drum", !drumOn, textureBButton);
+});
+
+textureAButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  setSoundState("flute", !fluteOn, textureAButton);
 });
 
 textureCButton.addEventListener("click", () => {
   if (!audioStarted) return alert("First click Start Audio");
-  setElectroState(!electroOn);
+  setSoundState("electro", !electroOn, textureCButton);
 });
 
 textureDButton.addEventListener("click", () => {
   if (!audioStarted) return alert("First click Start Audio");
-  setBassState(!bassOn);
+  setSoundState("bass", !bassOn, textureDButton);
 });
 
 playAllButton.addEventListener("click", () => {
   if (!audioStarted) return alert("First click Start Audio");
-  setFluteState(true);
-  setDrumState(true);
-  setElectroState(true);
-  setBassState(true);
+  setSoundState("acid", true, textureEButton);
+  setSoundState("drum", true, textureBButton);
+  setSoundState("flute", true, textureAButton);
+  setSoundState("electro", true, textureCButton);
+  setSoundState("bass", true, textureDButton);
 });
 
 stopAllButton.addEventListener("click", () => {
-  setFluteState(false);
-  setDrumState(false);
-  setElectroState(false);
-  setBassState(false);
+  setSoundState("acid", false, textureEButton);
+  setSoundState("drum", false, textureBButton);
+  setSoundState("flute", false, textureAButton);
+  setSoundState("electro", false, textureCButton);
+  setSoundState("bass", false, textureDButton);
   stopAllLoops();
 });
 
@@ -569,446 +1091,86 @@ distortionSlider.addEventListener("input", () => {
   applyStoredDistortion(target);
 });
 
-// ---------------- EQ HELPERS ----------------
-function getEqElements(prefix) {
-  const out = {};
-  eqBands.forEach((band) => {
-    out[band] = $(`${prefix}Eq${band}`);
-  });
-  return out;
-}
+// ---------------- MUSIC ENGINE ----------------
+bpmSlider.addEventListener("input", () => {
+  bpmValue.textContent = `${bpmSlider.value} BPM`;
+  Tone.Transport.bpm.rampTo(Number(bpmSlider.value), 0.05);
+});
 
-const fluteEqEls = getEqElements("flute");
-const drumEqEls = getEqElements("drum");
-const electroEqEls = getEqElements("electro");
-const bassEqEls = getEqElements("bass");
+swingSlider.addEventListener("input", () => {
+  swingValue.textContent = `${swingSlider.value}%`;
+  Tone.Transport.swing = Number(swingSlider.value) / 100;
+});
 
-function readEqValues(elementMap) {
-  return {
-    "60": Number(elementMap["60"].value),
-    "250": Number(elementMap["250"].value),
-    "1000": Number(elementMap["1000"].value),
-    "4000": Number(elementMap["4000"].value),
-    "8000": Number(elementMap["8000"].value),
-    "15000": Number(elementMap["15000"].value)
-  };
-}
+modDepthSlider.addEventListener("input", () => {
+  modDepthValue.textContent = `${modDepthSlider.value}%`;
+});
 
-function applySixBandEq(eq, values) {
-  eq.b60.gain.value = values["60"];
-  eq.b250.gain.value = values["250"];
-  eq.b1000.gain.value = values["1000"];
-  eq.b4000.gain.value = values["4000"];
-  eq.b8000.gain.value = values["8000"];
-  eq.b15000.gain.value = values["15000"];
-}
-
-function bindEq(elementMap, eqNode) {
-  eqBands.forEach((band) => {
-    elementMap[band].addEventListener("input", () => {
-      applySixBandEq(eqNode, readEqValues(elementMap));
-    });
-  });
-}
-
-bindEq(fluteEqEls, fluteEq);
-bindEq(drumEqEls, drumEq);
-bindEq(electroEqEls, electroEq);
-bindEq(bassEqEls, bassEq);
-
-applySixBandEq(fluteEq, readEqValues(fluteEqEls));
-applySixBandEq(drumEq, readEqValues(drumEqEls));
-applySixBandEq(electroEq, readEqValues(electroEqEls));
-applySixBandEq(bassEq, readEqValues(bassEqEls));
-
-// ---------------- EQ UI + GRAPH ----------------
-function setupEqUI(config) {
-  const toggle = $(config.toggleId);
-  const drawer = $(config.drawerId);
-  const canvas = $(config.canvasId);
-  if (!toggle || !drawer || !canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  const sliders = config.sliderIds.map((id) => $(id)).filter(Boolean);
-
-  let dragging = false;
-
-  function values() {
-    return sliders.map((slider) => Number(slider.value));
+drumTestButton.addEventListener("click", async () => {
+  if (!audioStarted) {
+    await Tone.start();
+    await masterReverb.ready;
+    startSourcesOnce();
+    audioStarted = true;
+    startButton.textContent = "Audio Ready";
   }
 
-  function valueToY(value, height) {
-    const min = -12;
-    const max = 12;
-    const t = (value - min) / (max - min);
-    return height - t * height;
-  }
+  drumGain.gain.value = getBaseGain("drum");
+  kickSynth.triggerAttackRelease("C1", "8n", undefined, 0.98);
+  setTimeout(() => snareNoise.triggerAttackRelease("16n", undefined, 0.75), 120);
+  setTimeout(() => hatSynth.triggerAttackRelease("16n", undefined, 0.35), 170);
+});
 
-  function yToValue(y, height) {
-    const min = -12;
-    const max = 12;
-    const t = 1 - y / height;
-    return Math.round(min + t * (max - min));
-  }
-
-  function draw() {
-    const width = canvas.width;
-    const height = canvas.height;
-
-    ctx.clearRect(0, 0, width, height);
-    ctx.fillStyle = "#050505";
-    ctx.fillRect(0, 0, width, height);
-
-    ctx.save();
-    ctx.strokeStyle = "rgba(255,255,255,0.08)";
-    ctx.lineWidth = 1;
-    for (let i = 0; i <= 6; i++) {
-      const x = (width / 6) * i;
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, height);
-      ctx.stroke();
-    }
-    for (let i = 0; i <= 6; i++) {
-      const y = (height / 6) * i;
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(width, y);
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    const centerY = valueToY(0, height);
-    ctx.save();
-    ctx.strokeStyle = "rgba(255,255,255,0.18)";
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(0, centerY);
-    ctx.lineTo(width, centerY);
-    ctx.stroke();
-    ctx.restore();
-
-    const vals = values();
-    const points = vals.map((value, i) => ({
-      x: (width / (vals.length - 1)) * i,
-      y: valueToY(value, height)
-    }));
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.lineWidth = 8;
-    ctx.strokeStyle = "rgba(140,255,109,0.16)";
-    ctx.shadowBlur = 18;
-    ctx.shadowColor = "#8cff6d";
-    points.forEach((p, i) => {
-      if (i === 0) ctx.moveTo(p.x, p.y);
-      else ctx.lineTo(p.x, p.y);
-    });
-    ctx.stroke();
-    ctx.restore();
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.lineWidth = 2.6;
-    ctx.strokeStyle = "#8cff6d";
-    points.forEach((p, i) => {
-      if (i === 0) ctx.moveTo(p.x, p.y);
-      else ctx.lineTo(p.x, p.y);
-    });
-    ctx.stroke();
-
-    points.forEach((p) => {
-      ctx.beginPath();
-      ctx.fillStyle = "#b7ff9f";
-      ctx.arc(p.x, p.y, 4.5, 0, Math.PI * 2);
-      ctx.fill();
-    });
-    ctx.restore();
-  }
-
-  function updateFromPointer(event) {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-
-    const x = (event.clientX - rect.left) * scaleX;
-    const y = (event.clientY - rect.top) * scaleY;
-
-    const bandWidth = canvas.width / sliders.length;
-    const bandIndex = clamp(Math.floor(x / bandWidth), 0, sliders.length - 1);
-    const newValue = clamp(yToValue(y, canvas.height), -12, 12);
-
-    sliders[bandIndex].value = newValue;
-    sliders[bandIndex].dispatchEvent(new Event("input", { bubbles: true }));
-    draw();
-  }
-
-  toggle.addEventListener("click", () => {
-    drawer.classList.toggle("open");
-    toggle.classList.toggle("active");
-    draw();
-  });
-
-  sliders.forEach((slider) => {
-    slider.addEventListener("input", draw);
-  });
-
-  canvas.addEventListener("pointerdown", (event) => {
-    dragging = true;
-    updateFromPointer(event);
-  });
-
-  window.addEventListener("pointerup", () => {
-    dragging = false;
-  });
-
-  canvas.addEventListener("pointermove", (event) => {
-    if (!dragging) return;
-    updateFromPointer(event);
-  });
-
-  draw();
+// ---------------- GLITCH ----------------
+function syncGlitchLabels() {
+  glitchChanceValue.textContent = `${glitchChanceSlider.value}%`;
+  glitchRateValue.textContent = glitchRateSlider.value;
+  glitchPitchValue.textContent = `${glitchPitchSlider.value}%`;
+  glitchToneValue.textContent = `${glitchToneSlider.value}%`;
 }
 
-setupEqUI({
-  toggleId: "fluteEqToggle",
-  drawerId: "fluteEqDrawer",
-  canvasId: "fluteEqCanvas",
-  sliderIds: ["fluteEq60", "fluteEq250", "fluteEq1000", "fluteEq4000", "fluteEq8000", "fluteEq15000"]
+[glitchChanceSlider, glitchRateSlider, glitchPitchSlider, glitchToneSlider].forEach((el) => {
+  el.addEventListener("input", syncGlitchLabels);
 });
 
-setupEqUI({
-  toggleId: "drumEqToggle",
-  drawerId: "drumEqDrawer",
-  canvasId: "drumEqCanvas",
-  sliderIds: ["drumEq60", "drumEq250", "drumEq1000", "drumEq4000", "drumEq8000", "drumEq15000"]
+toggleAutoGlitchButton.addEventListener("click", () => {
+  autoGlitchEnabled = !autoGlitchEnabled;
+  toggleAutoGlitchButton.textContent = autoGlitchEnabled ? "Auto Glitch On" : "Auto Glitch Off";
 });
 
-setupEqUI({
-  toggleId: "electroEqToggle",
-  drawerId: "electroEqDrawer",
-  canvasId: "electroEqCanvas",
-  sliderIds: ["electroEq60", "electroEq250", "electroEq1000", "electroEq4000", "electroEq8000", "electroEq15000"]
-});
+function triggerGlitchBurst(time = Tone.now()) {
+  const pitchAmt = Number(glitchPitchSlider.value) / 100;
+  const toneAmt = Number(glitchToneSlider.value) / 100;
 
-setupEqUI({
-  toggleId: "bassEqToggle",
-  drawerId: "bassEqDrawer",
-  canvasId: "bassEqCanvas",
-  sliderIds: ["bassEq60", "bassEq250", "bassEq1000", "bassEq4000", "bassEq8000", "bassEq15000"]
-});
+  if (electroOn) {
+    const base = electroOsc1.frequency.value;
+    electroOsc1.frequency.setValueAtTime(base * (1 + pitchAmt * 0.4), time);
+    electroOsc2.frequency.setValueAtTime((base + 6) * (1 - pitchAmt * 0.2), time);
+    electroFilter.frequency.setValueAtTime(600 + toneAmt * 2600, time);
+  }
 
-// ---------------- PRESETS ----------------
-const presetButtons = [presetFog, presetGlass, presetUnderground, presetPunch];
+  if (acidOn) {
+    acidFilter.frequency.setValueAtTime(220 + toneAmt * 2800, time);
+    acidFilter.Q.value = 10 + toneAmt * 15;
+  }
 
-function clearPresetActive() {
-  presetButtons.forEach((btn) => btn.classList.remove("active"));
+  if (drumOn) {
+    hatSynth.triggerAttackRelease("16n", time, 0.6);
+    percSynth.triggerAttackRelease("G2", "16n", time + 0.015, 0.55);
+  }
+
+  setTimeout(() => {
+    applyStoredFilter("electro");
+    applyStoredFilter("acid");
+  }, 120 + Number(glitchRateSlider.value) * 16);
 }
 
-function setPresetButton(button) {
-  clearPresetActive();
-  button.classList.add("active");
-}
-
-function setEqValues(prefix, values) {
-  eqBands.forEach((band, i) => {
-    const el = $(`${prefix}Eq${band}`);
-    if (el) {
-      el.value = values[i];
-      el.dispatchEvent(new Event("input", { bubbles: true }));
-    }
-  });
-}
-
-presetFog.addEventListener("click", () => {
-  setPresetButton(presetFog);
-
-  masterReverbSlider.value = 60;
-  masterDelaySlider.value = 18;
-  masterWidthSlider.value = 55;
-  masterOutputSlider.value = 72;
-
-  oscGlowAmount.value = 78;
-  oscTrailAmount.value = 28;
-  oscLineSize.value = 3;
-
-  controlState.master.filter = 40;
-  applyStoredFilter("master");
-  applyMasterFx();
-
-  setEqValues("flute", [0, 2, 3, 1, 2, 1]);
-  setEqValues("drum", [1, 0, -1, -2, -2, -1]);
-  setEqValues("electro", [0, 0, 2, 4, 5, 2]);
-  setEqValues("bass", [4, 2, -1, -3, -4, -4]);
-
-  if (driftSlider) driftSlider.value = driftValue.value = 18;
-  if (smearSlider) smearSlider.value = smearValue.value = 35;
-  if (grainSlider) grainSlider.value = grainValue.value = 28;
-  if (crushSlider) crushSlider.value = crushValue.value = 8;
-  if (stretchSlider) stretchSlider.value = stretchValue.value = 22;
-  if (motionSlider) motionSlider.value = motionValue.value = 26;
-  if (blurSlider) blurSlider.value = blurValue.value = 32;
-  if (flutterSlider) flutterSlider.value = flutterValue.value = 10;
-
-  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 42;
-  if (glueSlider) glueSlider.value = glueValue.value = 28;
-  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 56;
-  if (punchSlider) punchSlider.value = punchValue.value = 26;
-  if (airSlider) airSlider.value = airValue.value = 24;
-  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 42;
-  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 10;
-  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 18;
-
-  applyTweaks();
-  applyMix();
-});
-
-presetGlass.addEventListener("click", () => {
-  setPresetButton(presetGlass);
-
-  masterReverbSlider.value = 34;
-  masterDelaySlider.value = 15;
-  masterWidthSlider.value = 72;
-  masterOutputSlider.value = 75;
-
-  oscGlowAmount.value = 85;
-  oscTrailAmount.value = 15;
-  oscLineSize.value = 2;
-
-  controlState.master.filter = 62;
-  applyStoredFilter("master");
-  applyMasterFx();
-
-  setEqValues("flute", [-2, 0, 3, 5, 6, 4]);
-  setEqValues("drum", [0, -1, 1, 2, 1, 0]);
-  setEqValues("electro", [-1, 1, 3, 5, 6, 3]);
-  setEqValues("bass", [2, 1, -2, -4, -5, -5]);
-
-  if (driftSlider) driftSlider.value = driftValue.value = 12;
-  if (smearSlider) smearSlider.value = smearValue.value = 20;
-  if (grainSlider) grainSlider.value = grainValue.value = 18;
-  if (crushSlider) crushSlider.value = crushValue.value = 4;
-  if (stretchSlider) stretchSlider.value = stretchValue.value = 14;
-  if (motionSlider) motionSlider.value = motionValue.value = 18;
-  if (blurSlider) blurSlider.value = blurValue.value = 8;
-  if (flutterSlider) flutterSlider.value = flutterValue.value = 18;
-
-  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 32;
-  if (glueSlider) glueSlider.value = glueValue.value = 18;
-  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 74;
-  if (punchSlider) punchSlider.value = punchValue.value = 18;
-  if (airSlider) airSlider.value = airValue.value = 44;
-  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 24;
-  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 4;
-  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 30;
-
-  applyTweaks();
-  applyMix();
-});
-
-presetUnderground.addEventListener("click", () => {
-  setPresetButton(presetUnderground);
-
-  masterReverbSlider.value = 12;
-  masterDelaySlider.value = 10;
-  masterWidthSlider.value = 38;
-  masterOutputSlider.value = 80;
-
-  oscGlowAmount.value = 58;
-  oscTrailAmount.value = 22;
-  oscLineSize.value = 4;
-
-  controlState.master.filter = 30;
-  applyStoredFilter("master");
-  applyMasterFx();
-
-  setEqValues("flute", [-3, -1, 1, 0, -1, -2]);
-  setEqValues("drum", [5, 3, 0, -2, -3, -4]);
-  setEqValues("electro", [3, 2, 1, 0, -1, -2]);
-  setEqValues("bass", [6, 5, 2, -2, -4, -5]);
-
-  if (driftSlider) driftSlider.value = driftValue.value = 26;
-  if (smearSlider) smearSlider.value = smearValue.value = 30;
-  if (grainSlider) grainSlider.value = grainValue.value = 42;
-  if (crushSlider) crushSlider.value = crushValue.value = 22;
-  if (stretchSlider) stretchSlider.value = stretchValue.value = 20;
-  if (motionSlider) motionSlider.value = motionValue.value = 34;
-  if (blurSlider) blurSlider.value = blurValue.value = 38;
-  if (flutterSlider) flutterSlider.value = flutterValue.value = 14;
-
-  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 24;
-  if (glueSlider) glueSlider.value = glueValue.value = 38;
-  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 34;
-  if (punchSlider) punchSlider.value = punchValue.value = 52;
-  if (airSlider) airSlider.value = airValue.value = 14;
-  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 68;
-  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 18;
-  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 28;
-
-  applyTweaks();
-  applyMix();
-});
-
-presetPunch.addEventListener("click", () => {
-  setPresetButton(presetPunch);
-
-  masterReverbSlider.value = 8;
-  masterDelaySlider.value = 6;
-  masterWidthSlider.value = 50;
-  masterOutputSlider.value = 82;
-
-  oscGlowAmount.value = 70;
-  oscTrailAmount.value = 8;
-  oscLineSize.value = 5;
-
-  controlState.master.filter = 55;
-  applyStoredFilter("master");
-  applyMasterFx();
-
-  setEqValues("flute", [0, 1, 2, 1, 0, -1]);
-  setEqValues("drum", [6, 4, 1, -2, -3, -4]);
-  setEqValues("electro", [2, 2, 3, 4, 3, 1]);
-  setEqValues("bass", [7, 4, 0, -3, -4, -5]);
-
-  if (driftSlider) driftSlider.value = driftValue.value = 10;
-  if (smearSlider) smearSlider.value = smearValue.value = 8;
-  if (grainSlider) grainSlider.value = grainValue.value = 12;
-  if (crushSlider) crushSlider.value = crushValue.value = 6;
-  if (stretchSlider) stretchSlider.value = stretchValue.value = 8;
-  if (motionSlider) motionSlider.value = motionValue.value = 14;
-  if (blurSlider) blurSlider.value = blurValue.value = 6;
-  if (flutterSlider) flutterSlider.value = flutterValue.value = 6;
-
-  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = 14;
-  if (glueSlider) glueSlider.value = glueValue.value = 30;
-  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 50;
-  if (punchSlider) punchSlider.value = punchValue.value = 72;
-  if (airSlider) airSlider.value = airValue.value = 18;
-  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 58;
-  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = 4;
-  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = 12;
-
-  applyTweaks();
-  applyMix();
+triggerGlitchButton.addEventListener("click", () => {
+  if (!audioStarted) return alert("First click Start Audio");
+  triggerGlitchBurst();
 });
 
 // ---------------- LOOPS ----------------
-function getLoopElements(prefix) {
-  return {
-    effect: $(`${prefix}LoopEffect`),
-    interval: $(`${prefix}LoopInterval`),
-    duration: $(`${prefix}LoopDuration`),
-    start: $(`${prefix}LoopStart`),
-    stop: $(`${prefix}LoopStop`),
-    warning: $(`${prefix}LoopWarning`)
-  };
-}
-
-const fluteLoop = getLoopElements("flute");
-const drumLoop = getLoopElements("drum");
-const electroLoop = getLoopElements("electro");
-const bassLoop = getLoopElements("bass");
-
 function validateLoop(loopObj) {
   const interval = Number(loopObj.interval.value);
   const duration = Number(loopObj.duration.value);
@@ -1017,12 +1179,10 @@ function validateLoop(loopObj) {
     loopObj.warning.textContent = "Please enter valid numbers.";
     return false;
   }
-
   if (interval <= 0 || duration <= 0) {
     loopObj.warning.textContent = "Interval and duration must be positive.";
     return false;
   }
-
   if (interval <= duration) {
     loopObj.warning.textContent = "Interval must be bigger than duration.";
     return false;
@@ -1032,136 +1192,68 @@ function validateLoop(loopObj) {
   return true;
 }
 
-[
-  fluteLoop.interval, fluteLoop.duration,
-  drumLoop.interval, drumLoop.duration,
-  electroLoop.interval, electroLoop.duration,
-  bassLoop.interval, bassLoop.duration
-].forEach((el) => {
-  el.addEventListener("input", () => {
-    validateLoop(fluteLoop);
-    validateLoop(drumLoop);
-    validateLoop(electroLoop);
-    validateLoop(bassLoop);
+[fluteLoop, electroLoop, bassLoop].forEach((loopObj) => {
+  [loopObj.interval, loopObj.duration].forEach((el) => {
+    el.addEventListener("input", () => validateLoop(loopObj));
   });
 });
 
 function getOscillatorGroup(target) {
   if (target === "flute") {
-    return {
-      oscillators: [fluteOsc],
-      baseFrequencies: [660 * (controlState.flute.speed / 100)]
-    };
+    return { oscillators: [fluteOsc], baseFrequencies: [660 * (controlState.flute.speed / 100)] };
   }
-
   if (target === "electro") {
     return {
       oscillators: [electroOsc1, electroOsc2],
-      baseFrequencies: [
-        220 * (controlState.electro.speed / 100),
-        224 * (controlState.electro.speed / 100)
-      ]
+      baseFrequencies: [220 * (controlState.electro.speed / 100), 224 * (controlState.electro.speed / 100)]
     };
   }
-
   if (target === "bass") {
     return {
       oscillators: [bassOsc1, bassOsc2],
-      baseFrequencies: [
-        55 * (controlState.bass.speed / 100),
-        55.5 * (controlState.bass.speed / 100)
-      ]
+      baseFrequencies: [55 * (controlState.bass.speed / 100), 55.5 * (controlState.bass.speed / 100)]
     };
   }
-
   return null;
-}
-
-function getDrumVelocity() {
-  return 0.7 + Number(punchSlider?.value || 0) / 300;
 }
 
 function triggerLoopEffectForSound(soundName, effectName, durationValue) {
   if (!requireSound(soundName)) return;
 
-  if (soundName === "drum" && effectName === "echoBurst") {
-    drumSynth.triggerAttackRelease("C1", "8n", undefined, getDrumVelocity() + 0.2);
-    return;
-  }
-
-  if (soundName === "drum" && effectName === "muffle") {
-    const normalFreq = drumFilter.frequency.value;
-    drumFilter.frequency.value = 180;
-    setTimeout(() => {
-      drumFilter.frequency.value = normalFreq;
-    }, durationValue * 1000);
-    return;
-  }
-
-  if (soundName === "drum" && (effectName === "hitUp" || effectName === "hitDown" || effectName === "warp")) {
-    const note = effectName === "hitDown" ? "A0" : effectName === "warp" ? "D1" : "E1";
-    drumSynth.triggerAttackRelease(note, "8n", undefined, getDrumVelocity());
-    return;
-  }
-
   if (effectName === "hitUp") {
     const group = getOscillatorGroup(soundName);
     if (!group) return;
-
-    group.oscillators.forEach((osc, i) => {
-      osc.frequency.value = group.baseFrequencies[i] * 1.8;
-    });
-
+    group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i] * 1.8));
     setTimeout(() => {
-      group.oscillators.forEach((osc, i) => {
-        osc.frequency.value = group.baseFrequencies[i];
-      });
+      group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i]));
     }, durationValue * 1000);
   }
 
   if (effectName === "hitDown") {
     const group = getOscillatorGroup(soundName);
     if (!group) return;
-
-    group.oscillators.forEach((osc, i) => {
-      osc.frequency.value = group.baseFrequencies[i] * 0.45;
-    });
-
+    group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i] * 0.45));
     setTimeout(() => {
-      group.oscillators.forEach((osc, i) => {
-        osc.frequency.value = group.baseFrequencies[i];
-      });
+      group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i]));
     }, durationValue * 1000);
   }
 
   if (effectName === "warp") {
     const group = getOscillatorGroup(soundName);
     if (!group) return;
-
-    group.oscillators.forEach((osc, i) => {
-      osc.frequency.value = group.baseFrequencies[i] * 1.55;
-    });
-
+    group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i] * 1.55));
     setTimeout(() => {
-      group.oscillators.forEach((osc, i) => {
-        osc.frequency.value = group.baseFrequencies[i] * 0.78;
-      });
+      group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i] * 0.78));
     }, durationValue * 500);
-
     setTimeout(() => {
-      group.oscillators.forEach((osc, i) => {
-        osc.frequency.value = group.baseFrequencies[i];
-      });
+      group.oscillators.forEach((osc, i) => (osc.frequency.value = group.baseFrequencies[i]));
     }, durationValue * 1000);
   }
 
   if (effectName === "muffle") {
     const filterNode = getFilterNode(soundName);
-    if (!filterNode) return;
-
     const normalFreq = filterNode.frequency.value;
     filterNode.frequency.value = 220;
-
     setTimeout(() => {
       filterNode.frequency.value = normalFreq;
     }, durationValue * 1000);
@@ -1169,11 +1261,8 @@ function triggerLoopEffectForSound(soundName, effectName, durationValue) {
 
   if (effectName === "echoBurst") {
     const gainNode = getGainNode(soundName);
-    if (!gainNode) return;
-
-    const normalGain = sliderToGain(soundName, controlState[soundName].volume) * getCrossmixMultiplier(soundName);
-    gainNode.gain.value = normalGain * 1.5;
-
+    const normalGain = getBaseGain(soundName);
+    gainNode.gain.value = normalGain * 1.45;
     setTimeout(() => {
       gainNode.gain.value = normalGain;
     }, durationValue * 1000);
@@ -1184,10 +1273,6 @@ function stopLoop(name) {
   if (name === "flute" && fluteLoopId) {
     clearInterval(fluteLoopId);
     fluteLoopId = null;
-  }
-  if (name === "drum" && drumLoopId) {
-    clearInterval(drumLoopId);
-    drumLoopId = null;
   }
   if (name === "electro" && electroLoopId) {
     clearInterval(electroLoopId);
@@ -1201,7 +1286,6 @@ function stopLoop(name) {
 
 function stopAllLoops() {
   stopLoop("flute");
-  stopLoop("drum");
   stopLoop("electro");
   stopLoop("bass");
 }
@@ -1211,7 +1295,6 @@ function startLoop(name, soundName, loopConfig) {
     alert("First click Start Audio");
     return;
   }
-
   if (!validateLoop(loopConfig)) return;
 
   stopLoop(name);
@@ -1227,140 +1310,116 @@ function startLoop(name, soundName, loopConfig) {
   }, intervalSeconds * 1000);
 
   if (name === "flute") fluteLoopId = id;
-  if (name === "drum") drumLoopId = id;
   if (name === "electro") electroLoopId = id;
   if (name === "bass") bassLoopId = id;
 }
 
 fluteLoop.start.addEventListener("click", () => startLoop("flute", "flute", fluteLoop));
 fluteLoop.stop.addEventListener("click", () => stopLoop("flute"));
-
-drumLoop.start.addEventListener("click", () => startLoop("drum", "drum", drumLoop));
-drumLoop.stop.addEventListener("click", () => stopLoop("drum"));
-
 electroLoop.start.addEventListener("click", () => startLoop("electro", "electro", electroLoop));
 electroLoop.stop.addEventListener("click", () => stopLoop("electro"));
-
 bassLoop.start.addEventListener("click", () => startLoop("bass", "bass", bassLoop));
 bassLoop.stop.addEventListener("click", () => stopLoop("bass"));
 
-// ---------------- TWEAKS + MIX BINDINGS ----------------
-function bindSliderNumber(slider, number, callback) {
-  if (!slider || !number) return;
-
-  slider.addEventListener("input", () => {
-    number.value = slider.value;
-    if (callback) callback();
-  });
-
-  number.addEventListener("input", () => {
-    const val = clamp(Number(number.value), Number(slider.min), Number(slider.max));
-    slider.value = val;
-    number.value = val;
-    if (callback) callback();
-  });
+// ---------------- STEP ENGINE ----------------
+function getDrumSeqLen() {
+  return Number(drumSeqLength.value);
 }
 
-function getCrossmixMultiplier(target) {
-  const v = Number(crossmixSlider?.value || 0) / 100;
-
-  if (target === "flute") return 1 - v * 0.15;
-  if (target === "drum") return 1 + v * 0.12;
-  if (target === "electro") return 1 + v * 0.18;
-  if (target === "bass") return 1 - v * 0.08;
-  return 1;
+function getAcidSeqLen() {
+  return Number(acidSeqLength.value);
 }
 
-function applyTweaks() {
-  const drift = Number(driftSlider?.value || 0);
-  const smear = Number(smearSlider?.value || 0);
-  const grain = Number(grainSlider?.value || 0);
-  const crush = Number(crushSlider?.value || 0);
-  const stretch = Number(stretchSlider?.value || 0);
-  const motion = Number(motionSlider?.value || 0);
-  const blur = Number(blurSlider?.value || 0);
-  const flutter = Number(flutterSlider?.value || 0);
-
-  // drift / flutter / motion
-  fluteVibrato.min = -10 - drift * 0.4 - flutter * 0.4;
-  fluteVibrato.max = 10 + drift * 0.4 + flutter * 0.4;
-  fluteVibrato.frequency.value = 5 + motion * 0.06 + flutter * 0.08;
-
-  electroLfo.min = 600 - motion * 6;
-  electroLfo.max = 2600 + motion * 8;
-  electroLfo.frequency.value = 0.25 + motion * 0.02;
-
-  // grain / noise
-  fluteNoiseGain.gain.value = 0.05 + grain / 700;
-  floorNoiseGain.gain.value = Number(noiseFloorSlider?.value || 0) / 2000 + grain / 4000;
-
-  // crush
-  masterDistortion.distortion = Math.min(0.9, Number(masterOutputSlider?.value || 75) / 2000 + crush / 120);
-
-  // blur
-  masterFilter.frequency.value = Math.max(160, sliderToFrequency(controlState.master.filter) - blur * 18);
-
-  // smear / stretch
-  masterReverb.decay = 1.2 + smear / 20 + stretch / 40;
-  masterDelay.delayTime.value = 0.15 + stretch / 400;
+function currentNotePools() {
+  return {
+    flute: buildScaleFrequencies(rootSelect.value, scaleSelect.value, 1),
+    electro: buildScaleFrequencies(rootSelect.value, scaleSelect.value, 0),
+    bass: buildScaleFrequencies(rootSelect.value, scaleSelect.value, -1),
+    acid: buildScaleFrequencies(rootSelect.value, scaleSelect.value, 0)
+  };
 }
 
-function applyMix() {
-  const dryWet = Number(dryWetSlider?.value || 0);
-  const glue = Number(glueSlider?.value || 0);
-  const widthMix = Number(widthMixSlider?.value || 0);
-  const punch = Number(punchSlider?.value || 0);
-  const air = Number(airSlider?.value || 0);
-  const lowWeight = Number(lowWeightSlider?.value || 0);
-  const noiseFloor = Number(noiseFloorSlider?.value || 0);
+function runStep(time) {
+  const pattern = PATTERN_MAP[patternSelect.value];
+  const modDepth = Number(modDepthSlider.value) / 100;
+  const pools = currentNotePools();
 
-  const wet = dryWet / 100;
-  masterReverb.wet.value = wet * 0.75 + Number(masterReverbSlider?.value || 0) / 400;
-  masterDelay.wet.value = wet * 0.55 + Number(masterDelaySlider?.value || 0) / 500;
+  const drumStep = stepIndex % getDrumSeqLen();
+  const acidStep = stepIndex % getAcidSeqLen();
 
-  masterWidth.width.value = Math.min(1, widthMix / 100);
-
-  masterCompressor.threshold.value = -8 - glue * 0.22;
-  masterCompressor.ratio.value = 1 + glue / 18;
-
-  masterHighShelf.gain.value = air / 4;
-  masterLowShelf.gain.value = lowWeight / 4;
-
-  floorNoiseGain.gain.value = noiseFloor / 1500 + Number(grainSlider?.value || 0) / 4000;
+  highlightCurrentStep(drumKickGrid, drumStep, getDrumSeqLen());
+  highlightCurrentStep(drumSnareGrid, drumStep, getDrumSeqLen());
+  highlightCurrentStep(drumHatGrid, drumStep, getDrumSeqLen());
+  highlightCurrentStep(drumClapGrid, drumStep, getDrumSeqLen());
+  highlightCurrentStep(drumPercGrid, drumStep, getDrumSeqLen());
+  highlightCurrentStep(acidStepGrid, acidStep, getAcidSeqLen());
+  highlightCurrentStep(acidAccentGrid, acidStep, getAcidSeqLen());
 
   if (drumOn) {
-    drumGain.gain.value = sliderToGain("drum", controlState.drum.volume) * (1 + punch / 250) * getCrossmixMultiplier("drum");
+    if (drumPattern.kick[drumStep]) {
+      kickSynth.triggerAttackRelease(drumStep % 8 === 4 ? "A0" : "C1", "8n", time, 1.0);
+    }
+    if (drumPattern.snare[drumStep]) {
+      snareNoise.triggerAttackRelease("16n", time + 0.001, 0.7);
+    }
+    if (drumPattern.hat[drumStep]) {
+      hatSynth.triggerAttackRelease("16n", time + 0.002, 0.38);
+    }
+    if (drumPattern.clap[drumStep]) {
+      clapNoise.triggerAttackRelease("16n", time + 0.003, 0.55);
+    }
+    if (drumPattern.perc[drumStep]) {
+      percSynth.triggerAttackRelease("G2", "16n", time + 0.004, 0.6);
+    }
   }
-  if (bassOn) {
-    bassGain.gain.value = sliderToGain("bass", controlState.bass.volume) * (1 + lowWeight / 300) * getCrossmixMultiplier("bass");
+
+  if (acidOn && acidPattern.steps[acidStep]) {
+    const freq = pools.acid[(acidStep + stepIndex) % pools.acid.length];
+    const accented = acidPattern.accent[acidStep];
+    const slide = Number(acidSlideSlider.value) / 100;
+    const envAmt = Number(acidEnvSlider.value) / 100;
+    const baseCutoff = 180 + (Number(acidCutoffSlider.value) / 100) * 3000;
+
+    acidFilter.frequency.value = baseCutoff + envAmt * 1200;
+    acidFilter.Q.value = 6 + Number(acidResSlider.value) / 4;
+
+    if (slide > 0.05) {
+      acidSynth.frequency.rampTo(freq, 0.02 + slide * 0.08);
+    }
+
+    acidSynth.triggerAttackRelease(freq, "16n", time, accented ? 1 : 0.8);
+    pulseGain(acidGain, getBaseGain("acid"), time, accented ? 1.55 : 1.2, 0.12);
   }
-  if (fluteOn) {
-    fluteGain.gain.value = sliderToGain("flute", controlState.flute.volume) * getCrossmixMultiplier("flute");
+
+  if (bassOn && pattern.bass[stepIndex]) {
+    const freq = pools.bass[stepIndex % pools.bass.length];
+    bassOsc1.frequency.setValueAtTime(freq, time);
+    bassOsc2.frequency.setValueAtTime(freq * 1.01, time);
+    pulseGain(bassGain, getBaseGain("bass"), time, 1.35, 0.18);
   }
-  if (electroOn) {
-    electroGain.gain.value = sliderToGain("electro", controlState.electro.volume) * getCrossmixMultiplier("electro");
+
+  if (electroOn && pattern.electro[stepIndex]) {
+    const freq = pools.electro[(stepIndex + 2) % pools.electro.length];
+    electroOsc1.frequency.setValueAtTime(freq, time);
+    electroOsc2.frequency.setValueAtTime(freq * (1.004 + modDepth * 0.01), time);
+    pulseGain(electroGain, getBaseGain("electro"), time, 1.22, 0.14);
   }
+
+  if (fluteOn && pattern.flute[stepIndex]) {
+    const freq = pools.flute[(stepIndex + 1) % pools.flute.length];
+    fluteOsc.frequency.setValueAtTime(freq, time);
+    pulseGain(fluteGain, getBaseGain("flute"), time, 1.16, 0.20);
+  }
+
+  if (autoGlitchEnabled) {
+    const chance = Number(glitchChanceSlider.value) / 100;
+    if (Math.random() < chance * 0.18) {
+      triggerGlitchBurst(time);
+    }
+  }
+
+  stepIndex = (stepIndex + 1) % 16;
 }
-
-[
-  [driftSlider, driftValue, applyTweaks],
-  [smearSlider, smearValue, applyTweaks],
-  [grainSlider, grainValue, applyTweaks],
-  [crushSlider, crushValue, applyTweaks],
-  [stretchSlider, stretchValue, applyTweaks],
-  [motionSlider, motionValue, applyTweaks],
-  [blurSlider, blurValue, applyTweaks],
-  [flutterSlider, flutterValue, applyTweaks],
-
-  [dryWetSlider, dryWetValue, applyMix],
-  [glueSlider, glueValue, applyMix],
-  [widthMixSlider, widthMixValue, applyMix],
-  [punchSlider, punchValue, applyMix],
-  [airSlider, airValue, applyMix],
-  [lowWeightSlider, lowWeightValue, applyMix],
-  [noiseFloorSlider, noiseFloorValue, applyMix],
-  [crossmixSlider, crossmixValue, applyMix]
-].forEach(([slider, number, callback]) => bindSliderNumber(slider, number, callback));
 
 // ---------------- OSC / SPEC ----------------
 pauseOscilloscopeButton.addEventListener("click", () => {
@@ -1404,12 +1463,11 @@ clearSpectrogramButton.addEventListener("click", () => {
 
 function fftToColor(value) {
   const intensity = Math.max(0, Math.min(1, (value + 140) / 140));
-
-  if (intensity < 0.2) return `rgb(0, 0, ${Math.floor(80 + intensity * 200)})`;
-  if (intensity < 0.4) return `rgb(0, ${Math.floor(intensity * 255)}, 160)`;
-  if (intensity < 0.65) return `rgb(${Math.floor(intensity * 180)}, ${Math.floor(120 + intensity * 100)}, 80)`;
-  if (intensity < 0.85) return `rgb(${Math.floor(180 + intensity * 60)}, ${Math.floor(120 + intensity * 80)}, 40)`;
-  return `rgb(255, 255, ${Math.floor(150 + intensity * 80)})`;
+  if (intensity < 0.2) return `rgb(0,0,${Math.floor(80 + intensity * 200)})`;
+  if (intensity < 0.4) return `rgb(0,${Math.floor(intensity * 255)},160)`;
+  if (intensity < 0.65) return `rgb(${Math.floor(intensity * 180)},${Math.floor(120 + intensity * 100)},80)`;
+  if (intensity < 0.85) return `rgb(${Math.floor(180 + intensity * 60)},${Math.floor(120 + intensity * 80)},40)`;
+  return `rgb(255,255,${Math.floor(150 + intensity * 80)})`;
 }
 
 function drawSpectrogramOverlay() {
@@ -1495,7 +1553,6 @@ function drawOscilloscope() {
     oscilloscopeCtx.save();
     oscilloscopeCtx.strokeStyle = "rgba(120,120,120,0.18)";
     oscilloscopeCtx.lineWidth = 1;
-
     for (let i = 0; i <= 12; i++) {
       const x = (width / 12) * i;
       oscilloscopeCtx.beginPath();
@@ -1503,7 +1560,6 @@ function drawOscilloscope() {
       oscilloscopeCtx.lineTo(x, height);
       oscilloscopeCtx.stroke();
     }
-
     for (let i = 0; i <= 6; i++) {
       const y = (height / 6) * i;
       oscilloscopeCtx.beginPath();
@@ -1511,7 +1567,6 @@ function drawOscilloscope() {
       oscilloscopeCtx.lineTo(width, y);
       oscilloscopeCtx.stroke();
     }
-
     oscilloscopeCtx.restore();
   }
 
@@ -1553,49 +1608,16 @@ function drawOscilloscope() {
   oscilloscopeCtx.restore();
 }
 
-// ---------------- RANDOMIZE ----------------
-randomButton.addEventListener("click", () => {
-  if (!audioStarted) return alert("First click Start Audio");
-
-  const target = controlTargetSelect.value;
-  controlState[target].volume = Math.floor(Math.random() * 101);
-  controlState[target].filter = Math.floor(Math.random() * 101);
-  controlState[target].speed = 70 + Math.floor(Math.random() * 61);
-  controlState[target].distortion = Math.floor(Math.random() * 40);
-
-  syncControlSlidersToTarget();
-  applyStoredVolume(target);
-  applyStoredFilter(target);
-  applyStoredSpeed(target);
-  applyStoredDistortion(target);
-
-  if (driftSlider) driftSlider.value = driftValue.value = Math.floor(Math.random() * 40);
-  if (smearSlider) smearSlider.value = smearValue.value = Math.floor(Math.random() * 45);
-  if (grainSlider) grainSlider.value = grainValue.value = Math.floor(Math.random() * 50);
-  if (crushSlider) crushSlider.value = crushValue.value = Math.floor(Math.random() * 25);
-  if (stretchSlider) stretchSlider.value = stretchValue.value = Math.floor(Math.random() * 30);
-  if (motionSlider) motionSlider.value = motionValue.value = Math.floor(Math.random() * 40);
-  if (blurSlider) blurSlider.value = blurValue.value = Math.floor(Math.random() * 40);
-  if (flutterSlider) flutterSlider.value = flutterValue.value = Math.floor(Math.random() * 20);
-
-  if (dryWetSlider) dryWetSlider.value = dryWetValue.value = Math.floor(Math.random() * 60);
-  if (glueSlider) glueSlider.value = glueValue.value = Math.floor(Math.random() * 50);
-  if (widthMixSlider) widthMixSlider.value = widthMixValue.value = 30 + Math.floor(Math.random() * 50);
-  if (punchSlider) punchSlider.value = punchValue.value = Math.floor(Math.random() * 70);
-  if (airSlider) airSlider.value = airValue.value = Math.floor(Math.random() * 50);
-  if (lowWeightSlider) lowWeightSlider.value = lowWeightValue.value = 20 + Math.floor(Math.random() * 60);
-  if (noiseFloorSlider) noiseFloorSlider.value = noiseFloorValue.value = Math.floor(Math.random() * 25);
-  if (crossmixSlider) crossmixSlider.value = crossmixValue.value = Math.floor(Math.random() * 40);
-
-  applyTweaks();
-  applyMix();
-});
-
 // ---------------- INIT ----------------
 syncControlSlidersToTarget();
 applyMasterFx();
 applyTweaks();
 applyMix();
+syncGlitchLabels();
+
+bpmValue.textContent = `${bpmSlider.value} BPM`;
+swingValue.textContent = `${swingSlider.value}%`;
+modDepthValue.textContent = `${modDepthSlider.value}%`;
 
 oscilloscopeCtx.fillStyle = "black";
 oscilloscopeCtx.fillRect(0, 0, oscilloscopeCanvas.width, oscilloscopeCanvas.height);
